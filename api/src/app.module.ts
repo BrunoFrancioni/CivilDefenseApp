@@ -2,12 +2,17 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { EntitiesController } from './entities/entities.controller';
-import { EntitiesService } from './entities/entities.service';
+import { ConfigModule } from '@nestjs/config';
+import { EntitiesModule } from './entities/entities.module';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost/civildefense')],
-  controllers: [AppController, EntitiesController],
-  providers: [AppService, EntitiesService],
+  imports: [
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot(`mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@civil-defense.r981f.mongodb.net/civil-defense?retryWrites=true&w=majority`),
+    EntitiesModule
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule {}
+
+export class AppModule { }
