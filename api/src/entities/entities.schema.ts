@@ -28,10 +28,10 @@ export class Entities extends Document {
     sector: string;
 
     @Prop({ type: [String], required: true })
-    risk: Array<string>;
+    risk: string[];
 
-    @Prop({ type: [Number], required: true })
-    coordinates: Array<number>;
+    @Prop({ type: [String], required: true })
+    coordinates: string[];
 }
 
 export const EntitiesSchema = SchemaFactory.createForClass(Entities);
