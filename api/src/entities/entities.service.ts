@@ -49,53 +49,51 @@ export class EntitiesService {
         }
     }
 
-    async createEntity(entity: createEntityDTO): Promise<boolean> {
-        const newEntity: Entities = new Entities();
-        newEntity.name = entity.name;
-        newEntity.entityType = entity.entityType;
-        newEntity.legalNumber = entity.legalNumber;
-        newEntity.address = entity.address;
-        newEntity.phone = entity.phone;
-        newEntity.postalCode = entity.postalCode;
-        newEntity.email = entity.email;
-        newEntity.sector = entity.sector;
-        newEntity.risk = entity.risk;
-        newEntity.coordinates = entity.coordinates;
-        console.log(newEntity);
+    async createEntity(entity: createEntityDTO): Promise<entitiesDTO> {
         try {
-            const result = await this.entityModel.create(newEntity);
+            const result = await new this.entityModel(entity).save();
 
-            if (result) {
-                return true;
-            } else {
-                return false;
+            if (!result) {
+                return null;
             }
+
+            const { _id, name, entityType, legalNumber, address, phone, postalCode, email, sector, risk, coordinates } = result;
+
+            return new entitiesDTO(_id, name, entityType, legalNumber, address, phone, postalCode, email, sector, risk, coordinates);
         } catch (e) {
             console.log(e);
             throw new PersistenceException(e);
         }
     }
 
-    async updateEntity(idEntity: string, entity: createEntityDTO): Promise<Entities> {
+    async updateEntity(idEntity: string, entity: createEntityDTO): Promise<entitiesDTO> {
         try {
-            const result = await this.entityModel.findOneAndUpdate({ _id: idEntity }, entity);
+            const result = await this.entityModel.findOneAndUpdate({ _id: idEntity }, entity, { new: true });
 
-            return result;
+            if (!result) {
+                return null;
+            }
+
+            const { _id, name, entityType, legalNumber, address, phone, postalCode, email, sector, risk, coordinates } = result;
+
+            return new entitiesDTO(_id, name, entityType, legalNumber, address, phone, postalCode, email, sector, risk, coordinates);
         } catch (e) {
             console.log(e);
             throw new PersistenceException(e);
         }
     }
 
-    async deleteEntity(idEntity: string): Promise<boolean> {
+    async deleteEntity(idEntity: string): Promise<entitiesDTO> {
         try {
             const result = await this.entityModel.findOneAndDelete({ _id: idEntity });
 
             if (!result) {
-                return false;
+                return null;
             }
 
-            return true;
+            const { _id, name, entityType, legalNumber, address, phone, postalCode, email, sector, risk, coordinates } = result;
+
+            return new entitiesDTO(_id, name, entityType, legalNumber, address, phone, postalCode, email, sector, risk, coordinates);
         } catch (e) {
             console.log(e);
             throw new PersistenceException(e);

@@ -35,13 +35,18 @@ export class EntitiesController {
 
     @Post('/')
     async createEntity(@Body() body: CreateEntityDTO, @Res() res) {
+        console.log(body);
         try {
             const result = await this.entitiesService.createEntity(body);
 
             if (result) {
-                return res.status(HttpStatus.CREATED);
+                return res.status(HttpStatus.CREATED).json({
+                    result
+                });
             } else {
-                return res.status(HttpStatus.BAD_REQUEST);
+                return res.status(HttpStatus.BAD_REQUEST).json({
+                    result
+                });
             }
         } catch (e) {
             return res.status(HttpStatus.BAD_GATEWAY);
@@ -53,9 +58,15 @@ export class EntitiesController {
         try {
             const result = await this.entitiesService.updateEntity(idEntity, body);
 
-            return res.status(HttpStatus.OK).json({
-                result
-            });
+            if (result) {
+                return res.status(HttpStatus.OK).json({
+                    result
+                });
+            } else {
+                return res.status(HttpStatus.BAD_REQUEST).json({
+                    result
+                });
+            }
         } catch (e) {
             return res.status(HttpStatus.BAD_GATEWAY);
         }
@@ -66,11 +77,15 @@ export class EntitiesController {
         try {
             const result = await this.entitiesService.deleteEntity(idEntity);
 
-            if (!result) {
-                return res.status(HttpStatus.BAD_REQUEST);
+            if (result) {
+                return res.status(HttpStatus.OK).json({
+                    result
+                });
+            } else {
+                return res.status(HttpStatus.BAD_REQUEST).json({
+                    result
+                });
             }
-
-            return res.status(HttpStatus.OK);
         } catch (e) {
             return res.status(HttpStatus.BAD_GATEWAY);
         }
