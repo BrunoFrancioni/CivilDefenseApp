@@ -2,11 +2,10 @@ import * as bcrypt from 'bcrypt';
 
 import CredentialsSchema, { ICredentials } from '../models/credentialsModel';
 import { ICreateCredentials, ICredential, ILoginCredential, ILoginResult } from 'interfaces/ICredentials';
-import { Auth } from '../middleware/auth';
+import { sign } from '../middleware/auth';
 
 export class CredentialsController {
     private Credentials = CredentialsSchema;
-    private auth: Auth = new Auth();
 
     public async createCredential(createCredentialDTO: ICreateCredentials): Promise<boolean> {
         try {
@@ -70,7 +69,7 @@ export class CredentialsController {
                 role: credential.role
             }
 
-            const token = this.auth.sign(user);
+            const token = sign(user);
 
             const result: ILoginResult = {
                 result: true,
@@ -123,7 +122,7 @@ export class CredentialsController {
                 role: credential.role
             }
 
-            const token = this.auth.sign(user);
+            const token = sign(user);
 
             const result: ILoginResult = {
                 result: true,

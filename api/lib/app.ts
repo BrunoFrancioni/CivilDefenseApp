@@ -4,12 +4,14 @@ import * as mongoose from "mongoose";
 require('dotenv').config({ path: '.env' });
 
 import { CredentialsRoutes } from './routes/CredentialsRoutes';
+import { EntitiesRoutes } from './routes/EntitiesRoutes';
 
 class App {
     public app: express.Application;
     public mongoUrl: string = process.env.MONGO_DB_CONNECTION;
 
     public credentialsRoutes: CredentialsRoutes = new CredentialsRoutes();
+    public entitiesRoutes: EntitiesRoutes = new EntitiesRoutes();
 
     constructor() {
         this.app = express();
@@ -17,6 +19,7 @@ class App {
         this.mongoSetup();
 
         this.credentialsRoutes.routes(this.app);
+        this.entitiesRoutes.routes(this.app);
     }
 
     private config(): void {

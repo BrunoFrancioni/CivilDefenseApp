@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node ./lib/server.ts",
+    "dev": "ts-node-dev --respawn ./lib/server.ts",
     "start": "nodemon ./dist/server.js",
     "prod": "npm run build && npm run start"
   },
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
     "@types/express": "^4.17.11",
-    "@types/jsonwebtoken": "^8.5.0"
+    "@types/jsonwebtoken": "^8.5.0",
+    "ts-node-dev": "^1.1.6"
   }
 }
