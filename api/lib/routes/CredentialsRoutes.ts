@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ILoginResult } from "interfaces/ICredentials";
+import { ICreateCredentialsResult, ILoginResult } from "interfaces/ICredentials";
 
 import { CredentialsController } from '../controllers/credentialsController';
 
@@ -10,11 +10,12 @@ export class CredentialsRoutes {
         app.route('/credentials/signup')
             .post(async (req: Request, res: Response) => {
                 try {
-                    const result = await this.credentialsController.createCredential(req.body.createCredentialDTO);
+                    const result: ICreateCredentialsResult = await this.credentialsController.createCredential(req.body.createCredentialDTO);
 
-                    if (result) {
+                    if (result.result) {
                         return res.status(201).json({
-                            message: 'User Created Successfully'
+                            message: 'User Created Successfully',
+                            password: result.pass
                         });
                     } else {
                         return res.status(400).json({

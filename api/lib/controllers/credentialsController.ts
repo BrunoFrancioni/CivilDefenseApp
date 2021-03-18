@@ -1,21 +1,30 @@
 import * as bcrypt from 'bcrypt';
 
 import CredentialsSchema, { ICredentials } from '../models/credentialsModel';
-import { ICreateCredentials, ICredential, ILoginCredential, ILoginResult } from 'interfaces/ICredentials';
+import { ICreateCredentials, ICreateCredentialsResult, ICredential, ILoginCredential, ILoginResult } from 'interfaces/ICredentials';
 import { sign } from '../middleware/auth';
 
 export class CredentialsController {
     private Credentials = CredentialsSchema;
 
-    public async createCredential(createCredentialDTO: ICreateCredentials): Promise<boolean> {
+    public async createCredential(createCredentialDTO: ICreateCredentials): Promise<ICreateCredentialsResult> {
         try {
             const user = await this.Credentials.findOne({ email: createCredentialDTO.email }).exec();
 
-            if (user) return false;
+            if (user) {
+                const result: ICreateCredentialsResult = {
+                    result: false,
+                    pass: null
+                }
 
-            const hash = bcrypt.hashSync(createCredentialDTO.password, 10);
+                return result;
+            };
 
-            const result = await new this.Credentials({
+            const pass = Math.random().toString(36).slice(2);
+
+            const hash = bcrypt.hashSync(pass, 10);
+
+            const credential = await new this.Credentials({
                 name_lastname: createCredentialDTO.name_lastname,
                 dni: createCredentialDTO.dni,
                 organization: createCredentialDTO.organization,
@@ -24,11 +33,21 @@ export class CredentialsController {
                 role: createCredentialDTO.role
             }).save();
 
-            if (result == null) {
-                return false;
+            if (credential == null) {
+                const result: ICreateCredentialsResult = {
+                    result: false,
+                    pass: null
+                }
+
+                return result;
             }
 
-            return true;
+            const result: ICreateCredentialsResult = {
+                result: true,
+                pass: pass
+            }
+
+            return result;
         } catch (e) {
             throw new Error(e);
         }

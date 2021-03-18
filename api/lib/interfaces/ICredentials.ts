@@ -12,8 +12,12 @@ export interface ICreateCredentials {
     dni: string;
     organization: string;
     email: string;
-    password: string;
     role: string;
+}
+
+export interface ICreateCredentialsResult {
+    result: boolean;
+    pass: string;
 }
 
 export interface ILoginCredential {
