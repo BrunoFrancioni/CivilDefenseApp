@@ -2,7 +2,20 @@ import * as mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export const EntitiesSchema = new Schema({
+export interface IEntities extends mongoose.Document {
+    name: string;
+    entityType: string;
+    legalNumber: string;
+    address: string;
+    phone: string;
+    postalCode: string;
+    email: string;
+    sector: string;
+    risk: [string];
+    coordinates: [string];
+}
+
+const EntitiesSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -46,3 +59,5 @@ export const EntitiesSchema = new Schema({
         required: true
     }
 });
+
+export default mongoose.model<IEntities>('entities', EntitiesSchema);
