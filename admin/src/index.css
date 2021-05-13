@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+html {
+  font-size: 62.5%;
+  /* Reset para REMS - 62.5% = 10px de 16px */
+}
+
+p {
+  font-size: 1.3rem;
+}

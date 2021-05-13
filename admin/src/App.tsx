@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Sidebar from './components/shared/Sidebar/Sidebar';
+import Header from './components/shared/Header/Header';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
+import Home from './components/main/Home/Home';
+import Users from './components/main/Users/Users';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+
+      <Container>
+        <Row>
+          <Col md={2}>
+            <Sidebar />
+          </Col>
+
+          <Col>
+            <Router>
+              <Route path="/users" component={Users} />
+              <Route exact path="/" component={Home} />
+            </Router>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }
 
