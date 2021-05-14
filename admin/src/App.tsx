@@ -16,7 +16,7 @@ function App() {
 
       <Container>
         <Row>
-          <Col md={2}>
+          <Col md={3}>
             <Sidebar />
           </Col>
 

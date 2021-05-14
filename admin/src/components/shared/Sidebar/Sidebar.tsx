@@ -1,11 +1,34 @@
 import React from 'react';
-import { Nav } from 'react-bootstrap';
+import { Nav, Row, Col } from 'react-bootstrap';
+
+import './styles.css';
 
 const Sidebar: React.FC = () => {
     return (
-        <Nav className="flex-column">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/users">Users</Nav.Link>
+        <Nav className="flex-column sidebar">
+            <Nav.Link href="/">
+                <Row>
+                    <Col md={3}>
+                        <i className="fas fa-home icon"></i>
+                    </Col>
+
+                    <Col>
+                        <p className="text">Inicio</p>
+                    </Col>
+                </Row>
+            </Nav.Link>
+
+            <Nav.Link href="/users">
+                <Row>
+                    <Col md={3}>
+                        <i className="fas fa-users icon"></i>
+                    </Col>
+
+                    <Col>
+                        <p className="text">Usuarios</p>
+                    </Col>
+                </Row>
+            </Nav.Link>
         </Nav>
     )
 }

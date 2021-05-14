@@ -1,0 +1,16 @@
+.sidebar {
+    background-color: #ede1e5;
+    height: 100vh;
+    margin-right: 2rem;
+    padding-bottom: .5rem;
+}
+
+.icon {
+    font-size: 3rem;
+    color: black;
+}
+
+.text {
+    font-size: 2rem;
+    color: black;
+}

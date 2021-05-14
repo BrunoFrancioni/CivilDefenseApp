@@ -1,4 +1,26 @@
 .header-container {
-    background-color: #ea0e33;
+    /*background-color: #ea0e33;*/
+    background-color: black;
     height: 6rem;
+    margin-bottom: 2rem;
+}
+
+.logo {
+    /*font-size: 4rem;
+    color: white;*/
+    width: 4.8rem;
+    height: 4.8rem;
+}
+
+.title {
+    text-transform: uppercase;
+    font-size: 3rem;
+    color: white;
+    font-weight: bold;
+}
+
+.button-salir {
+    margin-top: 1.1rem;
+    font-weight: bold !important;
+    font-size: 1.8rem !important;
 }
