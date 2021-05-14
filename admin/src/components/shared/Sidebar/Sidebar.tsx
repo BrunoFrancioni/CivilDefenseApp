@@ -8,7 +8,7 @@ const Sidebar: React.FC = () => {
         <Nav className="flex-column sidebar">
             <Nav.Link href="/">
                 <Row>
-                    <Col md={3}>
+                    <Col md={2}>
                         <i className="fas fa-home icon"></i>
                     </Col>
 
@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
 
             <Nav.Link href="/users">
                 <Row>
-                    <Col md={3}>
+                    <Col md={2}>
                         <i className="fas fa-users icon"></i>
                     </Col>
 

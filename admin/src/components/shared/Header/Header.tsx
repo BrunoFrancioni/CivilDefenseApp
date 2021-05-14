@@ -25,7 +25,7 @@ const Header: React.FC = () => {
                     </Col>
 
                     <Col>
-                        <Button variant="danger" size="lg" className="button-salir">Salir</Button>
+                        <Button variant="danger" size="lg" className="button-salir float-end">Salir</Button>
                     </Col>
                 </Row>
             </Container>

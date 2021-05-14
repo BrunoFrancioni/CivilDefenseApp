@@ -14,13 +14,14 @@
 
 .title {
     text-transform: uppercase;
-    font-size: 3rem;
+    font-size: 2.5rem;
     color: white;
     font-weight: bold;
+    margin-top: .5rem;
 }
 
 .button-salir {
-    margin-top: 1.1rem;
+    margin-top: 1.5rem;
     font-weight: bold !important;
-    font-size: 1.8rem !important;
+    font-size: 1.3rem !important;
 }
