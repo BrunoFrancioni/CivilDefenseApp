@@ -30,3 +30,14 @@ export interface ILoginResult {
     token: string;
     user: ICredential;
 }
+
+export interface IGetCredentials {
+    page: number;
+    size: number;
+}
+
+export interface IGetCredentialsResult {
+    result: boolean;
+    credentials: ICredential[];
+    totalResults: number;
+}

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { ICreateCredentialsResult, ILoginResult } from "interfaces/ICredentials";
+import { ICreateCredentialsResult, IGetCredentials, IGetCredentialsResult, ILoginResult } from "interfaces/ICredentials";
+import { verify } from '../middleware/auth';
 
 import { CredentialsController } from '../controllers/credentialsController';
 
@@ -8,28 +9,29 @@ export class CredentialsRoutes {
 
     public routes(app): void {
         app.route('/credentials/signup')
-            .post(async (req: Request, res: Response) => {
-                try {
-                    const result: ICreateCredentialsResult = await this.credentialsController.createCredential(req.body.createCredentialDTO);
+            .post(verify,
+                async (req: Request, res: Response) => {
+                    try {
+                        const result: ICreateCredentialsResult = await this.credentialsController.createCredential(req.body.createCredentialDTO);
 
-                    if (result.result) {
-                        return res.status(201).json({
-                            message: 'User Created Successfully',
-                            password: result.pass
-                        });
-                    } else {
-                        return res.status(400).json({
-                            message: 'User already exists'
+                        if (result.result) {
+                            return res.status(201).json({
+                                message: 'User Created Successfully',
+                                password: result.pass
+                            });
+                        } else {
+                            return res.status(400).json({
+                                message: 'User already exists'
+                            });
+                        }
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
                         });
                     }
-                } catch (e) {
-                    console.log(e);
-
-                    return res.status(500).json({
-                        message: 'Error'
-                    });
-                }
-            });
+                });
 
         app.route('/credentials/login?:admin')
             .post(async (req: Request, res: Response) => {
@@ -66,5 +68,35 @@ export class CredentialsRoutes {
                     });
                 }
             });
+
+        app.route('/credentials')
+            .get(
+                async (req: Request, res: Response) => {
+                    try {
+                        const params: IGetCredentials = {
+                            page: Number(req.query.page),
+                            size: Number(req.query.size)
+                        }
+
+                        let result: IGetCredentialsResult = await this.credentialsController.getCredentials(params);
+
+                        if (!result.result) {
+                            return res.status(500).json({
+                                message: 'Server error'
+                            });
+                        } else {
+                            return res.status(200).json({
+                                credentials: result.credentials,
+                                totalResults: result.totalResults
+                            });
+                        }
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
+                        });
+                    }
+                });
     }
 }
