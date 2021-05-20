@@ -29,6 +29,18 @@ const Sidebar: React.FC = () => {
                     </Col>
                 </Row>
             </Nav.Link>
+
+            <Nav.Link href="/entities">
+                <Row>
+                    <Col md={2}>
+                        <i className="fas fa-building icon"></i>
+                    </Col>
+
+                    <Col>
+                        <p className="text">Entidades</p>
+                    </Col>
+                </Row>
+            </Nav.Link>
         </Nav>
     )
 }
