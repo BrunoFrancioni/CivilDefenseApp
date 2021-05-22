@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Nav, Row, Col } from 'react-bootstrap';
 
 import './styles.css';
 
 const Sidebar: React.FC = () => {
+    let [activeWindow, setActiveWindow] = useState<string>(window.location.pathname);
+
     return (
         <Nav className="flex-column sidebar">
             <Nav.Link href="/">
@@ -13,7 +15,9 @@ const Sidebar: React.FC = () => {
                     </Col>
 
                     <Col>
-                        <p className="text">Inicio</p>
+                        <p
+                            className={`text ${activeWindow === '/' ? "active" : ""}`}
+                        >Inicio</p>
                     </Col>
                 </Row>
             </Nav.Link>
@@ -25,7 +29,9 @@ const Sidebar: React.FC = () => {
                     </Col>
 
                     <Col>
-                        <p className="text">Usuarios</p>
+                        <p
+                            className={`text ${activeWindow === '/users' ? "active" : ""}`}
+                        >Usuarios</p>
                     </Col>
                 </Row>
             </Nav.Link>
@@ -37,7 +43,9 @@ const Sidebar: React.FC = () => {
                     </Col>
 
                     <Col>
-                        <p className="text">Entidades</p>
+                        <p
+                            className={`text ${activeWindow === '/entities' ? "active" : ""}`}
+                        >Entidades</p>
                     </Col>
                 </Row>
             </Nav.Link>

@@ -1,5 +1,5 @@
 .sidebar {
-    background-color: #ede1e5;
+    /*background-color: #ede1e5;*/
     height: 100vh;
     margin-right: 2rem;
     padding-top: 1rem;
@@ -13,5 +13,9 @@
 .text {
     font-size: 1.5rem;
     color: black;
+    padding-left: 1rem;
+}
+
+.active {
     font-weight: bold;
 }
