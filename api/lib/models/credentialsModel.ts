@@ -7,8 +7,7 @@ export interface ICredentials extends mongoose.Document {
     dni: string,
     organization: string,
     email: string,
-    password: string,
-    role: string
+    password: string
 }
 
 const CredentialsSchema = new Schema({
@@ -29,10 +28,6 @@ const CredentialsSchema = new Schema({
         required: true
     },
     password: {
-        type: String,
-        required: true
-    },
-    role: {
         type: String,
         required: true
     }

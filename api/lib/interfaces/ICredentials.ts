@@ -4,7 +4,6 @@ export interface ICredential {
     dni: string;
     organization: string;
     email: string;
-    role: string;
 }
 
 export interface ICreateCredentials {
@@ -12,7 +11,6 @@ export interface ICreateCredentials {
     dni: string;
     organization: string;
     email: string;
-    role: string;
 }
 
 export interface ICreateCredentialsResult {

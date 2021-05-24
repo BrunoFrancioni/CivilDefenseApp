@@ -31,8 +31,7 @@ export const sign = (credential: ICredential): string => {
             name_lastname: credential.name_lastname,
             dni: credential.dni,
             organization: credential.organization,
-            email: credential.email,
-            role: credential.role
+            email: credential.email
         }, process.env.JWT_SECRET);
 
         return result;

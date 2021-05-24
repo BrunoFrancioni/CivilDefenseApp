@@ -29,8 +29,7 @@ export class CredentialsController {
                 dni: createCredentialDTO.dni,
                 organization: createCredentialDTO.organization,
                 email: createCredentialDTO.email,
-                password: hash,
-                role: createCredentialDTO.role
+                password: hash
             }).save();
 
             if (credential == null) {
@@ -84,8 +83,7 @@ export class CredentialsController {
                 name_lastname: credential.name_lastname,
                 dni: credential.dni,
                 organization: credential.organization,
-                email: credential.email,
-                role: credential.role
+                email: credential.email
             }
 
             const token = sign(user);
@@ -116,7 +114,7 @@ export class CredentialsController {
                 return result;
             }
 
-            if (credential.role !== 'admin') {
+            if (credential.organization !== 'admin') {
                 return 'User is not admin';
             }
 
@@ -137,8 +135,7 @@ export class CredentialsController {
                 name_lastname: credential.name_lastname,
                 dni: credential.dni,
                 organization: credential.organization,
-                email: credential.email,
-                role: credential.role
+                email: credential.email
             }
 
             const token = sign(user);
@@ -174,8 +171,7 @@ export class CredentialsController {
                         name_lastname: cred.name_lastname,
                         dni: cred.dni,
                         organization: cred.organization,
-                        email: cred.email,
-                        role: cred.role
+                        email: cred.email
                     }
 
                     credentialsDTO.push(credential);
