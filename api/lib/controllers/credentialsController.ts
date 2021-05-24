@@ -156,12 +156,12 @@ export class CredentialsController {
         try {
             const { page, size } = getCredentials;
 
-            const totalResult: number = await this.Credentials.find().countDocuments().exec();
+            const totalResult: number = await this.Credentials.find({ organization: { $ne: 'admin' } }).countDocuments().exec();
 
             let result: IGetCredentialsResult;
 
             if (totalResult != 0) {
-                const credentials: ICredentials[] = await this.Credentials.find({ role: { $ne: 'admin' } }).limit(size).skip((page - 1) * size).exec();
+                const credentials: ICredentials[] = await this.Credentials.find({ organization: { $ne: 'admin' } }).limit(size).skip((page - 1) * size).exec();
 
                 const credentialsDTO: ICredential[] = [];
 
