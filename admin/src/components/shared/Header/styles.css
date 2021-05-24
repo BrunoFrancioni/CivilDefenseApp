@@ -1,15 +1,17 @@
 .header-container {
-    /*background-color: #ea0e33;*/
-    background-color: black;
+    background-color: #161616;
     height: 6rem;
     margin-bottom: 2rem;
 }
 
+.logo-title-container {
+    display: flex;
+}
+
 .logo {
-    /*font-size: 4rem;
-    color: white;*/
-    width: 4.8rem;
+    width: 5rem;
     height: 4.8rem;
+    margin-right: 1rem;
 }
 
 .title {

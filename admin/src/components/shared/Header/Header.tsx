@@ -11,15 +11,15 @@ const Header: React.FC = () => {
                     <Col lg={11}>
                         <Nav>
                             <Nav.Link href="/">
-                                <Row>
-                                    <Col>
-                                        <img src="ico-herramientas.png" alt="logo" className="logo" />
-                                    </Col>
+                                <div className="logo-title-container">
+                                    <div>
+                                        <img src="Defensa-Civil-logo.png" alt="logo" className="logo" />
+                                    </div>
 
-                                    <Col>
-                                        <p className="title">Administrador</p>
-                                    </Col>
-                                </Row>
+                                    <div>
+                                        <p className="title">Defensa Civil Administrador</p>
+                                    </div>
+                                </div>
                             </Nav.Link>
                         </Nav>
                     </Col>
