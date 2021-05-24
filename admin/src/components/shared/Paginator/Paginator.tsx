@@ -97,9 +97,17 @@ class Paginator extends React.Component<PaginatorProps, PaginatorState, {}> {
 
     render() {
         return (
-            <Pagination>
-                {this.state.items}
-            </Pagination>
+            <div className="paginator-container">
+                <div>
+                    <p>Resultados totales: {this.props.totalResults}</p>
+                </div>
+
+                <div className="center">
+                    <Pagination>
+                        {this.state.items}
+                    </Pagination>
+                </div>
+            </div>
         )
     };
 }

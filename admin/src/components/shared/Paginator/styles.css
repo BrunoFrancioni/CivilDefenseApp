@@ -1,3 +1,13 @@
+.paginator-container {
+    display: block;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .hover-item:hover {
     cursor: pointer;
 }
