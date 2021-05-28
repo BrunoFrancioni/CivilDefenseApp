@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ICreateCredentialsResult, IGetCredentials, IGetCredentialsResult, ILoginResult } from "interfaces/ICredentials";
+import { ICreateCredentialsResult, IDeleteCredentialResult, IEditCredentialResult, IGetCredentialByIdResult, IGetCredentials, IGetCredentialsResult, IGetNewPasswordResult, ILoginResult } from "interfaces/ICredentials";
 import { verify } from '../middleware/auth';
 
 import { CredentialsController } from '../controllers/credentialsController';
@@ -9,10 +9,11 @@ export class CredentialsRoutes {
 
     public routes(app): void {
         app.route('/credentials/signup')
-            .post(verify,
+            .post(
                 async (req: Request, res: Response) => {
                     try {
-                        const result: ICreateCredentialsResult = await this.credentialsController.createCredential(req.body.createCredentialDTO);
+                        const result: ICreateCredentialsResult = await this.credentialsController
+                            .createCredential(req.body.createCredentialsDTO);
 
                         if (result.result) {
                             return res.status(201).json({
@@ -20,9 +21,9 @@ export class CredentialsRoutes {
                                 password: result.pass
                             });
                         } else {
-                            return res.status(400).json({
+                            return res.json({
                                 message: 'User already exists'
-                            });
+                            })
                         }
                     } catch (e) {
                         console.log(e);
@@ -90,6 +91,106 @@ export class CredentialsRoutes {
                                 totalResults: result.totalResults
                             });
                         }
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
+                        });
+                    }
+                });
+
+        app.route('/credentials/get/:id')
+            .get(
+                async (req: Request, res: Response) => {
+                    try {
+                        const result: IGetCredentialByIdResult = await this.credentialsController
+                            .getCredentialById(req.params.id);
+
+                        if (result.result) {
+                            return res.status(200).json({
+                                credential: result.credential
+                            });
+                        }
+
+                        return res.json({
+                            message: 'User don`t exists'
+                        })
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
+                        });
+                    }
+                });
+
+        app.route('/credentials/password')
+            .post(
+                async (req: Request, res: Response) => {
+                    try {
+                        const result: IGetNewPasswordResult = await this.credentialsController
+                            .generateNewPassword(req.body.generateNewPassword);
+
+                        if (result.result) {
+                            return res.status(200).json({
+                                password: result.newPassword
+                            });
+                        }
+
+                        return res.status(400).json({
+                            message: 'Bad request'
+                        });
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
+                        });
+                    }
+                });
+
+        app.route('/credentials/:id')
+            .put(
+                async (req: Request, res: Response) => {
+                    try {
+                        const result: IEditCredentialResult = await this.credentialsController
+                            .editCredentials(req.params.id, req.body.editCredentialDTO);
+
+                        if (result.result) {
+                            return res.status(200).json({
+                                message: 'User updated'
+                            });
+                        }
+
+                        return res.json({
+                            message: 'User not exists'
+                        });
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
+                        });
+                    }
+                });
+
+        app.route('/credentials/:id')
+            .delete(
+                async (req: Request, res: Response) => {
+                    try {
+                        const result: IDeleteCredentialResult = await this.credentialsController
+                            .deleteCredential(req.params.id);
+
+                        if (result.result) {
+                            return res.status(201).json({
+                                message: 'User deleted successfuly'
+                            });
+                        }
+
+                        return res.json({
+                            message: 'Bad request'
+                        });
                     } catch (e) {
                         console.log(e);
 
