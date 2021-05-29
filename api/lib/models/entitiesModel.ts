@@ -11,8 +11,8 @@ export interface IEntities extends mongoose.Document {
     postalCode: string;
     email: string;
     sector: string;
-    risk: [string];
-    coordinates: [string];
+    risk: string[];
+    coordinates: string[];
 }
 
 const EntitiesSchema = new Schema({
