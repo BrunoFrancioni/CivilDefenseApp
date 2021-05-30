@@ -25,7 +25,7 @@ class Paginator extends React.Component<PaginatorProps, PaginatorState, {}> {
             totalPages = this.props.totalResults / this.props.sizePage;
             items.push(<Pagination.First key={0} onClick={() => this.changePage(1)} />);
         } else {
-            totalPages = (this.props.totalResults / this.props.sizePage) + 0.5;
+            totalPages = Math.ceil(this.props.totalResults / this.props.sizePage);
             items.push(<Pagination.First key={0} onClick={() => this.changePage(1)} />);
         }
 
