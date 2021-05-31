@@ -12,17 +12,6 @@ export interface IEntity {
     coordinates: string[];
 }
 
-export interface IGetEntities {
-    page: number;
-    size: number;
-}
-
-export interface IGetEntitiesResult {
-    result: boolean;
-    entities: IEntity[];
-    totalResults: number;
-}
-
 export interface ICreateEntity {
     name: string;
     entityType: string;
@@ -34,12 +23,4 @@ export interface ICreateEntity {
     sector: string;
     risk: string[];
     coordinates: string[];
-}
-
-export interface ICreateEntityResult {
-    result: boolean;
-}
-
-export interface IDeleteEntityResult {
-    result: boolean;
 }

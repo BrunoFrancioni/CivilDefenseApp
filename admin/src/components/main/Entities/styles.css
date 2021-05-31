@@ -1,0 +1,24 @@
+.button-crear {
+    margin-bottom: 1rem;
+}
+
+.spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+thead tr th {
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bold;
+}
+
+.container-options {
+    display: flex;
+    justify-content: space-between;
+}
+
+.option:hover {
+    cursor: pointer;
+}

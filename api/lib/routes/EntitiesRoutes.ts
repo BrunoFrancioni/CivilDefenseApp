@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ICreateEntityResult, IGetEntities } from "interfaces/IEntities";
+import { ICreateEntityResult, IDeleteEntityResult, IGetEntities } from "interfaces/IEntities";
 
 import { EntitiesController } from '../controllers/entitiesController';
 
@@ -55,6 +55,31 @@ export class EntitiesRoutes {
                                 message: 'Entity already exists'
                             })
                         }
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
+                        });
+                    }
+                });
+
+        app.route('/entities/:id')
+            .delete(
+                async (req: Request, res: Response) => {
+                    try {
+                        const result: IDeleteEntityResult = await this.entitiesController
+                            .deleteEntity(req.params.id);
+
+                        if (result.result) {
+                            return res.status(201).json({
+                                message: 'Entity deleted successfuly'
+                            });
+                        }
+
+                        return res.json({
+                            message: 'Bad request'
+                        });
                     } catch (e) {
                         console.log(e);
 

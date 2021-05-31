@@ -1,5 +1,5 @@
 
-import { ICreateEntity, ICreateEntityResult, IEntity, IGetEntities, IGetEntitiesResult } from 'interfaces/IEntities';
+import { ICreateEntity, ICreateEntityResult, IDeleteEntityResult, IEntity, IGetEntities, IGetEntitiesResult } from 'interfaces/IEntities';
 import EntitiesSchema, { IEntities } from '../models/entitiesModel';
 
 export class EntitiesController {
@@ -143,6 +143,30 @@ export class EntitiesController {
             }).save();
 
             if (newEntity == null) {
+                result = {
+                    result: false
+                }
+
+                return result;
+            }
+
+            result = {
+                result: true
+            }
+
+            return result;
+        } catch (e) {
+            throw new Error(e);
+        }
+    }
+
+    public async deleteEntity(id: string): Promise<IDeleteEntityResult> {
+        try {
+            let result: IDeleteEntityResult;
+
+            const deleted = await this.Entities.deleteOne({ _id: id }).exec();
+
+            if (deleted.deletedCount == 0) {
                 result = {
                     result: false
                 }
