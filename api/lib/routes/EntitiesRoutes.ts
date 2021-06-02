@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ICreateEntityResult, IDeleteEntityResult, IGetEntities } from "interfaces/IEntities";
+import { ICreateEntityResult, IDeleteEntityResult, IGetEntities, IGetEntityResult } from "interfaces/IEntities";
 
 import { EntitiesController } from '../controllers/entitiesController';
 
@@ -28,6 +28,31 @@ export class EntitiesRoutes {
                             return res.status(200).json({
                                 entities: result.entities,
                                 totalResults: result.totalResults
+                            });
+                        }
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
+                        });
+                    }
+                });
+
+        app.route('/entities/:id')
+            .get(
+                async (req: Request, res: Response) => {
+                    try {
+                        const result: IGetEntityResult = await this.entitiesController
+                            .getEntity(req.params.id);
+
+                        if (result.result) {
+                            return res.status(200).json({
+                                entity: result.entity
+                            });
+                        } else {
+                            return res.json({
+                                message: 'Entity don`t exists'
                             });
                         }
                     } catch (e) {

@@ -43,3 +43,8 @@ export interface ICreateEntityResult {
 export interface IDeleteEntityResult {
     result: boolean;
 }
+
+export interface IGetEntityResult {
+    result: boolean;
+    entity: IEntity;
+}

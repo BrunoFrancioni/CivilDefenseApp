@@ -1,0 +1,19 @@
+.spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.align-text {
+    text-align: center;
+}
+
+.container-risks {
+    display: flex;
+    justify-content: center;
+}
+
+.delete-button {
+    display: flex;
+    justify-content: flex-end;
+}

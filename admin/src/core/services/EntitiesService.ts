@@ -20,6 +20,10 @@ class EntitiesService {
     public async deleteEntity(id: string) {
         return await API.delete(this.path + `/${id}`);
     }
+
+    public async getEntity(id: string) {
+        return await API.get(this.path + `/${id}`);
+    }
 }
 
 export default EntitiesService;

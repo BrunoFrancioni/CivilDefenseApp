@@ -1,5 +1,5 @@
 
-import { ICreateEntity, ICreateEntityResult, IDeleteEntityResult, IEntity, IGetEntities, IGetEntitiesResult } from 'interfaces/IEntities';
+import { ICreateEntity, ICreateEntityResult, IDeleteEntityResult, IEntity, IGetEntities, IGetEntitiesResult, IGetEntityResult } from 'interfaces/IEntities';
 import EntitiesSchema, { IEntities } from '../models/entitiesModel';
 
 export class EntitiesController {
@@ -87,29 +87,41 @@ export class EntitiesController {
         }
     }
 
-    public async getEntity(_id: String): Promise<IEntity> {
+    public async getEntity(_id: String): Promise<IGetEntityResult> {
         try {
-            const result: IEntities = await this.Entities.findOne({ _id: _id }).exec();
+            let result: IGetEntityResult;
+
+            const getEntity: IEntities = await this.Entities.findOne({ _id: _id }).exec();
 
             let entity: IEntity;
 
-            if (result) {
+            if (getEntity) {
                 entity = {
-                    _id: result._id,
-                    name: result.name,
-                    entityType: result.entityType,
-                    legalNumber: result.legalNumber,
-                    address: result.address,
-                    phone: result.phone,
-                    postalCode: result.postalCode,
-                    email: result.email,
-                    sector: result.sector,
-                    risk: result.risk,
-                    coordinates: result.coordinates
+                    _id: getEntity._id,
+                    name: getEntity.name,
+                    entityType: getEntity.entityType,
+                    legalNumber: getEntity.legalNumber,
+                    address: getEntity.address,
+                    phone: getEntity.phone,
+                    postalCode: getEntity.postalCode,
+                    email: getEntity.email,
+                    sector: getEntity.sector,
+                    risk: getEntity.risk,
+                    coordinates: getEntity.coordinates
+                }
+
+                result = {
+                    result: true,
+                    entity: entity
+                }
+            } else {
+                result = {
+                    result: false,
+                    entity: null
                 }
             }
 
-            return entity;
+            return result;
         } catch (e) {
             throw new Error(e);
         }
