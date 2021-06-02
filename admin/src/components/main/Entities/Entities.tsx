@@ -8,6 +8,8 @@ import Paginator from '../../shared/Paginator/Paginator';
 import { IEntity } from '../../../core/interfaces/IEntities';
 import CreateEntityModal from '../../shared/Modals/Entities/CreateEntityModal/CreateEntityModal';
 import Swal from 'sweetalert2';
+import DetailsEntityModal from '../../shared/Modals/Entities/DetailsEntityModal/DetailsEntityModal';
+import EditEntityModal from '../../shared/Modals/Entities/EditEntityModal/EditEntityModal';
 
 const Entities = (props: EntitiesProps) => {
     const [loading, setLoading] = useState<boolean>(true);
@@ -17,6 +19,9 @@ const Entities = (props: EntitiesProps) => {
     const [totalResults, setTotalResults] = useState<number>(0);
     const [searchWithError, setSearchWithError] = useState<boolean>(false);
     const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
+    const [showDetailsModal, setShowDetailsModal] = useState<boolean>(false);
+    const [showEditModal, setShowEditModal] = useState<boolean>(false);
+    const [activeEntity, setActiveEntity] = useState<string | null>(null);
 
     const entitiesService: EntitiesService = new EntitiesService();
 
@@ -86,6 +91,28 @@ const Entities = (props: EntitiesProps) => {
         });
     }
 
+    const handleEditClick = (id: string) => {
+        setActiveEntity(id);
+        setShowEditModal(true);
+    }
+
+    const handleCloseEditModal = () => {
+        setShowEditModal(false);
+        setActiveEntity(null);
+    }
+
+    const handleEditClickModal = (id: string) => {
+        handleCloseDetailsModal();
+
+        handleEditClick(id);
+    }
+
+    const handleDeleteClickModal = (id: string) => {
+        handleCloseDetailsModal();
+
+        handleDeleteClick(id);
+    }
+
     const handleDeleteClick = (id: string) => {
         Swal.fire({
             title: '¿Está seguro que desea eliminar la entidad?',
@@ -122,6 +149,32 @@ const Entities = (props: EntitiesProps) => {
                     });
                 }
             }
+        });
+    }
+
+    const handleDetailsClick = (id: string) => {
+        setActiveEntity(id);
+        setShowDetailsModal(true);
+    }
+
+    const handleCloseDetailsModal = () => {
+        setShowDetailsModal(false);
+        setActiveEntity(null);
+    }
+
+    const handleEntityEdited = () => {
+        setShowEditModal(false);
+        setActiveEntity(null);
+
+        Swal.fire({
+            title: 'Entidad editada correctamente',
+            icon: 'success'
+        }).then(() => {
+            setLoading(true);
+            setTotalResults(0);
+            setEntities([]);
+            setSearchWithError(false);
+            setActualPage(1);
         });
     }
 
@@ -202,13 +255,13 @@ const Entities = (props: EntitiesProps) => {
                                                     <span title="Ver detalles de la entidad">
                                                         <i
                                                             className="fas fa-info-circle option"
-
+                                                            onClick={() => handleDetailsClick(entity._id)}
                                                         ></i>
                                                     </span>
                                                     <span title="Editar entidad">
                                                         <i
                                                             className="fas fa-edit option"
-
+                                                            onClick={() => handleEditClick(entity._id)}
                                                         ></i>
                                                     </span>
                                                     <span title="Eliminar entidad">
@@ -241,6 +294,27 @@ const Entities = (props: EntitiesProps) => {
                     showModal={showCreateModal}
                     handleClose={() => setShowCreateModal(false)}
                     handleUserCreated={handleUserCreated}
+                />
+            }
+
+            {
+                showEditModal &&
+                <EditEntityModal
+                    showModal={showEditModal}
+                    id={activeEntity}
+                    handleClose={handleCloseEditModal}
+                    handleEntityEdited={handleEntityEdited}
+                />
+            }
+
+            {
+                showDetailsModal &&
+                <DetailsEntityModal
+                    showModal={showDetailsModal}
+                    id={activeEntity}
+                    handleClose={handleCloseDetailsModal}
+                    handleEditEntity={handleEditClickModal.bind(this)}
+                    handleDeleteEntity={handleDeleteClickModal.bind(this)}
                 />
             }
         </>
