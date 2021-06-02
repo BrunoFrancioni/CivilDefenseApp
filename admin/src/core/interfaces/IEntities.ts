@@ -24,3 +24,14 @@ export interface ICreateEntity {
     risk: string[];
     coordinates: string[];
 }
+
+export interface IEditEntity {
+    name: string;
+    entityType: string;
+    address: string;
+    phone: string;
+    postalCode: string;
+    sector: string;
+    risk: string[];
+    coordinates: string[];
+}

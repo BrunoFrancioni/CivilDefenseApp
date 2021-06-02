@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ICreateEntityResult, IDeleteEntityResult, IGetEntities, IGetEntityResult } from "interfaces/IEntities";
+import { ICreateEntityResult, IDeleteEntityResult, IEditEntityResult, IGetEntities, IGetEntityResult } from "interfaces/IEntities";
 
 import { EntitiesController } from '../controllers/entitiesController';
 
@@ -80,6 +80,31 @@ export class EntitiesRoutes {
                                 message: 'Entity already exists'
                             })
                         }
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
+                        });
+                    }
+                });
+
+        app.route('/entities/:id')
+            .put(
+                async (req: Request, res: Response) => {
+                    try {
+                        const result: IEditEntityResult = await this.entitiesController
+                            .editEntity(req.params.id, req.body.editEntityDTO);
+
+                        if (result.result) {
+                            return res.status(200).json({
+                                message: 'Entity updated'
+                            });
+                        }
+
+                        return res.json({
+                            message: 'Entity not exists'
+                        });
                     } catch (e) {
                         console.log(e);
 

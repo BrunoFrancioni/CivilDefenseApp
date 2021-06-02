@@ -1,5 +1,5 @@
 
-import { ICreateEntity, ICreateEntityResult, IDeleteEntityResult, IEntity, IGetEntities, IGetEntitiesResult, IGetEntityResult } from 'interfaces/IEntities';
+import { ICreateEntity, ICreateEntityResult, IDeleteEntityResult, IEditEntity, IEditEntityResult, IEntity, IGetEntities, IGetEntitiesResult, IGetEntityResult } from 'interfaces/IEntities';
 import EntitiesSchema, { IEntities } from '../models/entitiesModel';
 
 export class EntitiesController {
@@ -155,6 +155,49 @@ export class EntitiesController {
             }).save();
 
             if (newEntity == null) {
+                result = {
+                    result: false
+                }
+
+                return result;
+            }
+
+            result = {
+                result: true
+            }
+
+            return result;
+        } catch (e) {
+            throw new Error(e);
+        }
+    }
+
+    public async editEntity(id: string, editEntityDTO: IEditEntity): Promise<IEditEntityResult> {
+        try {
+            let result: IEditEntityResult;
+
+            const entity = await this.Entities.findOne({ _id: id }).exec();
+
+            if (!entity) {
+                result = {
+                    result: false
+                }
+
+                return result;
+            }
+
+            entity.name = editEntityDTO.name;
+            entity.entityType = editEntityDTO.entityType;
+            entity.address = editEntityDTO.address;
+            entity.phone = editEntityDTO.phone;
+            entity.postalCode = editEntityDTO.postalCode;
+            entity.sector = editEntityDTO.sector;
+            entity.risk = entity.risk;
+            entity.coordinates = entity.coordinates;
+
+            const ent = await entity.save();
+
+            if (ent === null) {
                 result = {
                     result: false
                 }

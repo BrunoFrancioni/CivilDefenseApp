@@ -1,4 +1,4 @@
-import { ICreateEntity } from '../interfaces/IEntities';
+import { ICreateEntity, IEditEntity } from '../interfaces/IEntities';
 import API from '../utils/API';
 
 class EntitiesService {
@@ -15,6 +15,10 @@ class EntitiesService {
 
     public async createEntity(createEntity: ICreateEntity) {
         return await API.post(this.path, { createEntityDTO: createEntity });
+    }
+
+    public async editEntity(id: string, editEntity: IEditEntity) {
+        return await API.put(this.path + `/${id}`, { editEntityDTO: editEntity });
     }
 
     public async deleteEntity(id: string) {

@@ -40,6 +40,21 @@ export interface ICreateEntityResult {
     result: boolean;
 }
 
+export interface IEditEntity {
+    name: string;
+    entityType: string;
+    address: string;
+    phone: string;
+    postalCode: string;
+    sector: string;
+    risk: string[];
+    coordinates: string[];
+}
+
+export interface IEditEntityResult {
+    result: boolean;
+}
+
 export interface IDeleteEntityResult {
     result: boolean;
 }
