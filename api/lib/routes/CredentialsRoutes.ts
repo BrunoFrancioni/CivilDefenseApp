@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ICreateCredentialsResult, IDeleteCredentialResult, IEditCredentialResult, IGetCredentialByIdResult, IGetCredentials, IGetCredentialsResult, IGetNewPasswordResult, ILoginResult } from "interfaces/ICredentials";
+import { ICreateCredentialsResult, IDeleteCredentialResult, IEditCredentialResult, IGetCredentialByIdResult, IGetCredentials, IGetCredentialsResult, IGetCredentialsStatsResult, IGetNewPasswordResult, ILoginResult } from "interfaces/ICredentials";
 import { verify } from '../middleware/auth';
 
 import { CredentialsController } from '../controllers/credentialsController';
@@ -191,6 +191,31 @@ export class CredentialsRoutes {
                         return res.json({
                             message: 'Bad request'
                         });
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
+                        });
+                    }
+                });
+
+        app.route('/credentials/stats')
+            .get(
+                async (req: Request, res: Response) => {
+                    try {
+                        const result: IGetCredentialsStatsResult = await this.credentialsController
+                            .getCredentialsStats();
+
+                        if (result.result) {
+                            return res.status(200).json({
+                                stats: result.stats
+                            });
+                        } else {
+                            return res.json({
+                                message: 'Error'
+                            });
+                        }
                     } catch (e) {
                         console.log(e);
 

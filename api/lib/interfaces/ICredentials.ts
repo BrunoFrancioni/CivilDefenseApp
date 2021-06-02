@@ -68,3 +68,17 @@ export interface IGetNewPasswordResult {
 export interface IDeleteCredentialResult {
     result: boolean;
 }
+
+export interface IGetCredentialsStatsResult {
+    result: boolean;
+    stats: IStatsCredentials;
+}
+
+export interface IStatsCredentials {
+    totalCredentials: number;
+    statsOrganization: {
+        totalBomberos: number;
+        totalDefensaCivil: number;
+        totalPolicia: number;
+    }
+}

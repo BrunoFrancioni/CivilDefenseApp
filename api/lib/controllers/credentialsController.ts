@@ -11,6 +11,7 @@ import {
     IGetCredentialByIdResult,
     IGetCredentials,
     IGetCredentialsResult,
+    IGetCredentialsStatsResult,
     IGetNewPassword,
     IGetNewPasswordResult,
     ILoginCredential,
@@ -356,6 +357,52 @@ export class CredentialsController {
 
             result = {
                 result: true
+            }
+
+            return result;
+        } catch (e) {
+            throw new Error(e);
+        }
+    }
+
+    public async getCredentialsStats(): Promise<IGetCredentialsStatsResult> {
+        try {
+            let result: IGetCredentialsStatsResult;
+
+            const totalResult: number = await this.Credentials.find({ organization: { $ne: 'admin' } })
+                .countDocuments().exec();
+
+            if (totalResult === 0) {
+                result = {
+                    result: true,
+                    stats: {
+                        totalCredentials: totalResult,
+                        statsOrganization: null
+                    }
+                }
+
+                return result;
+            }
+
+            const totalBomberos: number = await this.Credentials.find({ organization: { $ne: 'admin', $eq: 'bomberos' } })
+                .countDocuments().exec();
+
+            const totalDefensaCivil: number = await this.Credentials.find({ organization: { $ne: 'admin', $eq: 'defensa civil' } })
+                .countDocuments().exec();
+
+            const totalPolicia: number = await this.Credentials.find({ organization: { $ne: 'admin', $eq: 'policia' } })
+                .countDocuments().exec();
+
+            result = {
+                result: true,
+                stats: {
+                    totalCredentials: totalResult,
+                    statsOrganization: {
+                        totalBomberos,
+                        totalDefensaCivil,
+                        totalPolicia
+                    }
+                }
             }
 
             return result;
