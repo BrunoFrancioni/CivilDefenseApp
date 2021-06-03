@@ -63,3 +63,32 @@ export interface IGetEntityResult {
     result: boolean;
     entity: IEntity;
 }
+
+export interface IGetEntitiesStatsResult {
+    result: boolean;
+    stats: IStatsEntities;
+}
+
+export interface IStatsEntities {
+    totalEntities: number;
+    statsEntityType: {
+        totalEducacion: number;
+        totalCentroSalud: number;
+        totalDepositoCombustible: number;
+        totalOrganismoPublico: number;
+        totalLugarEventoMasivo: number;
+        totalClub: number;
+        totalHogarAcogida: number;
+    },
+    statsSector: {
+        totalPrivado: number;
+        totalPublico: number;
+        totalEstatal: number;
+    },
+    statsRisk: {
+        totalIncendio: number;
+        totalInundacion: number;
+        totalAccidente: number;
+        totalAmenazaClimatica: number;
+    }
+}

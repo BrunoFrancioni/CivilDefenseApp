@@ -1,5 +1,5 @@
 
-import { ICreateEntity, ICreateEntityResult, IDeleteEntityResult, IEditEntity, IEditEntityResult, IEntity, IGetEntities, IGetEntitiesResult, IGetEntityResult } from 'interfaces/IEntities';
+import { ICreateEntity, ICreateEntityResult, IDeleteEntityResult, IEditEntity, IEditEntityResult, IEntity, IGetEntities, IGetEntitiesResult, IGetEntitiesStatsResult, IGetEntityResult } from 'interfaces/IEntities';
 import EntitiesSchema, { IEntities } from '../models/entitiesModel';
 
 export class EntitiesController {
@@ -231,6 +231,97 @@ export class EntitiesController {
 
             result = {
                 result: true
+            }
+
+            return result;
+        } catch (e) {
+            throw new Error(e);
+        }
+    }
+
+    public async getEntitiesStats(): Promise<IGetEntitiesStatsResult> {
+        try {
+            let result: IGetEntitiesStatsResult;
+
+            const totalResult = await this.Entities.find().countDocuments().exec();
+
+            if (totalResult === 0) {
+                result = {
+                    result: true,
+                    stats: {
+                        totalEntities: totalResult,
+                        statsEntityType: null,
+                        statsSector: null,
+                        statsRisk: null
+                    }
+                }
+
+                return result;
+            }
+
+            const totalEducacion: number = await this.Entities.find({ entityType: { $eq: 'inundación' } })
+                .countDocuments().exec();
+
+            const totalCentroSalud: number = await this.Entities.find({ entityType: { $eq: 'centro salud' } })
+                .countDocuments().exec();
+
+            const totalDepositoCombustible: number = await this.Entities.find({ entityType: { $eq: 'depósito combustible' } })
+                .countDocuments().exec();
+
+            const totalOrganismoPublico: number = await this.Entities.find({ entityType: { $eq: 'organismo público' } })
+                .countDocuments().exec();
+
+            const totalLugarEventoMasivo: number = await this.Entities.find({ entityType: { $eq: 'lugar evento masivo' } })
+                .countDocuments().exec();
+
+            const totalClub: number = await this.Entities.find({ entityType: { $eq: 'club' } })
+                .countDocuments().exec();
+
+            const totalHogarAcogida: number = await this.Entities.find({ entityType: { $eq: 'hogar acogida' } })
+                .countDocuments().exec();
+
+            const totalSectorPrivado: number = await this.Entities.find({ sector: { $eq: 'Privado' } })
+                .countDocuments().exec();
+
+            const totalSectorPublico: number = await this.Entities.find({ sector: { $eq: 'Publico' } })
+                .countDocuments().exec();
+
+            const totalSectorEstatal: number = await this.Entities.find({ sector: { $eq: 'Estatal' } })
+                .countDocuments().exec();
+
+            const totalRiskIncendio: number = await this.Entities.find({ risk: { $eq: 'incendio' } }).countDocuments();
+
+            const totalRiskInundacion: number = await this.Entities.find({ risk: { $eq: 'inundación' } }).countDocuments();
+
+            const totalRiskAccidente: number = await this.Entities.find({ risk: { $eq: 'accidente' } }).countDocuments();
+
+            const totalRiskAmenazaClimatica: number = await this.Entities.find({ risk: { $eq: 'amenaza climática' } }).countDocuments();
+
+            result = {
+                result: true,
+                stats: {
+                    totalEntities: totalResult,
+                    statsEntityType: {
+                        totalEducacion: totalEducacion,
+                        totalCentroSalud: totalCentroSalud,
+                        totalDepositoCombustible: totalDepositoCombustible,
+                        totalOrganismoPublico: totalOrganismoPublico,
+                        totalLugarEventoMasivo: totalLugarEventoMasivo,
+                        totalClub: totalClub,
+                        totalHogarAcogida: totalHogarAcogida
+                    },
+                    statsSector: {
+                        totalPrivado: totalSectorPrivado,
+                        totalPublico: totalSectorPublico,
+                        totalEstatal: totalSectorEstatal
+                    },
+                    statsRisk: {
+                        totalIncendio: totalRiskIncendio,
+                        totalInundacion: totalRiskInundacion,
+                        totalAccidente: totalRiskAccidente,
+                        totalAmenazaClimatica: totalRiskAmenazaClimatica
+                    }
+                }
             }
 
             return result;
