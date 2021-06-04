@@ -42,8 +42,8 @@ const CredentialsStats = () => {
     }
 
     return (
-        <div>
-            <h2>Estadísticas de Credenciales</h2>
+        <div className="container-credentials-stats">
+            <h2 className="title-credentials-stats">Estadísticas de Credenciales</h2>
 
             <br />
 

@@ -1,3 +1,11 @@
+.container-credentials-stats {
+    margin-bottom: 2rem;
+}
+
+.title-credentials-stats {
+    text-align: center;
+}
+
 .spinner-container {
     display: flex;
     align-items: center;
