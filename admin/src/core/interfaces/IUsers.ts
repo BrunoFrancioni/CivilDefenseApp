@@ -44,3 +44,12 @@ export interface IGetNewPassword {
     idAdmin: string;
     idCredential: string;
 }
+
+export interface IStatsCredentials {
+    totalCredentials: number;
+    statsOrganization: {
+        totalBomberos: number;
+        totalDefensaCivil: number;
+        totalPolicia: number;
+    }
+}

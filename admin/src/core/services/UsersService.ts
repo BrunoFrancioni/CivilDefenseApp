@@ -32,6 +32,10 @@ class UsersService {
     public async deleteCredential(id: string) {
         return await API.delete(this.path + `/${id}`);
     }
+
+    public async getStatsCredentials() {
+        return await API.get(this.path + '/stats');
+    }
 }
 
 export default UsersService;
