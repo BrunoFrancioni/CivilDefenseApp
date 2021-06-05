@@ -35,3 +35,27 @@ export interface IEditEntity {
     risk: string[];
     coordinates: string[];
 }
+
+export interface IStatsEntities {
+    totalEntities: number;
+    statsEntityType: {
+        totalEducacion: number;
+        totalCentroSalud: number;
+        totalDepositoCombustible: number;
+        totalOrganismoPublico: number;
+        totalLugarEventoMasivo: number;
+        totalClub: number;
+        totalHogarAcogida: number;
+    },
+    statsSector: {
+        totalPrivada: number;
+        totalPublico: number;
+        totalEstatal: number;
+    },
+    statsRisk: {
+        totalIncendio: number;
+        totalInundacion: number;
+        totalAccidente: number;
+        totalAmenazaClimatica: number;
+    }
+}

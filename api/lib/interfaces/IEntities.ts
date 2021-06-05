@@ -81,7 +81,7 @@ export interface IStatsEntities {
         totalHogarAcogida: number;
     },
     statsSector: {
-        totalPrivado: number;
+        totalPrivada: number;
         totalPublico: number;
         totalEstatal: number;
     },

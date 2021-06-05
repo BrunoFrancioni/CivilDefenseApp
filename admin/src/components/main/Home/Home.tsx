@@ -1,5 +1,6 @@
 import React from 'react';
 import CredentialsStats from './CredentialsStats/CredentialsStats';
+import EntitiesStats from './EntitiesStats/EntititesStats';
 
 const Home: React.FC = () => {
     return (
@@ -9,6 +10,8 @@ const Home: React.FC = () => {
             <hr />
 
             <CredentialsStats />
+
+            <EntitiesStats />
         </>
     )
 }

@@ -28,6 +28,10 @@ class EntitiesService {
     public async getEntity(id: string) {
         return await API.get(this.path + `/${id}`);
     }
+
+    public async getStatsEntities() {
+        return await API.get(this.path + '/stats');
+    }
 }
 
 export default EntitiesService;

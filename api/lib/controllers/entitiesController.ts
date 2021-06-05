@@ -280,7 +280,7 @@ export class EntitiesController {
             const totalHogarAcogida: number = await this.Entities.find({ entityType: { $eq: 'hogar acogida' } })
                 .countDocuments().exec();
 
-            const totalSectorPrivado: number = await this.Entities.find({ sector: { $eq: 'Privado' } })
+            const totalSectorPrivada: number = await this.Entities.find({ sector: { $eq: 'Privada' } })
                 .countDocuments().exec();
 
             const totalSectorPublico: number = await this.Entities.find({ sector: { $eq: 'Publico' } })
@@ -311,7 +311,7 @@ export class EntitiesController {
                         totalHogarAcogida: totalHogarAcogida
                     },
                     statsSector: {
-                        totalPrivado: totalSectorPrivado,
+                        totalPrivada: totalSectorPrivada,
                         totalPublico: totalSectorPublico,
                         totalEstatal: totalSectorEstatal
                     },

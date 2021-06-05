@@ -1,0 +1,39 @@
+.title-entities-stats {
+    text-align: center;
+}
+
+.spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-first-line {
+    margin-bottom: 1.5rem;
+}
+
+.card-total-entities {
+    width: 25rem;
+    border-radius: 1.5rem !important;
+    padding: 1rem 1rem;
+}
+
+.icon-entities {
+    font-size: 5rem;
+    margin-left: 2rem;
+}
+
+.card-porcentaje-entities {
+    border-radius: 1.5rem !important;
+    padding: .5rem .5rem;
+}
+
+.title-card-porcentaje-entities {
+    text-align: center;
+}
