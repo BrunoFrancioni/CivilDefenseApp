@@ -87,8 +87,8 @@ const CredentialsStats = () => {
                     <Col>
                         <Card className="card-porcentaje-organization">
                             <Card.Title className="title-card-porcentaje-organization">
-                                Porcentaje por tipo de Organización
-                        </Card.Title>
+                                <b>Porcentaje por tipo de Organización</b>
+                            </Card.Title>
 
                             <Card.Body>
                                 <Chart
