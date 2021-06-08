@@ -10,7 +10,7 @@ export class EntitiesRoutes {
 
     public routes(app): void {
         app.route('/entities')
-            .get(
+            .get(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const params: IGetEntities = {
@@ -40,7 +40,7 @@ export class EntitiesRoutes {
                 });
 
         app.route('/entities/stats')
-            .get(
+            .get(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const result: IGetEntitiesStatsResult = await this.entitiesController
@@ -65,7 +65,7 @@ export class EntitiesRoutes {
                 });
 
         app.route('/entities/:id')
-            .get(
+            .get(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const result: IGetEntityResult = await this.entitiesController
@@ -90,7 +90,7 @@ export class EntitiesRoutes {
                 });
 
         app.route('/entities')
-            .post(
+            .post(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const result: ICreateEntityResult = await this.entitiesController
@@ -115,7 +115,7 @@ export class EntitiesRoutes {
                 });
 
         app.route('/entities/:id')
-            .put(
+            .put(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const result: IEditEntityResult = await this.entitiesController
@@ -140,7 +140,7 @@ export class EntitiesRoutes {
                 });
 
         app.route('/entities/:id')
-            .delete(
+            .delete(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const result: IDeleteEntityResult = await this.entitiesController

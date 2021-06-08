@@ -2,8 +2,13 @@ import React from 'react';
 import { Button, Col, Container, Nav, Row } from 'react-bootstrap';
 
 import './styles.css';
+import { HeaderProps } from './types';
 
-const Header: React.FC = () => {
+const Header = (props: HeaderProps) => {
+    const handleLogOut = () => {
+        props.logOut();
+    }
+
     return (
         <div className="header-container">
             <Container>
@@ -25,7 +30,12 @@ const Header: React.FC = () => {
                     </Col>
 
                     <Col>
-                        <Button variant="danger" size="lg" className="button-salir float-end">Salir</Button>
+                        <Button
+                            variant="danger"
+                            size="lg"
+                            className="button-salir float-end"
+                            onClick={handleLogOut}
+                        >Salir</Button>
                     </Col>
                 </Row>
             </Container>

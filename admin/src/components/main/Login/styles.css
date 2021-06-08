@@ -1,0 +1,31 @@
+.main-container {
+    background-color: #f4edf4;
+}
+
+.card-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    border-radius: 1.5rem !important;
+    box-shadow: 1px 1px 1px black, 0 0 25px black, 0 0 5px darkblue;
+}
+
+.card-login {
+    border-radius: 1.5rem !important;
+    padding: 3rem 1rem;
+}
+
+.center-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+}

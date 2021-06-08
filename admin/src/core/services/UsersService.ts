@@ -1,4 +1,4 @@
-import { ICreateCredentials, IEditCredential, IGetNewPassword } from '../interfaces/IUsers';
+import { ICreateCredentials, IEditCredential, IGetNewPassword, ILoginCredential } from '../interfaces/IUsers';
 import API from '../utils/API';
 
 class UsersService {
@@ -6,6 +6,12 @@ class UsersService {
 
     public async createCredentials(createCredentialsDTO: ICreateCredentials) {
         return await API.post(this.path + '/signup', { createCredentialsDTO: createCredentialsDTO });
+    }
+
+    public async loginCredential(loginCredential: ILoginCredential) {
+        return await API.post(this.path + '/login?admin=true', {
+            loginCredentialDTO: loginCredential
+        });
     }
 
     public async getCredentials(page: number = 1, size: number = 10) {

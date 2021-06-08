@@ -9,7 +9,7 @@ export class CredentialsRoutes {
 
     public routes(app): void {
         app.route('/credentials/signup')
-            .post(
+            .post(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const result: ICreateCredentialsResult = await this.credentialsController
@@ -71,7 +71,7 @@ export class CredentialsRoutes {
             });
 
         app.route('/credentials')
-            .get(
+            .get(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const params: IGetCredentials = {
@@ -101,7 +101,7 @@ export class CredentialsRoutes {
                 });
 
         app.route('/credentials/get/:id')
-            .get(
+            .get(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const result: IGetCredentialByIdResult = await this.credentialsController
@@ -126,7 +126,7 @@ export class CredentialsRoutes {
                 });
 
         app.route('/credentials/password')
-            .post(
+            .post(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const result: IGetNewPasswordResult = await this.credentialsController
@@ -151,7 +151,7 @@ export class CredentialsRoutes {
                 });
 
         app.route('/credentials/:id')
-            .put(
+            .put(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const result: IEditCredentialResult = await this.credentialsController
@@ -176,7 +176,7 @@ export class CredentialsRoutes {
                 });
 
         app.route('/credentials/:id')
-            .delete(
+            .delete(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const result: IDeleteCredentialResult = await this.credentialsController
@@ -201,7 +201,7 @@ export class CredentialsRoutes {
                 });
 
         app.route('/credentials/stats')
-            .get(
+            .get(verify,
                 async (req: Request, res: Response) => {
                     try {
                         const result: IGetCredentialsStatsResult = await this.credentialsController
