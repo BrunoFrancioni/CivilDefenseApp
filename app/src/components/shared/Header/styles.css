@@ -1,0 +1,13 @@
+.header-container {
+    background-color: #161616;
+    height: 7rem;
+    margin-bottom: 2rem;
+}
+
+.button-sesion {
+    font-weight: bold !important;
+    font-size: 1.3rem !important;
+    position: absolute;
+    right: 0px;
+    margin: 2rem auto;
+}
