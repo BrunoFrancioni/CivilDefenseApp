@@ -1,0 +1,16 @@
+.center-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.position-relative {
+    position: relative;
+}

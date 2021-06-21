@@ -1,4 +1,4 @@
-export default interface ICredential {
+export interface ICredential {
     _id: string;
     name_lastname: string;
     dni: string;
@@ -6,3 +6,7 @@ export default interface ICredential {
     email: string;
 }
 
+export interface ICredentialLogIn {
+    email: string;
+    password: string;
+}

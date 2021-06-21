@@ -52,7 +52,7 @@ export class CredentialsRoutes {
                     }
 
                     if (!result.result) {
-                        return res.status(401).json({
+                        return res.status(400).json({
                             message: 'Email or password incorrect.'
                         });
                     } else {
