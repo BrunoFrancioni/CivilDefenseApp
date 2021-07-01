@@ -1,17 +1,32 @@
 import React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+import Header from '../../shared/Header/Header';
+import Sidebar from '../../shared/Sidebar/Sidebar';
 import CredentialsStats from './CredentialsStats/CredentialsStats';
 import EntitiesStats from './EntitiesStats/EntititesStats';
 
 const Home: React.FC = () => {
     return (
         <>
-            <h1>Inicio</h1>
+            <Header />
 
-            <hr />
+            <Container>
+                <Row>
+                    <Col md={2}>
+                        <Sidebar />
+                    </Col>
 
-            <CredentialsStats />
+                    <Col>
+                        <h1>Inicio</h1>
 
-            <EntitiesStats />
+                        <hr />
+
+                        <CredentialsStats />
+
+                        <EntitiesStats />
+                    </Col>
+                </Row>
+            </Container>
         </>
     )
 }

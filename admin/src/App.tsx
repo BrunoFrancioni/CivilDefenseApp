@@ -1,91 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.css';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Sidebar from './components/shared/Sidebar/Sidebar';
-import Header from './components/shared/Header/Header';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Switch, useHistory, Redirect } from 'react-router-dom';
 import Home from './components/main/Home/Home';
 import Users from './components/main/Users/Users';
 import Entities from './components/main/Entities/Entities';
 import Login from './components/main/Login/Login';
 import { ICredential } from './core/interfaces/IUsers';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from './components/store/store';
+import { logInAction } from './components/store/user/user.slice';
+import ProtectedRoute from './components/shared/ProtectedRoute/ProtectedRoute';
 
 function App() {
-  const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<ICredential | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      await getToken();
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      await getToken();
-    })();
-  }, [user]);
-
-  const getToken = async () => {
-    const data = localStorage.getItem('token');
-
-    if (data && data !== '') {
-      setToken(data);
-    } else {
-      setToken(null);
-    }
-  }
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
 
   const userLoggedIn = (token: string, user: ICredential) => {
     localStorage.setItem('token', token);
 
-    setUser(user);
-  }
+    dispatch(logInAction({ logged: true, info: user }));
 
-  const logOut = () => {
-    localStorage.removeItem('token');
-
-    setUser(null);
-
-    getToken();
+    return <Redirect to="/" />
   }
 
   return (
-    <div className="main-container">
-      {
-        !token &&
-        <Login
-          userLogguedIn={(token: string, user: ICredential) => userLoggedIn(token, user)}
-        />
-      }
+    <Router>
+      <div className="main-container">
+        <Switch>
+          <Route path='/login'>
+            <Login
+              userLogguedIn={(token: string, user: ICredential) => userLoggedIn(token, user)}
+              userLogged={user.logged}
+            />
+          </Route>
 
-      {
-        token &&
-        <Router>
-          <Header
-            logOut={logOut}
+          <ProtectedRoute
+            component={Users}
+            path='/users'
           />
 
-          <Container>
-            <Row>
-              <Col md={2}>
-                <Sidebar />
-              </Col>
+          <ProtectedRoute
+            component={Entities}
+            path='/entities'
+          />
 
-              <Col>
-                <Switch>
-                  <Route path="/users" component={Users} />
-                  <Route path="/entities" component={Entities} />
-                  <Route exact path="/" component={Home} />
-                </Switch>
-              </Col>
-            </Row>
-          </Container>
-        </Router>
-      }
-    </div>
+          <ProtectedRoute
+            component={Home}
+            path='/'
+          />
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

@@ -11,6 +11,8 @@ import './styles.css';
 import CreateUserModal from '../../shared/Modals/Users/CreateUserModal/CreateUserModal';
 import EditUserModal from '../../shared/Modals/Users/EditUserModal/EditUserModal';
 import { IGetNewPassword } from '../../../core/interfaces/IUsers';
+import Header from '../../shared/Header/Header';
+import Sidebar from '../../shared/Sidebar/Sidebar';
 
 class Users extends React.Component<UsersProps, UsersState> {
     private usersService: UsersService;
@@ -233,126 +235,138 @@ class Users extends React.Component<UsersProps, UsersState> {
     render() {
         return (
             <>
-                <h1>Usuarios</h1>
-                <hr />
+                <Header />
 
-                <Container fluid>
+                <Container>
                     <Row>
-                        <Col md={11}></Col>
+                        <Col md={2}>
+                            <Sidebar />
+                        </Col>
 
                         <Col>
-                            <Button
-                                variant="success"
-                                size="lg"
-                                className="button-crear"
-                                onClick={() => this.handleCrearClick(true)}
-                            >Crear</Button>
+                            <h1>Usuarios</h1>
+                            <hr />
+
+                            <Container fluid>
+                                <Row>
+                                    <Col md={11}></Col>
+
+                                    <Col>
+                                        <Button
+                                            variant="success"
+                                            size="lg"
+                                            className="button-crear"
+                                            onClick={() => this.handleCrearClick(true)}
+                                        >Crear</Button>
+                                    </Col>
+                                </Row>
+                            </Container>
+
+                            {
+                                this.state.loading &&
+                                <div className="spinner-container">
+                                    <Spinner animation="border" role="status">
+                                    </Spinner>
+                                </div>
+                            }
+
+                            {
+                                !this.state.loading && this.state.searchWithError &&
+                                <Container fluid>
+                                    <p><i className="fas fa-exclamation-triangle"></i> Ha ocurrido un error. Intente nuevamente.</p>
+                                </Container>
+                            }
+
+                            {
+                                !this.state.loading && this.state.totalResults == 0 &&
+                                !this.state.searchWithError &&
+                                <Container fluid>
+                                    <p>No se han encontrado resultados</p>
+                                </Container>
+                            }
+
+                            {
+                                !this.state.loading && this.state.totalResults != 0 &&
+                                !this.state.searchWithError &&
+                                <Container fluid>
+                                    <Table striped bordered hover>
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre Apellido</th>
+                                                <th>DNI</th>
+                                                <th>Organizacion</th>
+                                                <th>Email</th>
+                                                <th>Opciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                this.state.users.map((user, index) => {
+                                                    return (
+                                                        <tr key={user._id}>
+                                                            <td>{user.name_lastname}</td>
+                                                            <td>{user.dni}</td>
+                                                            <td>{this.firstLetterUppercase(user.organization)}</td>
+                                                            <td>{user.email}</td>
+                                                            <td>
+                                                                <div className="container-options">
+                                                                    <span title="Editar usuario">
+                                                                        <i
+                                                                            className="fas fa-user-edit option"
+                                                                            onClick={() => this.handleEditarClick(true, user._id)}
+                                                                        ></i>
+                                                                    </span>
+                                                                    <span title="Eliminar usuario">
+                                                                        <i
+                                                                            className="fas fa-user-minus option"
+                                                                            onClick={() => this.handleDeleteClick(user._id)}
+                                                                        ></i>
+                                                                    </span>
+                                                                    <span title="Soliciar nueva contraseña">
+                                                                        <i
+                                                                            className="fas fa-key option"
+                                                                            onClick={() => this.handlePasswordClick(user._id)}
+                                                                        ></i>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })
+                                            }
+                                        </tbody>
+                                    </Table>
+
+                                    <Paginator
+                                        active={this.state.actualPage}
+                                        totalResults={this.state.totalResults}
+                                        sizePage={this.state.sizePage}
+                                        changePage={this.changePage.bind(this)}
+                                    />
+                                </Container>
+                            }
+
+                            {
+                                this.state.showCreateUserModal &&
+                                <CreateUserModal
+                                    showModal={this.state.showCreateUserModal}
+                                    handleClose={this.handleCrearClick.bind(this)}
+                                    handleUserCreated={this.handleUserCreated.bind(this)}
+                                />
+                            }
+
+                            {
+                                this.state.showEditUserModal &&
+                                <EditUserModal
+                                    showModal={this.state.showEditUserModal}
+                                    idCredential={this.state.idCredential}
+                                    handleClose={this.handleEditarClick.bind(this)}
+                                    handleUserUpdated={this.handleUserEdited}
+                                />
+                            }
                         </Col>
                     </Row>
                 </Container>
-
-                {
-                    this.state.loading &&
-                    <div className="spinner-container">
-                        <Spinner animation="border" role="status">
-                        </Spinner>
-                    </div>
-                }
-
-                {
-                    !this.state.loading && this.state.searchWithError &&
-                    <Container fluid>
-                        <p><i className="fas fa-exclamation-triangle"></i> Ha ocurrido un error. Intente nuevamente.</p>
-                    </Container>
-                }
-
-                {
-                    !this.state.loading && this.state.totalResults == 0 &&
-                    !this.state.searchWithError &&
-                    <Container fluid>
-                        <p>No se han encontrado resultados</p>
-                    </Container>
-                }
-
-                {
-                    !this.state.loading && this.state.totalResults != 0 &&
-                    !this.state.searchWithError &&
-                    <Container fluid>
-                        <Table striped bordered hover>
-                            <thead>
-                                <tr>
-                                    <th>Nombre Apellido</th>
-                                    <th>DNI</th>
-                                    <th>Organizacion</th>
-                                    <th>Email</th>
-                                    <th>Opciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    this.state.users.map((user, index) => {
-                                        return (
-                                            <tr key={user._id}>
-                                                <td>{user.name_lastname}</td>
-                                                <td>{user.dni}</td>
-                                                <td>{this.firstLetterUppercase(user.organization)}</td>
-                                                <td>{user.email}</td>
-                                                <td>
-                                                    <div className="container-options">
-                                                        <span title="Editar usuario">
-                                                            <i
-                                                                className="fas fa-user-edit option"
-                                                                onClick={() => this.handleEditarClick(true, user._id)}
-                                                            ></i>
-                                                        </span>
-                                                        <span title="Eliminar usuario">
-                                                            <i
-                                                                className="fas fa-user-minus option"
-                                                                onClick={() => this.handleDeleteClick(user._id)}
-                                                            ></i>
-                                                        </span>
-                                                        <span title="Soliciar nueva contraseña">
-                                                            <i
-                                                                className="fas fa-key option"
-                                                                onClick={() => this.handlePasswordClick(user._id)}
-                                                            ></i>
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
-                                }
-                            </tbody>
-                        </Table>
-
-                        <Paginator
-                            active={this.state.actualPage}
-                            totalResults={this.state.totalResults}
-                            sizePage={this.state.sizePage}
-                            changePage={this.changePage.bind(this)}
-                        />
-                    </Container>
-                }
-
-                {
-                    this.state.showCreateUserModal &&
-                    <CreateUserModal
-                        showModal={this.state.showCreateUserModal}
-                        handleClose={this.handleCrearClick.bind(this)}
-                        handleUserCreated={this.handleUserCreated.bind(this)}
-                    />
-                }
-
-                {
-                    this.state.showEditUserModal &&
-                    <EditUserModal
-                        showModal={this.state.showEditUserModal}
-                        idCredential={this.state.idCredential}
-                        handleClose={this.handleEditarClick.bind(this)}
-                        handleUserUpdated={this.handleUserEdited}
-                    />
-                }
             </>
         )
     }

@@ -10,6 +10,8 @@ import CreateEntityModal from '../../shared/Modals/Entities/CreateEntityModal/Cr
 import Swal from 'sweetalert2';
 import DetailsEntityModal from '../../shared/Modals/Entities/DetailsEntityModal/DetailsEntityModal';
 import EditEntityModal from '../../shared/Modals/Entities/EditEntityModal/EditEntityModal';
+import Header from '../../shared/Header/Header';
+import Sidebar from '../../shared/Sidebar/Sidebar';
 
 const Entities = (props: EntitiesProps) => {
     const [loading, setLoading] = useState<boolean>(true);
@@ -180,143 +182,155 @@ const Entities = (props: EntitiesProps) => {
 
     return (
         <>
-            <h1>Entidades</h1>
-            <hr />
+            <Header />
 
-            <Container fluid>
+            <Container>
                 <Row>
-                    <Col md={11}></Col>
+                    <Col md={2}>
+                        <Sidebar />
+                    </Col>
 
                     <Col>
-                        <Button
-                            variant="success"
-                            size="lg"
-                            className="button-crear"
-                            onClick={() => setShowCreateModal(true)}
-                        >Crear</Button>
+                        <h1>Entidades</h1>
+                        <hr />
+
+                        <Container fluid>
+                            <Row>
+                                <Col md={11}></Col>
+
+                                <Col>
+                                    <Button
+                                        variant="success"
+                                        size="lg"
+                                        className="button-crear"
+                                        onClick={() => setShowCreateModal(true)}
+                                    >Crear</Button>
+                                </Col>
+                            </Row>
+                        </Container>
+
+                        {
+                            loading &&
+                            <div className="spinner-container">
+                                <Spinner animation="border" role="status">
+                                </Spinner>
+                            </div>
+                        }
+
+                        {
+                            !loading && searchWithError &&
+                            <Container fluid>
+                                <p>
+                                    <i className="fas fa-exclamation-triangle">
+                                    </i> Ha ocurrido un error. Intente nuevamente.
+                                </p>
+                            </Container>
+                        }
+
+                        {
+                            !loading && totalResults == 0 &&
+                            entities == [] && !searchWithError &&
+                            <Container fluid>
+                                <p>No se han encontrado resultados</p>
+                            </Container>
+                        }
+
+                        {
+                            !loading && totalResults != 0 &&
+                            entities != [] && !searchWithError &&
+                            <Container fluid>
+                                <Table striped bordered hover>
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre Institución</th>
+                                            <th>Numero Legal</th>
+                                            <th>Tipo</th>
+                                            <th>Sector</th>
+                                            <th>Teléfono</th>
+                                            <th>Opciones</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {
+                                            entities.map((entity) => {
+                                                return (
+                                                    <tr key={entity._id}>
+                                                        <td>{entity.name}</td>
+                                                        <td>{entity.legalNumber}</td>
+                                                        <td>{firstLetterUppercase(entity.entityType)}</td>
+                                                        <td>{entity.sector}</td>
+                                                        <td>{entity.phone}</td>
+                                                        <td>
+                                                            <div className="container-options">
+                                                                <span title="Ver detalles de la entidad">
+                                                                    <i
+                                                                        className="fas fa-info-circle option"
+                                                                        onClick={() => handleDetailsClick(entity._id)}
+                                                                    ></i>
+                                                                </span>
+                                                                <span title="Editar entidad">
+                                                                    <i
+                                                                        className="fas fa-edit option"
+                                                                        onClick={() => handleEditClick(entity._id)}
+                                                                    ></i>
+                                                                </span>
+                                                                <span title="Eliminar entidad">
+                                                                    <i
+                                                                        className="fas fa-minus-square option"
+                                                                        onClick={() => handleDeleteClick(entity._id)}
+                                                                    ></i>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })
+                                        }
+                                    </tbody>
+                                </Table>
+
+                                <Paginator
+                                    active={actualPage}
+                                    totalResults={totalResults}
+                                    sizePage={sizePage}
+                                    changePage={changePage.bind(this)}
+                                />
+                            </Container>
+                        }
+
+                        {
+                            showCreateModal &&
+                            <CreateEntityModal
+                                showModal={showCreateModal}
+                                handleClose={() => setShowCreateModal(false)}
+                                handleUserCreated={handleUserCreated}
+                            />
+                        }
+
+                        {
+                            showEditModal &&
+                            <EditEntityModal
+                                showModal={showEditModal}
+                                id={activeEntity}
+                                handleClose={handleCloseEditModal}
+                                handleEntityEdited={handleEntityEdited}
+                            />
+                        }
+
+                        {
+                            showDetailsModal &&
+                            <DetailsEntityModal
+                                showModal={showDetailsModal}
+                                id={activeEntity}
+                                handleClose={handleCloseDetailsModal}
+                                handleEditEntity={handleEditClickModal.bind(this)}
+                                handleDeleteEntity={handleDeleteClickModal.bind(this)}
+                            />
+                        }
                     </Col>
                 </Row>
             </Container>
-
-            {
-                loading &&
-                <div className="spinner-container">
-                    <Spinner animation="border" role="status">
-                    </Spinner>
-                </div>
-            }
-
-            {
-                !loading && searchWithError &&
-                <Container fluid>
-                    <p>
-                        <i className="fas fa-exclamation-triangle">
-                        </i> Ha ocurrido un error. Intente nuevamente.
-                    </p>
-                </Container>
-            }
-
-            {
-                !loading && totalResults == 0 &&
-                entities == [] && !searchWithError &&
-                <Container fluid>
-                    <p>No se han encontrado resultados</p>
-                </Container>
-            }
-
-            {
-                !loading && totalResults != 0 &&
-                entities != [] && !searchWithError &&
-                <Container fluid>
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>Nombre Institución</th>
-                                <th>Numero Legal</th>
-                                <th>Tipo</th>
-                                <th>Sector</th>
-                                <th>Teléfono</th>
-                                <th>Opciones</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {
-                                entities.map((entity) => {
-                                    return (
-                                        <tr key={entity._id}>
-                                            <td>{entity.name}</td>
-                                            <td>{entity.legalNumber}</td>
-                                            <td>{firstLetterUppercase(entity.entityType)}</td>
-                                            <td>{entity.sector}</td>
-                                            <td>{entity.phone}</td>
-                                            <td>
-                                                <div className="container-options">
-                                                    <span title="Ver detalles de la entidad">
-                                                        <i
-                                                            className="fas fa-info-circle option"
-                                                            onClick={() => handleDetailsClick(entity._id)}
-                                                        ></i>
-                                                    </span>
-                                                    <span title="Editar entidad">
-                                                        <i
-                                                            className="fas fa-edit option"
-                                                            onClick={() => handleEditClick(entity._id)}
-                                                        ></i>
-                                                    </span>
-                                                    <span title="Eliminar entidad">
-                                                        <i
-                                                            className="fas fa-minus-square option"
-                                                            onClick={() => handleDeleteClick(entity._id)}
-                                                        ></i>
-                                                    </span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })
-                            }
-                        </tbody>
-                    </Table>
-
-                    <Paginator
-                        active={actualPage}
-                        totalResults={totalResults}
-                        sizePage={sizePage}
-                        changePage={changePage.bind(this)}
-                    />
-                </Container>
-            }
-
-            {
-                showCreateModal &&
-                <CreateEntityModal
-                    showModal={showCreateModal}
-                    handleClose={() => setShowCreateModal(false)}
-                    handleUserCreated={handleUserCreated}
-                />
-            }
-
-            {
-                showEditModal &&
-                <EditEntityModal
-                    showModal={showEditModal}
-                    id={activeEntity}
-                    handleClose={handleCloseEditModal}
-                    handleEntityEdited={handleEntityEdited}
-                />
-            }
-
-            {
-                showDetailsModal &&
-                <DetailsEntityModal
-                    showModal={showDetailsModal}
-                    id={activeEntity}
-                    handleClose={handleCloseDetailsModal}
-                    handleEditEntity={handleEditClickModal.bind(this)}
-                    handleDeleteEntity={handleDeleteClickModal.bind(this)}
-                />
-            }
         </>
     )
 }

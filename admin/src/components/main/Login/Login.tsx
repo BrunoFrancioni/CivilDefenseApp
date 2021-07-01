@@ -1,64 +1,77 @@
-import React, { useState } from 'react';
+import { Formik } from 'formik';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Form, Spinner } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { ILoginCredential } from '../../../core/interfaces/IUsers';
 import UsersService from '../../../core/services/UsersService';
+import * as yup from 'yup';
 
 import './styles.css';
 import { LoginProps } from './types';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from '../../store/store';
+import { logInAction } from '../../store/user/user.slice';
+import { Redirect, useHistory } from 'react-router-dom';
 
 const Login = (props: LoginProps) => {
+    if (props.userLogged) {
+        return <Redirect to="/" />;
+    }
+
     const usersService: UsersService = new UsersService();
+
+    const history = useHistory();
+
+    const user = useSelector(selectUser);
+    const dispatch = useDispatch();
 
     const initialState: ILoginCredential = {
         email: '',
         password: ''
     }
 
-    const [loginCredential, setLoginCredential] = useState<ILoginCredential>(initialState);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const handleChangesEmail = (value: string) => {
-        setLoginCredential({
-            ...loginCredential,
-            email: value
-        });
-    }
+    useEffect(() => {
+        if (user.logged) {
+            history.push('/');
+        }
+    }, []);
 
-    const handleChangesPassword = (value: string) => {
-        setLoginCredential({
-            ...loginCredential,
-            password: value
-        });
-    }
+    const validationSchema = yup.object().shape({
+        email: yup.string().required("Requerido").email("Ingrese un email válido"),
+        password: yup.string().required("Requerido")
+    });
 
-    const handleSubmit = async (e: React.SyntheticEvent) => {
-        e.preventDefault();
-
+    const handleSubmit = async (values: ILoginCredential) => {
         setLoading(true);
 
         try {
-            const result = await usersService.loginCredential(loginCredential);
+            const result = await usersService.loginCredential(values);
 
-            if (result.status === 200) {
-                props.userLogguedIn(result.data.token, result.data.user);
-            } else {
+            props.userLogguedIn(result.data.token, result.data.user);
+        } catch (e) {
+            if (e.response.status === 400) {
                 Swal.fire({
                     title: 'Ha ocurrido un error',
                     text: 'Usuario o contraseña incorrecta',
                     icon: 'error'
                 });
+            } else if (e.response.status === 401) {
+                Swal.fire({
+                    title: 'Ha ocurrido un error',
+                    text: 'Usuario no tiene acceso a este sistema',
+                    icon: 'error'
+                });
+            } else {
+                console.log("ERROR", e);
+
+                Swal.fire({
+                    title: 'Ha ocurrido un error',
+                    text: 'Intente nuevamente',
+                    icon: 'error'
+                });
             }
-
-            setLoading(false);
-        } catch (e) {
-            console.log("ERROR", e);
-
-            Swal.fire({
-                title: 'Ha ocurrido un error',
-                text: 'Intente nuevamente',
-                icon: 'error'
-            });
 
             setLoading(false);
         }
@@ -76,43 +89,91 @@ const Login = (props: LoginProps) => {
                     </Card.Title>
 
                     <Card.Body>
-                        <Form>
-                            <Form.Group controlId="formEmail">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control
-                                    size="lg"
-                                    type="text"
-                                    placeholder="Ingrese el email"
-                                    required
-                                    onChange={e => handleChangesEmail(e.target.value)}
-                                />
-                            </Form.Group>
+                        <Formik
+                            initialValues={initialState}
+                            validationSchema={validationSchema}
+                            onSubmit={(data, { setSubmitting }) => {
+                                setSubmitting(true);
 
-                            <br />
+                                handleSubmit(data);
 
-                            <Form.Group controlId="formPassword">
-                                <Form.Label>Contraseña</Form.Label>
-                                <Form.Control
-                                    size="lg"
-                                    type="password"
-                                    placeholder="Ingrese la constraseña"
-                                    required
-                                    onChange={e => handleChangesPassword(e.target.value)}
-                                />
-                            </Form.Group>
+                                setSubmitting(false);
+                            }}
+                        >
+                            {
+                                ({ values,
+                                    errors,
+                                    isSubmitting,
+                                    handleChange,
+                                    handleBlur,
+                                    handleSubmit,
+                                    touched
+                                }) => (
+                                    <Form
+                                        noValidate
+                                        onSubmit={handleSubmit}
+                                    >
+                                        <Form.Group
+                                            controlId="email"
+                                            className="position-relative"
+                                        >
+                                            <Form.Label>Email</Form.Label>
+                                            <Form.Control
+                                                size="lg"
+                                                type="email"
+                                                placeholder="Ingrese el email"
+                                                defaultValue={values.email}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                isValid={touched.email && !errors.email}
+                                                isInvalid={!!errors.email}
+                                            />
 
-                            <br />
+                                            <Form.Control.Feedback
+                                                type="invalid"
+                                                tooltip
+                                            >{errors.email}</Form.Control.Feedback>
+                                        </Form.Group>
 
-                            <div className="center-container">
-                                <Button
-                                    variant="primary"
-                                    type="submit"
-                                    onClick={(e: React.SyntheticEvent) => handleSubmit(e)}
-                                >
-                                    Iniciar Sesión
-                                </Button>
-                            </div>
-                        </Form>
+                                        <br />
+
+                                        <Form.Group
+                                            controlId="password"
+                                            className="position-relative"
+                                        >
+                                            <Form.Label>Contraseña</Form.Label>
+                                            <Form.Control
+                                                size="lg"
+                                                type="password"
+                                                placeholder="Ingrese la contraseña"
+                                                defaultValue={values.password}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                isValid={touched.password && !errors.password}
+                                                isInvalid={!!errors.password}
+                                            />
+
+                                            <Form.Control.Feedback
+                                                type="invalid"
+                                                tooltip
+                                            >{errors.password}</Form.Control.Feedback>
+                                        </Form.Group>
+
+                                        <br />
+
+                                        <div className="center-container">
+                                            <Button
+                                                variant="success"
+                                                type="submit"
+                                                disabled={isSubmitting}
+                                            >
+                                                Iniciar Sesión
+                                            </Button>
+                                        </div>
+                                    </Form>
+                                )
+                            }
+                        </Formik>
 
                         {
                             loading &&

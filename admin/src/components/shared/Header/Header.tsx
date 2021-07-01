@@ -1,12 +1,27 @@
 import React from 'react';
 import { Button, Col, Container, Nav, Row } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
+import { logOutAction } from '../../store/user/user.slice';
 
 import './styles.css';
-import { HeaderProps } from './types';
 
-const Header = (props: HeaderProps) => {
+const Header = () => {
+    const dispatch = useDispatch();
+
     const handleLogOut = () => {
-        props.logOut();
+        Swal.fire({
+            icon: 'warning',
+            title: '¿Seguro desea cerrar la sesión',
+            showCancelButton: true,
+            confirmButtonText: `Cerrar`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem('token');
+
+                dispatch(logOutAction({ logged: false, info: null }));
+            }
+        });
     }
 
     return (
