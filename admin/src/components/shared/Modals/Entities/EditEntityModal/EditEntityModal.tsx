@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Form, Modal, Spinner } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 import { IEditEntity, IEntity } from '../../../../../core/interfaces/IEntities';
 import EntitiesService from '../../../../../core/services/EntitiesService';
+import { logOutAction } from '../../../../store/user/user.slice';
 import { EditEntityModalProps } from './types';
 
 const EditEntityModal = (props: EditEntityModalProps) => {
     const entitiesService: EntitiesService = new EntitiesService();
+    const dispatch = useDispatch();
 
     const initialStateEntity: IEntity = {
         _id: '',
@@ -48,42 +51,49 @@ const EditEntityModal = (props: EditEntityModalProps) => {
         try {
             const result = await entitiesService.getEntity(props.id);
 
-            if (result.status === 200) {
-                setEntity(result.data.entity);
-                setLoading(false);
-                setEditEntity({
-                    name: result.data.entity.name,
-                    entityType: result.data.entity.entityType,
-                    address: result.data.entity.address,
-                    phone: result.data.entity.phone,
-                    postalCode: result.data.entity.postalCode,
-                    sector: result.data.entity.sector,
-                    risk: result.data.entity.risk,
-                    coordinates: result.data.entity.coordinates
-                });
-                setSearchWithError(false);
-            } else {
-                setEntity(initialStateEntity);
-                setLoading(false);
-                setEditEntity(initialStateEditEntity);
-                setSearchWithError(true);
-            }
+            setEntity(result.data.entity);
+            setLoading(false);
+            setEditEntity({
+                name: result.data.entity.name,
+                entityType: result.data.entity.entityType,
+                address: result.data.entity.address,
+                phone: result.data.entity.phone,
+                postalCode: result.data.entity.postalCode,
+                sector: result.data.entity.sector,
+                risk: result.data.entity.risk,
+                coordinates: result.data.entity.coordinates
+            });
+            setSearchWithError(false);
         } catch (e) {
             console.log('Error', e);
 
-            setEntity(initialStateEntity);
-            setLoading(false);
-            setEditEntity({
-                name: '',
-                entityType: '',
-                address: '',
-                phone: '',
-                postalCode: '',
-                sector: '',
-                risk: [],
-                coordinates: ['', '']
-            });
-            setSearchWithError(true);
+            if (e.response.status === 401) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'La sesión ha expirado',
+                    text: 'Por favor, iníciela de nuevo.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    localStorage.removeItem('token');
+
+                    dispatch(logOutAction({ logged: false, info: null }));
+                });
+            } else {
+                setEntity(initialStateEntity);
+                setLoading(false);
+                setEditEntity({
+                    name: '',
+                    entityType: '',
+                    address: '',
+                    phone: '',
+                    postalCode: '',
+                    sector: '',
+                    risk: [],
+                    coordinates: ['', '']
+                });
+                setSearchWithError(true);
+            }
         }
     }
 
@@ -165,8 +175,22 @@ const EditEntityModal = (props: EditEntityModalProps) => {
         try {
             const result = await entitiesService.editEntity(props.id, editEntity);
 
-            if (result.status === 200) {
-                props.handleEntityEdited();
+            props.handleEntityEdited();
+        } catch (e) {
+            console.log("ERROR", e);
+
+            if (e.response.status === 401) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'La sesión ha expirado',
+                    text: 'Por favor, iníciela de nuevo.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    localStorage.removeItem('token');
+
+                    dispatch(logOutAction({ logged: false, info: null }));
+                });
             } else {
                 Swal.fire({
                     title: 'Ha ocurrido un error',
@@ -174,14 +198,6 @@ const EditEntityModal = (props: EditEntityModalProps) => {
                     icon: 'error'
                 });
             }
-        } catch (e) {
-            console.log("ERROR", e);
-
-            Swal.fire({
-                title: 'Ha ocurrido un error',
-                text: 'Intente nuevamente',
-                icon: 'error'
-            });
         }
     }
 

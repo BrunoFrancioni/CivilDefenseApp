@@ -3,7 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import Header from '../../shared/Header/Header';
 import Sidebar from '../../shared/Sidebar/Sidebar';
 import CredentialsStats from './CredentialsStats/CredentialsStats';
-import EntitiesStats from './EntitiesStats/EntititesStats';
+import EntitiesStats from './EntitiesStats/EntitiesStats';
 
 const Home: React.FC = () => {
     return (

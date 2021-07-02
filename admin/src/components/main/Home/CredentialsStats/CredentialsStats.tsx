@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import Chart from 'react-google-charts';
+import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
 import { IStatsCredentials } from '../../../../core/interfaces/IUsers';
 import UsersService from '../../../../core/services/UsersService';
+import { logOutAction } from '../../../store/user/user.slice';
 
 import './styles.css';
 
 const CredentialsStats = () => {
     const usersService: UsersService = new UsersService();
+    const dispatch = useDispatch();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [stats, setStats] = useState<IStatsCredentials | null>(null);
@@ -23,21 +27,29 @@ const CredentialsStats = () => {
         try {
             const result = await usersService.getStatsCredentials();
 
-            if (result.status === 200) {
-                setLoading(false);
-                setStats(result.data.stats);
-                setSearchWithError(false);
+            setLoading(false);
+            setStats(result.data.stats);
+            setSearchWithError(false);
+        } catch (e) {
+            console.log('ERROR', e);
+
+            if (e.response.status === 401) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'La sesión ha expirado',
+                    text: 'Por favor, iníciela de nuevo.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    localStorage.removeItem('token');
+
+                    dispatch(logOutAction({ logged: false, info: null }));
+                });
             } else {
                 setLoading(false);
                 setStats(null);
                 setSearchWithError(true);
             }
-        } catch (e) {
-            console.log('ERROR', e);
-
-            setLoading(false);
-            setStats(null);
-            setSearchWithError(true);
         }
     }
 

@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import Chart from 'react-google-charts';
+import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
 import { IStatsEntities } from '../../../../core/interfaces/IEntities';
 import EntitiesService from '../../../../core/services/EntitiesService';
+import { logOutAction } from '../../../store/user/user.slice';
 
 import './styles.css';
 
 const EntitiesStats = () => {
     const entitiesService: EntitiesService = new EntitiesService();
+    const dispatch = useDispatch();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [stats, setStats] = useState<IStatsEntities | null>(null);
@@ -23,21 +27,29 @@ const EntitiesStats = () => {
         try {
             const result = await entitiesService.getStatsEntities();
 
-            if (result.status === 200) {
-                setLoading(false);
-                setStats(result.data.stats);
-                setSearchWithError(false);
-            } else {
-                setLoading(false);
-                setStats(null);
-                setSearchWithError(true);
-            }
+            (result.data.stats) ? setStats(result.data.stats) : setStats(null);
+            setSearchWithError(false);
+            setLoading(false);
         } catch (e) {
             console.log('ERROR', e);
 
-            setLoading(false);
-            setStats(null);
-            setSearchWithError(true);
+            if (e.response.status === 401) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'La sesión ha expirado',
+                    text: 'Por favor, iníciela de nuevo.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    localStorage.removeItem('token');
+
+                    dispatch(logOutAction({ logged: false, info: null }));
+                });
+            } else {
+                setStats(null);
+                setSearchWithError(true);
+                setLoading(false);
+            }
         }
     }
 

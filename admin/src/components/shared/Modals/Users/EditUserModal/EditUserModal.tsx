@@ -1,12 +1,15 @@
 import React from 'react';
 import { Button, Container, Form, Modal, Spinner } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 import { ICredential, IEditCredential } from '../../../../../core/interfaces/IUsers';
 import UsersService from '../../../../../core/services/UsersService';
+import { logOutAction } from '../../../../store/user/user.slice';
 import { EditUserModalProps, EditUserModalStatus } from './types';
 
 class EditUserModal extends React.Component<EditUserModalProps, EditUserModalStatus> {
     private usersService: UsersService;
+    private dispatch = useDispatch();
 
     constructor(props: EditUserModalProps) {
         super(props);
@@ -39,16 +42,31 @@ class EditUserModal extends React.Component<EditUserModalProps, EditUserModalSta
         try {
             const result = await this.usersService.getCredentialById(this.props.idCredential);
             console.log(result);
-            if (result.status === 200) {
-                this.setState({
-                    loading: false,
-                    searchWithError: false,
-                    credential: result.data.credential,
-                    editCredentialDTO: {
-                        name_lastname: result.data.credential.name_lastname,
-                        dni: result.data.credential.dni,
-                        organization: result.data.credential.organization
-                    }
+
+            this.setState({
+                loading: false,
+                searchWithError: false,
+                credential: result.data.credential,
+                editCredentialDTO: {
+                    name_lastname: result.data.credential.name_lastname,
+                    dni: result.data.credential.dni,
+                    organization: result.data.credential.organization
+                }
+            });
+        } catch (e) {
+            console.log(e);
+
+            if (e.response.status === 401) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'La sesión ha expirado',
+                    text: 'Por favor, iníciela de nuevo.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    localStorage.removeItem('token');
+
+                    this.dispatch(logOutAction({ logged: false, info: null }));
                 });
             } else {
                 let credential: ICredential = {
@@ -72,29 +90,6 @@ class EditUserModal extends React.Component<EditUserModalProps, EditUserModalSta
                     editCredentialDTO: editCredentialDTO
                 });
             }
-        } catch (e) {
-            console.log(e);
-
-            let credential: ICredential = {
-                _id: '',
-                name_lastname: '',
-                dni: '',
-                organization: '',
-                email: '',
-            }
-
-            let editCredentialDTO: IEditCredential = {
-                name_lastname: '',
-                dni: '',
-                organization: ''
-            }
-
-            this.setState({
-                loading: false,
-                searchWithError: true,
-                credential: credential,
-                editCredentialDTO: editCredentialDTO
-            });
         }
     }
 
@@ -146,10 +141,25 @@ class EditUserModal extends React.Component<EditUserModalProps, EditUserModalSta
         e.preventDefault();
 
         try {
-            const result = await this.usersService.editCredentials(this.props.idCredential, this.state.editCredentialDTO);
+            const result = await this.usersService
+                .editCredentials(this.props.idCredential, this.state.editCredentialDTO);
 
-            if (result.status === 200) {
-                this.props.handleUserUpdated();
+            this.props.handleUserUpdated();
+        } catch (e) {
+            console.log("ERROR", e);
+
+            if (e.response.status === 401) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'La sesión ha expirado',
+                    text: 'Por favor, iníciela de nuevo.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    localStorage.removeItem('token');
+
+                    this.dispatch(logOutAction({ logged: false, info: null }));
+                });
             } else {
                 Swal.fire({
                     title: 'Ha ocurrido un error',
@@ -157,14 +167,6 @@ class EditUserModal extends React.Component<EditUserModalProps, EditUserModalSta
                     icon: 'error'
                 });
             }
-        } catch (e) {
-            console.log("ERROR", e);
-
-            Swal.fire({
-                title: 'Ha ocurrido un error',
-                text: 'Intente nuevamente',
-                icon: 'error'
-            });
         }
     }
 

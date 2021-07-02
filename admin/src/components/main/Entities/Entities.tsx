@@ -12,6 +12,8 @@ import DetailsEntityModal from '../../shared/Modals/Entities/DetailsEntityModal/
 import EditEntityModal from '../../shared/Modals/Entities/EditEntityModal/EditEntityModal';
 import Header from '../../shared/Header/Header';
 import Sidebar from '../../shared/Sidebar/Sidebar';
+import { logOutAction } from '../../store/user/user.slice';
+import { useDispatch } from 'react-redux';
 
 const Entities = (props: EntitiesProps) => {
     const [loading, setLoading] = useState<boolean>(true);
@@ -25,6 +27,7 @@ const Entities = (props: EntitiesProps) => {
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
     const [activeEntity, setActiveEntity] = useState<string | null>(null);
 
+    const dispatch = useDispatch();
     const entitiesService: EntitiesService = new EntitiesService();
 
     useEffect(() => {
@@ -43,24 +46,32 @@ const Entities = (props: EntitiesProps) => {
         try {
             const result = await entitiesService.getEntities(actualPage, sizePage);
 
-            if (result.status === 200) {
-                setTotalResults(result.data.totalResults);
-                setEntities(result.data.entities);
-                setSearchWithError(false);
+            setTotalResults(result.data.totalResults);
+            (result.data.entities) ? setEntities(result.data.entities) : setEntities([]);
+            setSearchWithError(false);
+
+            setLoading(false);
+        } catch (e) {
+            console.log('Error getting entities', e);
+
+            if (e.response.status === 401) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'La sesión ha expirado',
+                    text: 'Por favor, iníciela de nuevo.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    localStorage.removeItem('token');
+
+                    dispatch(logOutAction({ logged: false, info: null }));
+                });
             } else {
                 setTotalResults(0);
                 setEntities([]);
                 setSearchWithError(true);
+                setLoading(false);
             }
-
-            setLoading(false);
-        } catch (e) {
-            console.log('Error gettin entities', e);
-
-            setTotalResults(0);
-            setEntities([]);
-            setSearchWithError(true);
-            setLoading(false);
         }
     }
 
@@ -125,16 +136,30 @@ const Entities = (props: EntitiesProps) => {
                 try {
                     const result = await entitiesService.deleteEntity(id);
 
-                    if (result.status === 201) {
+                    Swal.fire({
+                        title: 'Entidad eliminada correctamente',
+                        icon: 'success'
+                    }).then(() => {
+                        setLoading(true);
+                        setTotalResults(0);
+                        setEntities([]);
+                        setSearchWithError(false);
+                        setActualPage(1);
+                    });
+                } catch (e) {
+                    console.log('ERROR', e);
+
+                    if (e.response.status === 401) {
                         Swal.fire({
-                            title: 'Entidad eliminada correctamente',
-                            icon: 'success'
+                            icon: 'warning',
+                            title: 'La sesión ha expirado',
+                            text: 'Por favor, iníciela de nuevo.',
+                            showConfirmButton: false,
+                            timer: 1500
                         }).then(() => {
-                            setLoading(true);
-                            setTotalResults(0);
-                            setEntities([]);
-                            setSearchWithError(false);
-                            setActualPage(1);
+                            localStorage.removeItem('token');
+
+                            dispatch(logOutAction({ logged: false, info: null }));
                         });
                     } else {
                         Swal.fire({
@@ -142,13 +167,6 @@ const Entities = (props: EntitiesProps) => {
                             icon: 'error'
                         });
                     }
-                } catch (e) {
-                    console.log('ERROR', e);
-
-                    Swal.fire({
-                        title: 'Ha ocurrido un error',
-                        icon: 'error'
-                    });
                 }
             }
         });

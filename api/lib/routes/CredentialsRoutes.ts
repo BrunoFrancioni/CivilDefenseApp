@@ -21,9 +21,9 @@ export class CredentialsRoutes {
                                 password: result.pass
                             });
                         } else {
-                            return res.json({
+                            return res.status(400).json({
                                 message: 'User already exists'
-                            })
+                            });
                         }
                     } catch (e) {
                         console.log(e);
@@ -81,16 +81,10 @@ export class CredentialsRoutes {
 
                         let result: IGetCredentialsResult = await this.credentialsController.getCredentials(params);
 
-                        if (!result.result) {
-                            return res.status(500).json({
-                                message: 'Server error'
-                            });
-                        } else {
-                            return res.status(200).json({
-                                credentials: result.credentials,
-                                totalResults: result.totalResults
-                            });
-                        }
+                        return res.status(200).json({
+                            credentials: result.credentials,
+                            totalResults: result.totalResults
+                        });
                     } catch (e) {
                         console.log(e);
 
@@ -111,11 +105,11 @@ export class CredentialsRoutes {
                             return res.status(200).json({
                                 credential: result.credential
                             });
+                        } else {
+                            return res.status(400).json({
+                                message: 'User don`t exists'
+                            });
                         }
-
-                        return res.json({
-                            message: 'User don`t exists'
-                        })
                     } catch (e) {
                         console.log(e);
 
@@ -163,7 +157,7 @@ export class CredentialsRoutes {
                             });
                         }
 
-                        return res.json({
+                        return res.status(400).json({
                             message: 'User not exists'
                         });
                     } catch (e) {
@@ -188,7 +182,7 @@ export class CredentialsRoutes {
                             });
                         }
 
-                        return res.json({
+                        return res.status(400).json({
                             message: 'Bad request'
                         });
                     } catch (e) {
@@ -212,7 +206,7 @@ export class CredentialsRoutes {
                                 stats: result.stats
                             });
                         } else {
-                            return res.json({
+                            return res.status(400).json({
                                 message: 'Error'
                             });
                         }

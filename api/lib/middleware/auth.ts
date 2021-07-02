@@ -12,6 +12,7 @@ export const verify = (req: Request, res: Response, next: NextFunction): any => 
             const decoded = jwt.verify(string, process.env.JWT_SECRET);
 
             res.locals.jwt = decoded;
+
             next();
         } else {
             return res.status(401).json({
@@ -19,7 +20,7 @@ export const verify = (req: Request, res: Response, next: NextFunction): any => 
             });
         }
     } catch (e) {
-        res.status(400).json({
+        res.status(401).json({
             message: 'Invalid token'
         });
     }

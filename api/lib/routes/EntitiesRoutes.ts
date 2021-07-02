@@ -20,16 +20,10 @@ export class EntitiesRoutes {
 
                         const result = await this.entitiesController.getPaginateEntities(params);
 
-                        if (!result.result) {
-                            return res.status(500).json({
-                                message: 'Server error'
-                            });
-                        } else {
-                            return res.status(200).json({
-                                entities: result.entities,
-                                totalResults: result.totalResults
-                            });
-                        }
+                        return res.status(200).json({
+                            entities: result.entities,
+                            totalResults: result.totalResults
+                        });
                     } catch (e) {
                         console.log(e);
 
@@ -46,15 +40,9 @@ export class EntitiesRoutes {
                         const result: IGetEntitiesStatsResult = await this.entitiesController
                             .getEntitiesStats();
 
-                        if (result.result) {
-                            return res.status(200).json({
-                                stats: result.stats
-                            });
-                        } else {
-                            return res.json({
-                                message: 'Error'
-                            });
-                        }
+                        return res.status(200).json({
+                            stats: result.stats
+                        });
                     } catch (e) {
                         console.log(e);
 
@@ -76,7 +64,7 @@ export class EntitiesRoutes {
                                 entity: result.entity
                             });
                         } else {
-                            return res.json({
+                            return res.status(400).json({
                                 message: 'Entity don`t exists'
                             });
                         }
@@ -101,7 +89,7 @@ export class EntitiesRoutes {
                                 message: 'Entity created successfuly'
                             });
                         } else {
-                            return res.json({
+                            return res.status(400).json({
                                 message: 'Entity already exists'
                             })
                         }
@@ -127,8 +115,8 @@ export class EntitiesRoutes {
                             });
                         }
 
-                        return res.json({
-                            message: 'Entity not exists'
+                        return res.status(400).json({
+                            message: 'Entity don`t exists'
                         });
                     } catch (e) {
                         console.log(e);
@@ -152,7 +140,7 @@ export class EntitiesRoutes {
                             });
                         }
 
-                        return res.json({
+                        return res.status(400).json({
                             message: 'Bad request'
                         });
                     } catch (e) {

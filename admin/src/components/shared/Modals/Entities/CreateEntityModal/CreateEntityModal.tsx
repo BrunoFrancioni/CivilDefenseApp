@@ -115,23 +115,35 @@ const CreateEntityModal = (props: CreateEntityModalProps) => {
         try {
             const result = await entitiesService.createEntity(createEntity);
 
-            if (result.status === 201) {
-                props.handleUserCreated();
-            } else {
+            props.handleUserCreated();
+        } catch (e) {
+            console.log("ERROR", e);
+
+            if (e.response.status === 401) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'La sesión ha expirado',
+                    text: 'Por favor, iníciela de nuevo.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    localStorage.removeItem('token');
+
+                    dispatch(logOutAction({ logged: false, info: null }));
+                });
+            } else if (e.response.status === 400) {
                 Swal.fire({
                     title: 'Oops...',
                     text: 'La entidad ya existe. Pruebe con otro email.',
                     icon: 'warning'
-                })
+                });
+            } else {
+                Swal.fire({
+                    title: 'Ha ocurrido un error',
+                    text: 'Intente nuevamente',
+                    icon: 'error'
+                });
             }
-        } catch (e) {
-            console.log("ERROR", e);
-
-            Swal.fire({
-                title: 'Ha ocurrido un error',
-                text: 'Intente nuevamente',
-                icon: 'error'
-            });
         }
     }
 

@@ -5,9 +5,13 @@ import EntitiesService from '../../../../../core/services/EntitiesService';
 import { DetailsEntityModalProps } from './types';
 
 import './styles.css';
+import { logOutAction } from '../../../../store/user/user.slice';
+import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
 
 const DetailsEntityModal = (props: DetailsEntityModalProps) => {
     const entitiesService: EntitiesService = new EntitiesService();
+    const dispatch = useDispatch();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [entity, setEntity] = useState<IEntity | null>(null);
@@ -23,21 +27,29 @@ const DetailsEntityModal = (props: DetailsEntityModalProps) => {
         try {
             const result = await entitiesService.getEntity(props.id);
 
-            if (result.status === 200) {
-                setEntity(result.data.entity);
-                setLoading(false);
-                setSearchWithError(false);
+            setEntity(result.data.entity);
+            setLoading(false);
+            setSearchWithError(false);
+        } catch (e) {
+            console.log('Error', e);
+
+            if (e.response.status === 401) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'La sesión ha expirado',
+                    text: 'Por favor, iníciela de nuevo.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    localStorage.removeItem('token');
+
+                    dispatch(logOutAction({ logged: false, info: null }));
+                });
             } else {
                 setEntity(null);
                 setLoading(false);
                 setSearchWithError(true);
             }
-        } catch (e) {
-            console.log('Error', e);
-
-            setEntity(null);
-            setLoading(false);
-            setSearchWithError(true);
         }
     }
 

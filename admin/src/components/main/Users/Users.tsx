@@ -13,8 +13,11 @@ import EditUserModal from '../../shared/Modals/Users/EditUserModal/EditUserModal
 import { IGetNewPassword } from '../../../core/interfaces/IUsers';
 import Header from '../../shared/Header/Header';
 import Sidebar from '../../shared/Sidebar/Sidebar';
+import { useDispatch } from 'react-redux';
+import { logOutAction } from '../../store/user/user.slice';
 
 class Users extends React.Component<UsersProps, UsersState> {
+    private dispatch = useDispatch();
     private usersService: UsersService;
 
     constructor(props: UsersProps) {
@@ -43,30 +46,36 @@ class Users extends React.Component<UsersProps, UsersState> {
         try {
             const result = await this.usersService.getCredentials(this.state.actualPage, this.state.sizePage);
 
-            if (result.status === 200) {
-                this.setState({
-                    totalResults: result.data.totalResults,
-                    users: result.data.credentials,
-                    searchWithError: false
-                });
-            } else {
-                this.setState({
-                    totalResults: 0,
-                    users: [],
-                    searchWithError: true
-                });
-            }
+            this.setState({
+                totalResults: result.data.totalResults,
+                users: (result.data.credentials) ? result.data.credentials : [],
+                searchWithError: false
+            });
 
             this.setState({ loading: false });
         } catch (e) {
             console.log(e);
 
-            this.setState({
-                loading: false,
-                totalResults: 0,
-                users: [],
-                searchWithError: true
-            });
+            if (e.response.status === 401) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'La sesión ha expirado',
+                    text: 'Por favor, iníciela de nuevo.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    localStorage.removeItem('token');
+
+                    this.dispatch(logOutAction({ logged: false, info: null }));
+                });
+            } else {
+                this.setState({
+                    loading: false,
+                    totalResults: 0,
+                    users: [],
+                    searchWithError: true
+                });
+            }
         }
     }
 
@@ -152,19 +161,33 @@ class Users extends React.Component<UsersProps, UsersState> {
                 try {
                     const result = await this.usersService.deleteCredential(id);
 
-                    if (result.status === 201) {
+                    Swal.fire({
+                        title: 'Usuario eliminado correctamente',
+                        icon: 'success'
+                    }).then(() => {
+                        this.setState({
+                            loading: true,
+                            totalResults: 0,
+                            users: [],
+                            searchWithError: false,
+                            actualPage: 1
+                        },
+                            this.getCredentials);
+                    });
+                } catch (e) {
+                    console.log('ERROR', e);
+
+                    if (e.response.status === 401) {
                         Swal.fire({
-                            title: 'Usuario eliminado correctamente',
-                            icon: 'success'
+                            icon: 'warning',
+                            title: 'La sesión ha expirado',
+                            text: 'Por favor, iníciela de nuevo.',
+                            showConfirmButton: false,
+                            timer: 1500
                         }).then(() => {
-                            this.setState({
-                                loading: true,
-                                totalResults: 0,
-                                users: [],
-                                searchWithError: false,
-                                actualPage: 1
-                            },
-                                this.getCredentials);
+                            localStorage.removeItem('token');
+
+                            this.dispatch(logOutAction({ logged: false, info: null }));
                         });
                     } else {
                         Swal.fire({
@@ -172,13 +195,6 @@ class Users extends React.Component<UsersProps, UsersState> {
                             icon: 'error'
                         });
                     }
-                } catch (e) {
-                    console.log('ERROR', e);
-
-                    Swal.fire({
-                        title: 'Ha ocurrido un error',
-                        icon: 'error'
-                    });
                 }
             }
         });
@@ -199,20 +215,35 @@ class Users extends React.Component<UsersProps, UsersState> {
 
                     const result = await this.usersService.generateNewPassword(consult);
                     console.log(result);
-                    if (result.status === 200) {
+
+                    Swal.fire({
+                        title: 'Se genero una nueva contraseña para el usuario',
+                        text: `La contraseña generada es: ${result.data.password}`,
+                        icon: 'success'
+                    }).then(() => {
+                        this.setState({
+                            loading: true,
+                            totalResults: 0,
+                            users: [],
+                            searchWithError: false,
+                            actualPage: 1
+                        },
+                            this.getCredentials);
+                    });
+                } catch (e) {
+                    console.log('ERROR', e);
+
+                    if (e.response.status === 401) {
                         Swal.fire({
-                            title: 'Se genero una nueva contraseña para el usuario',
-                            text: `La contraseña generada es: ${result.data.password}`,
-                            icon: 'success'
+                            icon: 'warning',
+                            title: 'La sesión ha expirado',
+                            text: 'Por favor, iníciela de nuevo.',
+                            showConfirmButton: false,
+                            timer: 1500
                         }).then(() => {
-                            this.setState({
-                                loading: true,
-                                totalResults: 0,
-                                users: [],
-                                searchWithError: false,
-                                actualPage: 1
-                            },
-                                this.getCredentials);
+                            localStorage.removeItem('token');
+
+                            this.dispatch(logOutAction({ logged: false, info: null }));
                         });
                     } else {
                         Swal.fire({
@@ -220,13 +251,6 @@ class Users extends React.Component<UsersProps, UsersState> {
                             icon: 'error'
                         });
                     }
-                } catch (e) {
-                    console.log('ERROR', e);
-
-                    Swal.fire({
-                        title: 'Ha ocurrido un error',
-                        icon: 'error'
-                    });
                 }
             }
         })
