@@ -129,7 +129,7 @@ const LogInModal = (props: LogInModalProps) => {
                                     <Form.Control.Feedback
                                         type="invalid"
                                         tooltip
-                                    >{errors.email}</Form.Control.Feedback>
+                                    >{errors.password}</Form.Control.Feedback>
                                 </Form.Group>
 
                                 <br />
