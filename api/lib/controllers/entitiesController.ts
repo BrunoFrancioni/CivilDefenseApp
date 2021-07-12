@@ -5,33 +5,49 @@ import EntitiesSchema, { IEntities } from '../models/entitiesModel';
 export class EntitiesController {
     private Entities = EntitiesSchema;
 
-    public async getAllEntities(): Promise<IEntity[]> {
+    public async getAllEntities(): Promise<IGetEntitiesResult> {
         try {
-            const result: IEntities[] = await this.Entities.find({}).exec();
+            const totalResult = await this.Entities.find().countDocuments().exec();
 
-            let entities: IEntity[] = new Array<IEntity>();
+            let result: IGetEntitiesResult;
 
-            if (result) {
-                for (let element of result) {
-                    let entity: IEntity = {
-                        _id: element._id,
-                        name: element.name,
-                        entityType: element.entityType,
-                        legalNumber: element.legalNumber,
-                        address: element.address,
-                        phone: element.phone,
-                        postalCode: element.postalCode,
-                        email: element.email,
-                        sector: element.sector,
-                        risk: element.risk,
-                        coordinates: element.coordinates
+            if (totalResult != 0) {
+                const entities: IEntities[] = await this.Entities.find({}).exec();
+
+                const entitiesDTO: IEntity[] = [];
+
+                entities.forEach(ent => {
+                    const entity: IEntity = {
+                        _id: ent._id,
+                        name: ent.name,
+                        entityType: ent.entityType,
+                        legalNumber: ent.legalNumber,
+                        address: ent.address,
+                        phone: ent.phone,
+                        postalCode: ent.postalCode,
+                        email: ent.email,
+                        sector: ent.sector,
+                        risk: ent.risk,
+                        coordinates: ent.coordinates
                     }
 
-                    entities.push(entity);
+                    entitiesDTO.push(entity);
+                });
+
+                result = {
+                    result: true,
+                    entities: entitiesDTO,
+                    totalResults: totalResult
+                }
+            } else {
+                result = {
+                    result: true,
+                    entities: null,
+                    totalResults: totalResult
                 }
             }
 
-            return entities;
+            return result;
         } catch (e) {
             throw new Error(e);
         }

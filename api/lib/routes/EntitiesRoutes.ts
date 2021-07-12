@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ICreateEntityResult, IDeleteEntityResult, IEditEntityResult, IGetEntities, IGetEntitiesStatsResult, IGetEntityResult } from "interfaces/IEntities";
+import { ICreateEntityResult, IDeleteEntityResult, IEditEntityResult, IGetEntities, IGetEntitiesResult, IGetEntitiesStatsResult, IGetEntityResult } from "interfaces/IEntities";
 
 import { EntitiesController } from '../controllers/entitiesController';
 
@@ -18,7 +18,13 @@ export class EntitiesRoutes {
                             size: Number(req.query.size)
                         }
 
-                        const result = await this.entitiesController.getPaginateEntities(params);
+                        let result: IGetEntitiesResult;
+
+                        if (!params.page && !params.size) {
+                            result = await this.entitiesController.getAllEntities();
+                        } else {
+                            result = await this.entitiesController.getPaginateEntities(params);
+                        }
 
                         return res.status(200).json({
                             entities: result.entities,
