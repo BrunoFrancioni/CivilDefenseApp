@@ -1,0 +1,10 @@
+.position-relative {
+    position: relative;
+}
+
+.spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+}

@@ -1,90 +1,58 @@
-import React from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { Button, Form, Modal, Spinner } from 'react-bootstrap';
+import { Formik } from 'formik';
+import * as yup from 'yup';
 
 import Swal from 'sweetalert2';
+import { ICreateCredentials } from '../../../../../core/interfaces/IUsers';
 
 import UsersService from '../../../../../core/services/UsersService';
 import { logOutAction } from '../../../../store/user/user.slice';
-import { CreateUserModalProps, CreateUserModalState } from './types';
+import { CreateUserModalProps } from './types';
+import { useDispatch } from 'react-redux';
 
-class CreateUserModal extends React.Component<CreateUserModalProps, CreateUserModalState> {
-    private dispatch = useDispatch();
-    private usersService: UsersService;
+import './styles.css';
 
-    constructor(props: CreateUserModalProps) {
-        super(props);
+const CreateUserModal = (props: CreateUserModalProps) => {
+    const usersService: UsersService = new UsersService();
 
-        this.state = {
-            createCredentialsDTO: {
-                name_lastname: '',
-                dni: '',
-                organization: '',
-                email: ''
-            }
-        }
-
-        this.usersService = new UsersService();
+    const initialState: ICreateCredentials = {
+        name_lastname: '',
+        dni: '',
+        organization: '',
+        email: ''
     }
 
-    handleClose = () => {
-        this.props.handleClose(false);
-    }
+    const typeOrganization = [
+        "Defensa Civil",
+        "Bomberos",
+        "Policía"
+    ]
 
-    handleChangesNombreApellido = (value: string) => {
-        this.setState({
-            createCredentialsDTO: {
-                name_lastname: value,
-                dni: this.state.createCredentialsDTO.dni,
-                organization: this.state.createCredentialsDTO.organization,
-                email: this.state.createCredentialsDTO.email
-            }
-        });
-    }
+    const validationSchema = yup.object().shape({
+        name_lastname: yup.string().required("Requerido"),
+        dni: yup.string().required("Requerido"),
+        organization: yup.string().required('Required'),
+        email: yup.string().required("Requerido").email("Ingrese un email válido")
+    });
 
-    handleChangesDNI(value: string) {
-        this.setState({
-            createCredentialsDTO: {
-                name_lastname: this.state.createCredentialsDTO.name_lastname,
-                dni: value,
-                organization: this.state.createCredentialsDTO.organization,
-                email: this.state.createCredentialsDTO.email
-            }
-        });
-    }
+    const [loading, setLoading] = useState<boolean>(false);
+    const dispatch = useDispatch();
 
-    handleChangesOrganization(value: string) {
-        this.setState({
-            createCredentialsDTO: {
-                name_lastname: this.state.createCredentialsDTO.name_lastname,
-                dni: this.state.createCredentialsDTO.dni,
-                organization: value,
-                email: this.state.createCredentialsDTO.email
-            }
-        });
-    }
-
-    handleChangesEmail(value: string) {
-        this.setState({
-            createCredentialsDTO: {
-                name_lastname: this.state.createCredentialsDTO.name_lastname,
-                dni: this.state.createCredentialsDTO.dni,
-                organization: this.state.createCredentialsDTO.organization,
-                email: value
-            }
-        });
-    }
-
-    handleSubmit = async (e: React.SyntheticEvent) => {
-        e.preventDefault();
+    const handleSubmit = async (values: ICreateCredentials) => {
+        setLoading(true);
 
         try {
-            const result = await this.usersService.createCredentials(this.state.createCredentialsDTO);
+            const result = await usersService.createCredentials(values);
             console.log("Resultado", result);
 
-            this.props.handleUserCreated(result.data.password);
+            setLoading(false);
+
+            props.handleUserCreated(result.data.password);
         } catch (e) {
             console.log("ERROR", e);
+
+            setLoading(false);
 
             if (e.response.status === 401) {
                 Swal.fire({
@@ -96,7 +64,7 @@ class CreateUserModal extends React.Component<CreateUserModalProps, CreateUserMo
                 }).then(() => {
                     localStorage.removeItem('token');
 
-                    this.dispatch(logOutAction({ logged: false, info: null }));
+                    dispatch(logOutAction({ logged: false, info: null }));
                 });
             } else if (e.response.status === 400) {
                 Swal.fire({
@@ -114,98 +82,180 @@ class CreateUserModal extends React.Component<CreateUserModalProps, CreateUserMo
         }
     }
 
-    render() {
-        return (
-            <>
-                <Modal
-                    show={this.props.showModal}
-                    onHide={this.handleClose}
-                    size="lg"
-                    animation={false}
-                    centered={true}
-                    onEscapeKeyDown={this.handleClose}
-                    onSubmit={(e: React.SyntheticEvent) => this.handleSubmit(e)}
+    return (
+        <Modal
+            show={props.showModal}
+            onHide={() => props.handleClose(false)}
+            size="lg"
+            animation={false}
+            centered={true}
+            onEscapeKeyDown={() => props.handleClose(false)}
+        >
+            <Modal.Header closeButton>
+                <Modal.Title>Crear Usuario</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+                <Formik
+                    initialValues={initialState}
+                    validationSchema={validationSchema}
+                    onSubmit={(data, { setSubmitting }) => {
+                        setSubmitting(true);
+
+                        handleSubmit(data);
+
+                        setSubmitting(false);
+                    }}
                 >
-                    <Modal.Header closeButton>
-                        <Modal.Title>Crear Usuario</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                        <Form>
-                            <Form.Group controlId="formNameLastname">
-                                <Form.Label>Nombre y Apellido</Form.Label>
-                                <Form.Control
-                                    size="lg"
-                                    type="text"
-                                    placeholder="Ingrese el nombre y apellido"
-                                    required
-                                    onChange={e => this.handleChangesNombreApellido(e.target.value)}
-                                />
-                            </Form.Group>
-
-                            <br />
-
-                            <Form.Group controlId="formDNI">
-                                <Form.Label>DNI</Form.Label>
-                                <Form.Control
-                                    size="lg"
-                                    type="text"
-                                    placeholder="Ingrese el DNI"
-                                    required
-                                    onChange={e => this.handleChangesDNI(e.target.value)}
-                                />
-                                <Form.Text className="text-muted">
-                                    Ingresar sin puntos
-                                </Form.Text>
-                            </Form.Group>
-
-                            <br />
-
-                            <Form.Group controlId="formOrganization">
-                                <Form.Label>Seleccione su organización</Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    size="lg"
-                                    required
-                                    onChange={e => this.handleChangesOrganization(e.target.value)}
+                    {
+                        ({
+                            values,
+                            errors,
+                            isSubmitting,
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            touched
+                        }) => (
+                            <Form
+                                noValidate
+                                onSubmit={handleSubmit}
+                            >
+                                <Form.Group
+                                    controlId="name_lastname"
+                                    className="position-relative"
                                 >
-                                    <option value="">Selecciona una opción</option>
-                                    <option value="defensa civil">Defensa Civil</option>
-                                    <option value="bomberos">Bomberos</option>
-                                    <option value="policia">Policía</option>
-                                </Form.Control>
-                            </Form.Group>
+                                    <Form.Label>Nombre y Apellido</Form.Label>
+                                    <Form.Control
+                                        size="lg"
+                                        type="text"
+                                        placeholder="Ingrese el nombre y apellido"
+                                        defaultValue={values.name_lastname}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.name_lastname && !errors.name_lastname}
+                                        isInvalid={!!errors.name_lastname}
+                                    />
 
-                            <br />
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.name_lastname}</Form.Control.Feedback>
+                                </Form.Group>
 
-                            <Form.Group controlId="formEmail">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control
-                                    size="lg"
-                                    type="email"
-                                    placeholder="Ingrese el email"
-                                    required
-                                    onChange={e => this.handleChangesEmail(e.target.value)}
-                                />
-                            </Form.Group>
+                                <br />
 
-                            <br />
+                                <Form.Group
+                                    controlId="dni"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>DNI</Form.Label>
+                                    <Form.Control
+                                        size="lg"
+                                        type="text"
+                                        placeholder="Ingrese el DNI"
+                                        defaultValue={values.dni}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.dni && !errors.dni}
+                                        isInvalid={!!errors.dni}
+                                    />
+                                    <Form.Text className="text-muted">
+                                        Ingresar sin puntos
+                                    </Form.Text>
 
-                            <Button variant="primary" type="submit">
-                                Crear
-                            </Button>
-                        </Form>
-                    </Modal.Body>
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.dni}</Form.Control.Feedback>
+                                </Form.Group>
 
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleClose}>
-                            Cerrar
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </>
-        )
-    }
+                                <br />
+
+                                <Form.Group
+                                    controlId="organization"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Seleccione su organización</Form.Label>
+                                    <Form.Control
+                                        as="select"
+                                        size="lg"
+                                        defaultValue={values.organization}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.organization && !errors.organization}
+                                        isInvalid={!!errors.organization}
+                                    >
+                                        <option value={""}>Selecciona una opción</option>
+                                        {
+                                            typeOrganization.map((organization, index) => {
+                                                return <option value={organization} key={index}>
+                                                    {organization}
+                                                </option>
+                                            })
+                                        }
+                                    </Form.Control>
+
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.organization}</Form.Control.Feedback>
+                                </Form.Group>
+
+                                <br />
+
+                                <Form.Group
+                                    controlId="email"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control
+                                        size="lg"
+                                        type="email"
+                                        placeholder="Ingrese el email"
+                                        defaultValue={values.email}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.email && !errors.email}
+                                        isInvalid={!!errors.email}
+                                    />
+
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.email}</Form.Control.Feedback>
+                                </Form.Group>
+
+                                <br />
+
+                                <Button
+                                    variant="primary"
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                >
+                                    Crear
+                                </Button>
+                            </Form>
+                        )
+                    }
+                </Formik>
+
+                {
+                    loading &&
+                    <div className="spinner-container">
+                        <Spinner animation="border" role="status">
+                        </Spinner>
+                    </div>
+                }
+            </Modal.Body>
+
+            <Modal.Footer>
+                <Button variant="secondary" onClick={() => props.handleClose(false)}>
+                    Cerrar
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    );
 }
 
 export default CreateUserModal;
