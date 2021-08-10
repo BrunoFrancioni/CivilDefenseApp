@@ -132,6 +132,8 @@ class Users extends React.Component<UsersProps, UsersState> {
     }
 
     handleEditarClick = (state: boolean, user: ICredential) => {
+        user.organization = this.firstLetterUppercase(user.organization);
+
         this.setState({
             credential: user,
             showEditUserModal: state
