@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form, Modal, Spinner } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { Formik } from 'formik';
+import * as yup from 'yup';
 import Swal from 'sweetalert2';
-import { ICreateEntity } from '../../../../../core/interfaces/IEntities';
+import { ICreateEntity, ICreateEntityDTO } from '../../../../../core/interfaces/IEntities';
 import EntitiesService from '../../../../../core/services/EntitiesService';
+import { logOutAction } from '../../../../store/user/user.slice';
 import { CreateEntityModalProps } from './types';
 
 const CreateEntityModal = (props: CreateEntityModalProps) => {
-    const initialStateEntity: ICreateEntity = {
+    const initialStateEntity: ICreateEntityDTO = {
         name: '',
         entityType: '',
         legalNumber: '',
@@ -16,108 +20,70 @@ const CreateEntityModal = (props: CreateEntityModalProps) => {
         email: '',
         sector: '',
         risk: [],
-        coordinates: ['', '']
+        longitude: '',
+        latitude: ''
     }
 
-    const [createEntity, setCreateEntity] = useState<ICreateEntity>(initialStateEntity);
+    const [loading, setLoading] = useState<boolean>(false);
+    const dispatch = useDispatch();
 
     const entitiesService: EntitiesService = new EntitiesService();
 
-    const handleChangesName = (value: string) => {
-        setCreateEntity({
-            ...createEntity,
-            name: value
-        });
-    }
+    const entityType = [
+        "Educación",
+        "Centro salud",
+        "Depósito combustible",
+        "Organismo público",
+        "Lugar evento masivo",
+        "Club",
+        "Hogar acogida"
+    ];
 
-    const handleChangesEntityType = (value: string) => {
-        setCreateEntity({
-            ...createEntity,
-            entityType: value
-        });
-    }
+    const sectorType = [
+        "Privada",
+        "Estatal",
+        "Público"
+    ];
 
-    const handleChangesLegalNumber = (value: string) => {
-        setCreateEntity({
-            ...createEntity,
-            legalNumber: value
-        });
-    }
+    const validationSchema = yup.object().shape({
+        name: yup.string().required("Requerido"),
+        entityType: yup.string().required("Requerido"),
+        legalNumber: yup.string().required('Required'),
+        address: yup.string().required('Required'),
+        phone: yup.string().required('Required'),
+        postalCode: yup.string().required('Required'),
+        email: yup.string().required("Requerido").email("Ingrese un email válido"),
+        sector: yup.string().required('Required'),
+        //risk: yup.array().min(1, "Debe seleccionar al menos un riesgo"),
+        longitude: yup.string().required("Requerido"),
+        latitude: yup.string().required("Requerido")
+    });
 
-    const handleChangesAddress = (value: string) => {
-        setCreateEntity({
-            ...createEntity,
-            address: value
-        });
-    }
+    const handleSubmit = async (values: ICreateEntityDTO) => {
+        setLoading(true);
 
-    const handleChangesPhone = (value: string) => {
-        setCreateEntity({
-            ...createEntity,
-            phone: value
-        });
-    }
-
-    const handleChangesPostalCode = (value: string) => {
-        setCreateEntity({
-            ...createEntity,
-            postalCode: value
-        });
-    }
-
-    const handleChangesEmail = (value: string) => {
-        setCreateEntity({
-            ...createEntity,
-            email: value
-        });
-    }
-
-    const handleChangesSector = (value: string) => {
-        setCreateEntity({
-            ...createEntity,
-            sector: value
-        });
-    }
-
-    const handleChangesRisk = (id: string) => {
-        const value = createEntity.risk.find((v) => v == id);
-
-        if (value) {
-            setCreateEntity({
-                ...createEntity,
-                risk: createEntity.risk.filter((v) => v != id)
-            });
-        } else {
-            setCreateEntity({
-                ...createEntity,
-                risk: [...createEntity.risk, id]
-            });
+        const params: ICreateEntity = {
+            name: values.name,
+            entityType: values.entityType,
+            legalNumber: values.legalNumber,
+            address: values.address,
+            phone: values.phone,
+            postalCode: values.postalCode,
+            email: values.email,
+            sector: values.sector,
+            risk: values.risk,
+            coordinates: [values.longitude, values.longitude]
         }
-    }
-
-    const handleChangesLongitude = (value: string) => {
-        setCreateEntity({
-            ...createEntity,
-            coordinates: [value, createEntity.coordinates[1]]
-        });
-    }
-
-    const handleChangesLatitud = (value: string) => {
-        setCreateEntity({
-            ...createEntity,
-            coordinates: [createEntity.coordinates[0], value]
-        });
-    }
-
-    const handleSubmit = async (e: React.SyntheticEvent) => {
-        e.preventDefault();
 
         try {
-            const result = await entitiesService.createEntity(createEntity);
+            const result = await entitiesService.createEntity(params);
+            console.log(result);
 
-            props.handleUserCreated();
+            props.handleEntityCreated();
         } catch (e) {
             console.log("ERROR", e);
+
+            setLoading(false);
 
             if (e.response.status === 401) {
                 Swal.fire({
@@ -155,197 +121,381 @@ const CreateEntityModal = (props: CreateEntityModalProps) => {
             animation={false}
             centered={true}
             onEscapeKeyDown={() => props.handleClose(false)}
-            onSubmit={(e: React.SyntheticEvent) => handleSubmit(e)}
         >
             <Modal.Header closeButton>
                 <Modal.Title>Crear Entidad</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
-                <Form>
-                    <Form.Group controlId="formNameLastname">
-                        <Form.Label>Nombre Entidad</Form.Label>
-                        <Form.Control
-                            size="lg"
-                            type="text"
-                            placeholder="Ingrese el nombre de la entidad"
-                            required
-                            onChange={e => handleChangesName(e.target.value)}
-                        />
-                    </Form.Group>
+                <Formik
+                    initialValues={initialStateEntity}
+                    validationSchema={validationSchema}
+                    onSubmit={(data, { setSubmitting }) => {
+                        setSubmitting(true);
 
-                    <br />
+                        handleSubmit(data);
 
-                    <Form.Group controlId="formEntityType">
-                        <Form.Label>Tipo de entidad</Form.Label>
-                        <Form.Control
-                            as="select"
-                            size="lg"
-                            required
-                            onChange={e => handleChangesEntityType(e.target.value)}
-                        >
-                            <option value="">Selecciona una opción</option>
-                            <option value="educación">Educación</option>
-                            <option value="centro salud">Centro salud</option>
-                            <option value="depósito combustible">Depósito combustible</option>
-                            <option value="organismo público">Organismo público</option>
-                            <option value="lugar evento masivo">Lugar evento masivo</option>
-                            <option value="club">Club</option>
-                            <option value="hogar acogida">Hogar acogida</option>
-                        </Form.Control>
-                    </Form.Group>
+                        setSubmitting(false);
+                    }}
+                >
+                    {
+                        ({
+                            values,
+                            errors,
+                            isSubmitting,
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            touched
+                        }) => (
+                            <Form
+                                noValidate
+                                onSubmit={handleSubmit}
+                            >
+                                <Form.Group
+                                    controlId="name"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Nombre de la Entidad</Form.Label>
+                                    <Form.Control
+                                        size="lg"
+                                        type="text"
+                                        placeholder="Ingrese el nombre de la entidad"
+                                        defaultValue={values.name}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.name && !errors.name}
+                                        isInvalid={!!errors.name}
+                                    />
 
-                    <br />
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.name}</Form.Control.Feedback>
+                                </Form.Group>
 
-                    <Form.Group controlId="formLegalNumber">
-                        <Form.Label>Numero Legal</Form.Label>
-                        <Form.Control
-                            size="lg"
-                            type="text"
-                            placeholder="Ingrese el numero legal"
-                            required
-                            onChange={e => handleChangesLegalNumber(e.target.value)}
-                        />
-                    </Form.Group>
+                                <br />
 
-                    <br />
+                                <Form.Group
+                                    controlId="entityType"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Seleccione el tipo de Entidad</Form.Label>
+                                    <Form.Control
+                                        as="select"
+                                        size="lg"
+                                        defaultValue={values.entityType}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.entityType && !errors.entityType}
+                                        isInvalid={!!errors.entityType}
+                                    >
+                                        <option value={""}>Selecciona una opción</option>
+                                        {
+                                            entityType.map((type, index) => {
+                                                return <option value={type} key={index}>
+                                                    {type}
+                                                </option>
+                                            })
+                                        }
+                                    </Form.Control>
 
-                    <Form.Group controlId="formAddress">
-                        <Form.Label>Dirección</Form.Label>
-                        <Form.Control
-                            size="lg"
-                            type="text"
-                            placeholder="Ingrese la dirección"
-                            required
-                            onChange={e => handleChangesAddress(e.target.value)}
-                        />
-                    </Form.Group>
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.entityType}</Form.Control.Feedback>
+                                </Form.Group>
 
-                    <br />
+                                <br />
 
-                    <Form.Group controlId="formPhone">
-                        <Form.Label>Teléfono</Form.Label>
-                        <Form.Control
-                            size="lg"
-                            type="text"
-                            placeholder="Ingrese el teléfono"
-                            required
-                            onChange={e => handleChangesPhone(e.target.value)}
-                        />
-                    </Form.Group>
+                                <Form.Group
+                                    controlId="legalNumber"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Número Legal</Form.Label>
+                                    <Form.Control
+                                        size="lg"
+                                        type="text"
+                                        placeholder="Ingrese el número legal"
+                                        defaultValue={values.legalNumber}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.legalNumber && !errors.legalNumber}
+                                        isInvalid={!!errors.legalNumber}
+                                    />
 
-                    <br />
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.legalNumber}</Form.Control.Feedback>
+                                </Form.Group>
 
-                    <Form.Group controlId="formPostalCode">
-                        <Form.Label>Código Postal</Form.Label>
-                        <Form.Control
-                            size="lg"
-                            type="text"
-                            placeholder="Ingrese el código postal"
-                            required
-                            onChange={e => handleChangesPostalCode(e.target.value)}
-                        />
-                    </Form.Group>
+                                <br />
 
-                    <br />
+                                <Form.Group
+                                    controlId="address"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Dirección</Form.Label>
+                                    <Form.Control
+                                        size="lg"
+                                        type="text"
+                                        placeholder="Ingrese el dirección"
+                                        defaultValue={values.address}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.address && !errors.address}
+                                        isInvalid={!!errors.address}
+                                    />
 
-                    <Form.Group controlId="formEmail">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            size="lg"
-                            type="text"
-                            placeholder="Ingrese el email"
-                            required
-                            onChange={e => handleChangesEmail(e.target.value)}
-                        />
-                    </Form.Group>
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.address}</Form.Control.Feedback>
+                                </Form.Group>
 
-                    <br />
+                                <br />
 
-                    <Form.Group controlId="formSector">
-                        <Form.Label>Sector</Form.Label>
-                        <Form.Control
-                            size="lg"
-                            type="text"
-                            placeholder="Ingrese el sector"
-                            required
-                            onChange={e => handleChangesSector(e.target.value)}
-                        />
-                    </Form.Group>
+                                <Form.Group
+                                    controlId="phone"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Teléfono</Form.Label>
+                                    <Form.Control
+                                        size="lg"
+                                        type="text"
+                                        placeholder="Ingrese el teléfono"
+                                        defaultValue={values.phone}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.phone && !errors.phone}
+                                        isInvalid={!!errors.phone}
+                                    />
 
-                    <br />
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.phone}</Form.Control.Feedback>
+                                </Form.Group>
 
-                    <Form.Group controlId="formRisk">
-                        <Form.Label>Seleccione los riesgos de la entidad</Form.Label>
+                                <br />
 
-                        <Form.Check
-                            type="checkbox"
-                            id="incendio"
-                            value="incendio"
-                            label="Incendio"
-                            onChange={e => handleChangesRisk(e.target.value)}
-                        />
+                                <Form.Group
+                                    controlId="postalCode"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Código Postal</Form.Label>
+                                    <Form.Control
+                                        size="lg"
+                                        type="text"
+                                        placeholder="Ingrese el código postal"
+                                        defaultValue={values.postalCode}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.postalCode && !errors.postalCode}
+                                        isInvalid={!!errors.postalCode}
+                                    />
 
-                        <Form.Check
-                            type="checkbox"
-                            id="inundación"
-                            value="inundación"
-                            label="Inundación"
-                            onChange={e => handleChangesRisk(e.target.value)}
-                        />
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.postalCode}</Form.Control.Feedback>
+                                </Form.Group>
 
-                        <Form.Check
-                            type="checkbox"
-                            id="accidente"
-                            value="accidente"
-                            label="Accidente"
-                            onChange={e => handleChangesRisk(e.target.value)}
-                        />
+                                <br />
 
-                        <Form.Check
-                            type="checkbox"
-                            id="amenaza climática"
-                            value="amenaza climática"
-                            label="Amenaza climática"
-                            onChange={e => handleChangesRisk(e.target.value)}
-                        />
-                    </Form.Group>
+                                <Form.Group
+                                    controlId="email"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control
+                                        size="lg"
+                                        type="email"
+                                        placeholder="Ingrese el email"
+                                        defaultValue={values.email}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.email && !errors.email}
+                                        isInvalid={!!errors.email}
+                                    />
 
-                    <br />
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.email}</Form.Control.Feedback>
+                                </Form.Group>
 
-                    <Form.Group controlId="formCoordinates">
-                        <Form.Label>Coordenadas</Form.Label>
-                        <Form.Control
-                            size="lg"
-                            type="text"
-                            placeholder="Ingrese la longitud"
-                            required
-                            onChange={e => handleChangesLongitude(e.target.value)}
-                        />
-                    </Form.Group>
+                                <br />
 
-                    <br />
+                                <Form.Group
+                                    controlId="sector"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Seleccione el Sector</Form.Label>
+                                    <Form.Control
+                                        as="select"
+                                        size="lg"
+                                        defaultValue={values.sector}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.sector && !errors.sector}
+                                        isInvalid={!!errors.sector}
+                                    >
+                                        <option value={""}>Selecciona una opción</option>
+                                        {
+                                            sectorType.map((type, index) => {
+                                                return <option value={type} key={index}>
+                                                    {type}
+                                                </option>
+                                            })
+                                        }
+                                    </Form.Control>
 
-                    <Form.Group controlId="formLatitud">
-                        <Form.Control
-                            size="lg"
-                            type="text"
-                            placeholder="Ingrese la latitud"
-                            required
-                            onChange={e => handleChangesLatitud(e.target.value)}
-                        />
-                    </Form.Group>
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.sector}</Form.Control.Feedback>
+                                </Form.Group>
 
-                    <br />
+                                <br />
 
-                    <Button variant="primary" type="submit">
-                        Crear
-                    </Button>
-                </Form>
+                                <Form.Group
+                                    controlId="risk"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Riesgo</Form.Label>
+
+                                    <Form.Check
+                                        type="checkbox"
+                                        id="incendio"
+                                        value="incendio"
+                                        label="Incendio"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.risk && !errors.risk}
+                                        isInvalid={!!errors.risk}
+                                    />
+
+                                    <Form.Check
+                                        type="checkbox"
+                                        id="inundación"
+                                        value="inundación"
+                                        label="Inundación"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.risk && !errors.risk}
+                                        isInvalid={!!errors.risk}
+                                    />
+
+                                    <Form.Check
+                                        type="checkbox"
+                                        id="accidente"
+                                        value="accidente"
+                                        label="Accidente"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.risk && !errors.risk}
+                                        isInvalid={!!errors.risk}
+                                    />
+
+                                    <Form.Check
+                                        type="checkbox"
+                                        id="amenaza climática"
+                                        value="amenaza climática"
+                                        label="Amenaza climática"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.risk && !errors.risk}
+                                        isInvalid={!!errors.risk}
+                                    />
+
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.risk}</Form.Control.Feedback>
+                                </Form.Group>
+
+                                <br />
+
+                                <Form.Group controlId="formCoordinates">
+                                    <Form.Label>Coordenadas</Form.Label>
+                                </Form.Group>
+
+                                <Form.Group
+                                    controlId="longitude"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Longitud</Form.Label>
+                                    <Form.Control
+                                        size="lg"
+                                        type="text"
+                                        placeholder="Ingrese la longitud"
+                                        defaultValue={values.longitude}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.longitude && !errors.longitude}
+                                        isInvalid={!!errors.longitude}
+                                    />
+
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.longitude}</Form.Control.Feedback>
+                                </Form.Group>
+
+                                <br />
+
+                                <Form.Group
+                                    controlId="latitude"
+                                    className="position-relative"
+                                >
+                                    <Form.Label>Latitud</Form.Label>
+                                    <Form.Control
+                                        size="lg"
+                                        type="text"
+                                        placeholder="Ingrese la latitud"
+                                        defaultValue={values.latitude}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isValid={touched.latitude && !errors.latitude}
+                                        isInvalid={!!errors.latitude}
+                                    />
+
+                                    <Form.Control.Feedback
+                                        type="invalid"
+                                        tooltip
+                                    >{errors.latitude}</Form.Control.Feedback>
+                                </Form.Group>
+
+                                <br />
+
+                                <Button
+                                    variant="primary"
+                                    disabled={isSubmitting}
+                                    type="submit"
+                                >
+                                    Crear
+                                </Button>
+                            </Form>
+                        )
+                    }
+                </Formik>
+
+                {
+                    loading &&
+                    <div className="spinner-container">
+                        <Spinner animation="border" role="status">
+                        </Spinner>
+                    </div>
+                }
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="secondary" onClick={() => props.handleClose()}>
+                <Button
+                    variant="secondary"
+                    onClick={() => props.handleClose()}
+                >
                     Cerrar
                 </Button>
             </Modal.Footer>

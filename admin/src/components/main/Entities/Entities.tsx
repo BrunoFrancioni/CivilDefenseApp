@@ -89,7 +89,7 @@ const Entities = (props: EntitiesProps) => {
         return cadena.replace(cadena.charAt(0), cadena.charAt(0).toUpperCase());
     }
 
-    const handleUserCreated = () => {
+    const handleEntityCreated = () => {
         setShowCreateModal(false);
 
         Swal.fire({
@@ -101,6 +101,8 @@ const Entities = (props: EntitiesProps) => {
             setEntities([]);
             setSearchWithError(false);
             setActualPage(1);
+
+            getEntities();
         });
     }
 
@@ -322,7 +324,7 @@ const Entities = (props: EntitiesProps) => {
                             <CreateEntityModal
                                 showModal={showCreateModal}
                                 handleClose={() => setShowCreateModal(false)}
-                                handleUserCreated={handleUserCreated}
+                                handleEntityCreated={handleEntityCreated}
                             />
                         }
 

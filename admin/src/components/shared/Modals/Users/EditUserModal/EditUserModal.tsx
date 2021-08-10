@@ -1,58 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Container, Form, Modal, Spinner } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import { ICredential, IEditCredential } from '../../../../../core/interfaces/IUsers';
 import UsersService from '../../../../../core/services/UsersService';
 import { logOutAction } from '../../../../store/user/user.slice';
-import { EditUserModalProps, EditUserModalStatus } from './types';
+import { EditUserModalProps } from './types';
+import { Formik } from 'formik';
 
-class EditUserModal extends React.Component<EditUserModalProps, EditUserModalStatus> {
-    private usersService: UsersService;
-    private dispatch = useDispatch();
+const EditUserModal = (props: EditUserModalProps) => {
+    const usersService: UsersService = new UsersService();
+    const dispatch = useDispatch();
 
-    constructor(props: EditUserModalProps) {
-        super(props);
-
-        this.state = {
-            loading: true,
-            searchWithError: false,
-            credential: {
-                _id: '',
-                name_lastname: '',
-                dni: '',
-                organization: '',
-                email: '',
-            },
-            editCredentialDTO: {
-                name_lastname: '',
-                dni: '',
-                organization: ''
-            }
-        }
-
-        this.usersService = new UsersService();
+    const initialStateCredential: ICredential = {
+        _id: '',
+        name_lastname: '',
+        dni: '',
+        organization: '',
+        email: ''
     }
 
-    componentDidMount() {
-        this.getCredential();
+    const initialStateEditCredential: IEditCredential = {
+        name_lastname: '',
+        dni: '',
+        organization: ''
     }
 
-    async getCredential() {
+    const [loading, setLoading] = useState<boolean>(false);
+    const [searchWithError, setSearchWithError] = useState<boolean>(false);
+    const [credential, setCredential] = useState<ICredential>(initialStateCredential);
+    const [editCredentialDTO, setEditCredentialDTO] = useState<IEditCredential>(initialStateEditCredential);
+
+    useEffect(() => {
+        /*(async () => {
+            await getCredential();
+        })();*/
+    }, [])
+    /*
+    const getCredential = async () => {
         try {
-            const result = await this.usersService.getCredentialById(this.props.idCredential);
+            const result = await usersService.getCredentialById(props.idCredential);
             console.log(result);
 
-            this.setState({
-                loading: false,
-                searchWithError: false,
-                credential: result.data.credential,
-                editCredentialDTO: {
-                    name_lastname: result.data.credential.name_lastname,
-                    dni: result.data.credential.dni,
-                    organization: result.data.credential.organization
-                }
+            setCredential(result.data.credential);
+            setEditCredentialDTO({
+                name_lastname: result.data.credential.name_lastname,
+                dni: result.data.credential.dni,
+                organization: result.data.credential.organization
             });
+
+            setLoading(false);
+            setSearchWithError(false);
         } catch (e) {
             console.log(e);
 
@@ -66,85 +65,62 @@ class EditUserModal extends React.Component<EditUserModalProps, EditUserModalSta
                 }).then(() => {
                     localStorage.removeItem('token');
 
-                    this.dispatch(logOutAction({ logged: false, info: null }));
+                    dispatch(logOutAction({ logged: false, info: null }));
                 });
             } else {
-                let credential: ICredential = {
-                    _id: '',
-                    name_lastname: '',
-                    dni: '',
-                    organization: '',
-                    email: '',
-                }
-
-                let editCredentialDTO: IEditCredential = {
-                    name_lastname: '',
-                    dni: '',
-                    organization: ''
-                }
-
-                this.setState({
-                    loading: false,
-                    searchWithError: true,
-                    credential: credential,
-                    editCredentialDTO: editCredentialDTO
-                });
+                setLoading(false);
+                setSearchWithError(true);
+                setCredential(initialStateCredential);
+                setEditCredentialDTO(initialStateEditCredential);
             }
         }
     }
+    */
+    const typeOrganization = [
+        "Defensa Civil",
+        "Bomberos",
+        "Policía"
+    ]
 
-    firstLetterLowercase = (cadena: string) => {
+    const getEditCredentialDTO = (): IEditCredential => {
+        return editCredentialDTO;
+    }
+
+    const validationSchema = yup.object().shape({
+        name_lastname: yup.string().required("Requerido"),
+        dni: yup.string().required("Requerido"),
+        organization: yup.string().required('Required'),
+        email: yup.string().required("Requerido").email("Ingrese un email válido")
+    });
+
+    const firstLetterLowercase = (cadena: string) => {
         return cadena.replace(cadena.charAt(0), cadena.charAt(0).toLowerCase());
     }
 
-    handleClose = () => {
-        let credential: IEditCredential = {
+    const handleClose = () => {
+        let credential: ICredential = {
+            _id: '',
             name_lastname: '',
             dni: '',
-            organization: ''
+            organization: '',
+            email: ''
         }
 
-        this.props.handleClose(false, credential);
+        props.handleClose(false, credential);
     }
 
-    handleChangesNombreApellido = (value: string) => {
-        this.setState({
-            editCredentialDTO: {
-                name_lastname: value,
-                dni: this.state.editCredentialDTO.dni,
-                organization: this.state.editCredentialDTO.organization
-            }
-        });
-    }
-
-    handleChangesDNI(value: string) {
-        this.setState({
-            editCredentialDTO: {
-                name_lastname: this.state.editCredentialDTO.name_lastname,
-                dni: value,
-                organization: this.state.editCredentialDTO.organization
-            }
-        });
-    }
-
-    handleChangesOrganization(value: string) {
-        this.setState({
-            editCredentialDTO: {
-                name_lastname: this.state.editCredentialDTO.name_lastname,
-                dni: this.state.editCredentialDTO.dni,
-                organization: value
-            }
-        });
-    }
-
-    handleSubmit = async (e: React.SyntheticEvent) => {
-        e.preventDefault();
-
+    const handleSubmit = async (values: ICredential) => {
         try {
-            const result = await this.usersService
-                .editCredentials(this.props.idCredential, this.state.editCredentialDTO);
+            const credentialEdited: IEditCredential = {
+                name_lastname: values.name_lastname,
+                dni: values.dni,
+                organization: values.organization
+            }
 
-            this.props.handleUserUpdated();
+            const result = await usersService
+                .editCredentials(props.credential._id, credentialEdited);
+
+            props.handleUserUpdated();
         } catch (e) {
             console.log("ERROR", e);
 
@@ -158,7 +134,7 @@ class EditUserModal extends React.Component<EditUserModalProps, EditUserModalSta
                 }).then(() => {
                     localStorage.removeItem('token');
 
-                    this.dispatch(logOutAction({ logged: false, info: null }));
+                    dispatch(logOutAction({ logged: false, info: null }));
                 });
             } else {
                 Swal.fire({
@@ -170,116 +146,184 @@ class EditUserModal extends React.Component<EditUserModalProps, EditUserModalSta
         }
     }
 
-    render() {
-        return (
-            <Modal
-                show={this.props.showModal}
-                onHide={this.handleClose}
-                size="lg"
-                animation={false}
-                centered={true}
-                onEscapeKeyDown={this.handleClose}
-                onSubmit={(e: React.SyntheticEvent) => this.handleSubmit(e)}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Editar Usuario</Modal.Title>
-                </Modal.Header>
+    return (
+        <Modal
+            show={props.showModal}
+            onHide={handleClose}
+            size="lg"
+            animation={false}
+            centered={true}
+            onEscapeKeyDown={handleClose}
+        >
+            <Modal.Header closeButton>
+                <Modal.Title>Editar Usuario</Modal.Title>
+            </Modal.Header>
 
-                <Modal.Body>
-                    {
-                        this.state.loading &&
-                        <div className="spinner-container">
-                            <Spinner animation="border" role="status">
-                            </Spinner>
-                        </div>
-                    }
+            <Modal.Body>
+                {
+                    loading &&
+                    <div className="spinner-container">
+                        <Spinner animation="border" role="status">
+                        </Spinner>
+                    </div>
+                }
 
-                    {
-                        !this.state.loading && this.state.searchWithError &&
-                        <Container fluid>
-                            <p><i className="fas fa-exclamation-triangle"></i> Ha ocurrido un error. Intente nuevamente.</p>
-                        </Container>
-                    }
+                {
+                    !loading && searchWithError &&
+                    <Container fluid>
+                        <p>
+                            <i className="fas fa-exclamation-triangle"></i> Ha ocurrido un error. Intente nuevamente.
+                        </p>
+                    </Container>
+                }
 
-                    {
-                        !this.state.loading && !this.state.searchWithError &&
-                        <Form>
-                            <Form.Group controlId="formEmail">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control
-                                    size="lg"
-                                    type="email"
-                                    value={this.state.credential.email}
-                                    readOnly
-                                />
-                            </Form.Group>
+                {
+                    !loading && !searchWithError &&
+                    <Formik
+                        initialValues={props.credential}
+                        validationSchema={validationSchema}
+                        onSubmit={(data, { setSubmitting }) => {
+                            setSubmitting(true);
 
-                            <br />
+                            handleSubmit(data);
 
-                            <Form.Group controlId="formNameLastname">
-                                <Form.Label>Nombre y Apellido</Form.Label>
-                                <Form.Control
-                                    size="lg"
-                                    type="text"
-                                    placeholder="Ingrese el nombre y apellido"
-                                    required
-                                    defaultValue={this.state.editCredentialDTO.name_lastname}
-                                    onChange={e => this.handleChangesNombreApellido(e.target.value)}
-                                />
-                            </Form.Group>
-
-                            <br />
-
-                            <Form.Group controlId="formDNI">
-                                <Form.Label>DNI</Form.Label>
-                                <Form.Control
-                                    size="lg"
-                                    type="text"
-                                    placeholder="Ingrese el DNI"
-                                    required
-                                    defaultValue={this.state.editCredentialDTO.dni}
-                                    onChange={e => this.handleChangesDNI(e.target.value)}
-                                />
-                                <Form.Text className="text-muted">
-                                    Ingresar sin puntos
-                                </Form.Text>
-                            </Form.Group>
-
-                            <br />
-
-                            <Form.Group controlId="formOrganization">
-                                <Form.Label>Seleccione su organización</Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    size="lg"
-                                    required
-                                    defaultValue={this.firstLetterLowercase(this.state.editCredentialDTO.organization)}
-                                    onChange={e => this.handleChangesOrganization(e.target.value)}
+                            setSubmitting(false);
+                        }}
+                    >
+                        {
+                            ({
+                                values,
+                                errors,
+                                isSubmitting,
+                                handleChange,
+                                handleBlur,
+                                handleSubmit,
+                                touched
+                            }) => (
+                                <Form
+                                    noValidate
+                                    onSubmit={handleSubmit}
                                 >
-                                    <option value="">Selecciona una opción</option>
-                                    <option value="defensa civil">Defensa Civil</option>
-                                    <option value="bomberos">Bomberos</option>
-                                    <option value="policia">Policía</option>
-                                </Form.Control>
-                            </Form.Group>
+                                    <Form.Group
+                                        controlId="email"
+                                        className="position-relative"
+                                    >
+                                        <Form.Label>Email</Form.Label>
+                                        <Form.Control
+                                            size="lg"
+                                            type="email"
+                                            placeholder="Ingrese el email"
+                                            defaultValue={values.email}
+                                            readOnly
+                                        />
+                                    </Form.Group>
 
-                            <br />
+                                    <br />
 
-                            <Button variant="primary" type="submit">
-                                Guardar
-                            </Button>
-                        </Form>
-                    }
-                </Modal.Body>
+                                    <Form.Group
+                                        controlId="name_lastname"
+                                        className="position-relative"
+                                    >
+                                        <Form.Label>Nombre y Apellido</Form.Label>
+                                        <Form.Control
+                                            size="lg"
+                                            type="text"
+                                            placeholder="Ingrese el nombre y apellido"
+                                            defaultValue={values.name_lastname}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            isValid={touched.name_lastname && !errors.name_lastname}
+                                            isInvalid={!!errors.name_lastname}
+                                        />
 
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={this.handleClose}>
-                        Cerrar
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        );
-    }
+                                        <Form.Control.Feedback
+                                            type="invalid"
+                                            tooltip
+                                        >{errors.name_lastname}</Form.Control.Feedback>
+                                    </Form.Group>
+
+                                    <br />
+
+                                    <Form.Group
+                                        controlId="dni"
+                                        className="position-relative"
+                                    >
+                                        <Form.Label>DNI</Form.Label>
+                                        <Form.Control
+                                            size="lg"
+                                            type="text"
+                                            placeholder="Ingrese el DNI"
+                                            defaultValue={values.dni}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            isValid={touched.dni && !errors.dni}
+                                            isInvalid={!!errors.dni}
+                                        />
+                                        <Form.Text className="text-muted">
+                                            Ingresar sin puntos
+                                        </Form.Text>
+
+                                        <Form.Control.Feedback
+                                            type="invalid"
+                                            tooltip
+                                        >{errors.dni}</Form.Control.Feedback>
+                                    </Form.Group>
+
+                                    <br />
+
+                                    <Form.Group
+                                        controlId="organization"
+                                        className="position-relative"
+                                    >
+                                        <Form.Label>Seleccione su organización</Form.Label>
+                                        <Form.Control
+                                            as="select"
+                                            size="lg"
+                                            defaultValue={values.organization}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            isValid={touched.organization && !errors.organization}
+                                            isInvalid={!!errors.organization}
+                                        >
+                                            <option value={""}>Selecciona una opción</option>
+                                            {
+                                                typeOrganization.map((organization, index) => {
+                                                    return <option value={organization} key={index}>
+                                                        {organization}
+                                                    </option>
+                                                })
+                                            }
+                                        </Form.Control>
+
+                                        <Form.Control.Feedback
+                                            type="invalid"
+                                            tooltip
+                                        >{errors.organization}</Form.Control.Feedback>
+                                    </Form.Group>
+
+                                    <br />
+
+                                    <Button
+                                        variant="primary"
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                    >
+                                        Guardar
+                                    </Button>
+                                </Form>
+                            )
+                        }
+                    </Formik>
+                }
+            </Modal.Body>
+
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                    Cerrar
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    );
 }
 
 export default EditUserModal;

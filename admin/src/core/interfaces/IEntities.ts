@@ -12,6 +12,20 @@ export interface IEntity {
     coordinates: string[];
 }
 
+export interface ICreateEntityDTO {
+    name: string;
+    entityType: string;
+    legalNumber: string;
+    address: string;
+    phone: string;
+    postalCode: string;
+    email: string;
+    sector: string;
+    risk: string[];
+    longitude: string;
+    latitude: string;
+}
+
 export interface ICreateEntity {
     name: string;
     entityType: string;

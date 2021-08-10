@@ -5,20 +5,28 @@ import Swal from 'sweetalert2';
 
 import UsersService from '../../../core/services/UsersService';
 import Paginator from '../../shared/Paginator/Paginator';
-import { UsersProps, UsersState } from './types';
+import { UsersState } from './types';
 
 import './styles.css';
 import CreateUserModal from '../../shared/Modals/Users/CreateUserModal/CreateUserModal';
 import EditUserModal from '../../shared/Modals/Users/EditUserModal/EditUserModal';
-import { IGetNewPassword } from '../../../core/interfaces/IUsers';
+import { ICredential, IGetNewPassword } from '../../../core/interfaces/IUsers';
 import Header from '../../shared/Header/Header';
 import Sidebar from '../../shared/Sidebar/Sidebar';
-import { useDispatch } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { logOutAction } from '../../store/user/user.slice';
+import { Dispatch } from '@reduxjs/toolkit';
 
 class Users extends React.Component<UsersProps, UsersState> {
-    private dispatch = useDispatch();
     private usersService: UsersService;
+
+    private initialStateCredential: ICredential = {
+        _id: '',
+        name_lastname: '',
+        dni: '',
+        organization: '',
+        email: ''
+    }
 
     constructor(props: UsersProps) {
         super(props);
@@ -28,7 +36,7 @@ class Users extends React.Component<UsersProps, UsersState> {
             actualPage: 1,
             sizePage: 5,
             users: [],
-            idCredential: '',
+            credential: this.initialStateCredential,
             totalResults: 0,
             searchWithError: false,
             showCreateUserModal: false,
@@ -66,7 +74,7 @@ class Users extends React.Component<UsersProps, UsersState> {
                 }).then(() => {
                     localStorage.removeItem('token');
 
-                    this.dispatch(logOutAction({ logged: false, info: null }));
+                    this.props.logOut();
                 });
             } else {
                 this.setState({
@@ -123,16 +131,16 @@ class Users extends React.Component<UsersProps, UsersState> {
         });
     }
 
-    handleEditarClick = (state: boolean, id: string) => {
+    handleEditarClick = (state: boolean, user: ICredential) => {
         this.setState({
-            idCredential: id,
+            credential: user,
             showEditUserModal: state
         });
     }
 
     handleUserEdited = () => {
         this.setState({
-            idCredential: '',
+            credential: this.initialStateCredential,
             showEditUserModal: false
         });
 
@@ -187,7 +195,7 @@ class Users extends React.Component<UsersProps, UsersState> {
                         }).then(() => {
                             localStorage.removeItem('token');
 
-                            this.dispatch(logOutAction({ logged: false, info: null }));
+                            this.props.logOut();
                         });
                     } else {
                         Swal.fire({
@@ -243,7 +251,7 @@ class Users extends React.Component<UsersProps, UsersState> {
                         }).then(() => {
                             localStorage.removeItem('token');
 
-                            this.dispatch(logOutAction({ logged: false, info: null }));
+                            this.props.logOut();
                         });
                     } else {
                         Swal.fire({
@@ -337,7 +345,7 @@ class Users extends React.Component<UsersProps, UsersState> {
                                                                     <span title="Editar usuario">
                                                                         <i
                                                                             className="fas fa-user-edit option"
-                                                                            onClick={() => this.handleEditarClick(true, user._id)}
+                                                                            onClick={() => this.handleEditarClick(true, user)}
                                                                         ></i>
                                                                     </span>
                                                                     <span title="Eliminar usuario">
@@ -383,7 +391,7 @@ class Users extends React.Component<UsersProps, UsersState> {
                                 this.state.showEditUserModal &&
                                 <EditUserModal
                                     showModal={this.state.showEditUserModal}
-                                    idCredential={this.state.idCredential}
+                                    credential={this.state.credential}
                                     handleClose={this.handleEditarClick.bind(this)}
                                     handleUserUpdated={this.handleUserEdited}
                                 />
@@ -396,4 +404,14 @@ class Users extends React.Component<UsersProps, UsersState> {
     }
 }
 
-export default Users;
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        logOut: () => dispatch(logOutAction({ logged: false, info: null }))
+    }
+};
+
+const connector = connect(null, mapDispatchToProps);
+
+type UsersProps = ConnectedProps<typeof connector>;
+
+export default connector(Users);
