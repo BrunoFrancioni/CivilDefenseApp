@@ -10,7 +10,6 @@ import './styles.css';
 import { LoginProps } from './types';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../store/store';
-import { logInAction } from '../../store/user/user.slice';
 import { Redirect, useHistory } from 'react-router-dom';
 
 const Login = (props: LoginProps) => {
