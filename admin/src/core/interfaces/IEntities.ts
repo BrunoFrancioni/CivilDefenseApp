@@ -39,6 +39,21 @@ export interface ICreateEntity {
     coordinates: string[];
 }
 
+export interface IEditEntityDTO {
+    _id: string;
+    name: string;
+    entityType: string;
+    legalNumber: string;
+    address: string;
+    phone: string;
+    postalCode: string;
+    email: string;
+    sector: string;
+    risk: string[];
+    longitude: string;
+    latitude: string;
+}
+
 export interface IEditEntity {
     name: string;
     entityType: string;

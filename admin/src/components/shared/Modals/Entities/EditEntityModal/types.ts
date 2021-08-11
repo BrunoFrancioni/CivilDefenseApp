@@ -1,6 +1,8 @@
+import { IEditEntityDTO } from "../../../../../core/interfaces/IEntities";
+
 export type EditEntityModalProps = {
     showModal: boolean;
-    id: string | any;
+    entity: IEditEntityDTO;
     handleClose: any;
     handleEntityEdited: any;
 }
