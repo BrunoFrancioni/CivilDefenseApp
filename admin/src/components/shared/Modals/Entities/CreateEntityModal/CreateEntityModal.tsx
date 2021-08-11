@@ -59,8 +59,26 @@ const CreateEntityModal = (props: CreateEntityModalProps) => {
         latitude: yup.string().required("Requerido")
     });
 
-    const handleSubmit = async (values: ICreateEntityDTO) => {
+    const handleSubmit = async (values: any) => {
         setLoading(true);
+        console.log(values);
+        let risks = [];
+
+        if (values.incendio) {
+            risks.push("incendio");
+        }
+
+        if (values.inundación) {
+            risks.push("inundación");
+        }
+
+        if (values.accidente) {
+            risks.push("accidente");
+        }
+
+        if (values.amenaza_climática) {
+            risks.push("amenaza climática");
+        }
 
         const params: ICreateEntity = {
             name: values.name,
@@ -71,8 +89,8 @@ const CreateEntityModal = (props: CreateEntityModalProps) => {
             postalCode: values.postalCode,
             email: values.email,
             sector: values.sector,
-            risk: values.risk,
-            coordinates: [values.longitude, values.longitude]
+            risk: risks,
+            coordinates: [values.longitude, values.latitude]
         }
 
         try {
@@ -401,7 +419,7 @@ const CreateEntityModal = (props: CreateEntityModalProps) => {
 
                                     <Form.Check
                                         type="checkbox"
-                                        id="amenaza climática"
+                                        id="amenaza_climática"
                                         value="amenaza climática"
                                         label="Amenaza climática"
                                         onChange={handleChange}
