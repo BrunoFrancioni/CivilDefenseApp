@@ -9,6 +9,24 @@ export class EntitiesRoutes {
     private entitiesController: EntitiesController = new EntitiesController();
 
     public routes(app): void {
+        app.route('/entities/all')
+            .get(async (req: Request, res: Response) => {
+                try {
+                    let result: IGetEntitiesResult = await this.entitiesController.getAllEntities();
+
+                    return res.status(200).json({
+                        entities: result.entities,
+                        totalResults: result.totalResults
+                    });
+                } catch (e) {
+                    console.log(e);
+
+                    return res.status(500).json({
+                        message: 'Error'
+                    });
+                }
+            });
+
         app.route('/entities')
             .get(verify,
                 async (req: Request, res: Response) => {
@@ -18,13 +36,8 @@ export class EntitiesRoutes {
                             size: Number(req.query.size)
                         }
 
-                        let result: IGetEntitiesResult;
-
-                        if (!params.page && !params.size) {
-                            result = await this.entitiesController.getAllEntities();
-                        } else {
-                            result = await this.entitiesController.getPaginateEntities(params);
-                        }
+                        let result: IGetEntitiesResult = await this.entitiesController
+                            .getPaginateEntities(params);
 
                         return res.status(200).json({
                             entities: result.entities,

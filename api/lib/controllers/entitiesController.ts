@@ -208,7 +208,7 @@ export class EntitiesController {
             entity.phone = editEntityDTO.phone;
             entity.postalCode = editEntityDTO.postalCode;
             entity.sector = editEntityDTO.sector;
-            entity.risk = entity.risk;
+            entity.risk = editEntityDTO.risk;
             entity.coordinates = entity.coordinates;
 
             const ent = await entity.save();
