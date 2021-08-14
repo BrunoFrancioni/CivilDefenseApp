@@ -5,6 +5,7 @@ require('dotenv').config({ path: '.env' });
 
 import { CredentialsRoutes } from './routes/CredentialsRoutes';
 import { EntitiesRoutes } from './routes/EntitiesRoutes';
+import { EventsRoutes } from "./routes/EventsRoutes";
 
 class App {
     public app: express.Application;
@@ -12,6 +13,7 @@ class App {
 
     public credentialsRoutes: CredentialsRoutes = new CredentialsRoutes();
     public entitiesRoutes: EntitiesRoutes = new EntitiesRoutes();
+    public eventsRoutes: EventsRoutes = new EventsRoutes();
 
     constructor() {
         this.app = express();
@@ -20,6 +22,7 @@ class App {
 
         this.credentialsRoutes.routes(this.app);
         this.entitiesRoutes.routes(this.app);
+        this.eventsRoutes.routes(this.app);
     }
 
     private config(): void {
