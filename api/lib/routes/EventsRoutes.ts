@@ -121,9 +121,13 @@ export class EventsRoutes {
                             .setEventInactive(params);
 
                         if (result.result) {
-                            return res.status(200);
+                            return res.status(200).json({
+                                message: 'Event updated'
+                            });;
                         } else {
-                            return res.status(400);
+                            return res.status(400).json({
+                                message: 'Event don`t exists'
+                            });;
                         }
                     } catch (e) {
                         console.log(e);
