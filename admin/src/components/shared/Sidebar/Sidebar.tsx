@@ -49,6 +49,20 @@ const Sidebar: React.FC = () => {
                     </Col>
                 </Row>
             </Nav.Link>
+
+            <Nav.Link href="/events">
+                <Row>
+                    <Col md={2}>
+                        <i className="fas fa-medkit icon"></i>
+                    </Col>
+
+                    <Col>
+                        <p
+                            className={`text ${activeWindow === '/events' ? "active" : ""}`}
+                        >Eventos</p>
+                    </Col>
+                </Row>
+            </Nav.Link>
         </Nav>
     )
 }
