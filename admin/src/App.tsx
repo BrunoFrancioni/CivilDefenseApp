@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from './components/store/store';
 import { logInAction } from './components/store/user/user.slice';
 import ProtectedRoute from './components/shared/ProtectedRoute/ProtectedRoute';
+import Events from './components/main/Events/Events';
 
 function App() {
   const user = useSelector(selectUser);
@@ -42,6 +43,11 @@ function App() {
           <ProtectedRoute
             component={Entities}
             path='/entities'
+          />
+
+          <ProtectedRoute
+            component={Events}
+            path='/events'
           />
 
           <ProtectedRoute
