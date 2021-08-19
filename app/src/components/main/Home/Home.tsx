@@ -8,6 +8,7 @@ import { IEntity } from "../../../core/interfaces/IEntities";
 import { IEvent } from "../../../core/interfaces/IEvents";
 import EntitiesService from "../../../core/services/EntitiesService";
 import EventsService from "../../../core/services/EventsService";
+import Footer from "../../shared/Footer/Footer";
 import CreateEventModal from "../../shared/Modals/Events/CreateEventModal/CreateEventModal";
 import { selectUser } from "../../store/store";
 import { logOutAction } from "../../store/user/user.slice";
@@ -190,6 +191,8 @@ const Home = () => {
                     </Col>
                 </Row>
             </Container>
+
+            <Footer />
 
             {
                 showModalCreateEvent &&
