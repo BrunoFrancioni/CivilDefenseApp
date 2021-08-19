@@ -28,6 +28,10 @@ class EventsService {
     public async deleteEvent(id: string) {
         return await API.delete(this.path + `/${id}`);
     }
+
+    public async getEventsStats() {
+        return await API.get(this.path + '/stats');
+    }
 }
 
 export default EventsService;

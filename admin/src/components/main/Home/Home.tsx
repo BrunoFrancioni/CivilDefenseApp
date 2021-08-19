@@ -5,6 +5,7 @@ import Header from '../../shared/Header/Header';
 import Sidebar from '../../shared/Sidebar/Sidebar';
 import CredentialsStats from './CredentialsStats/CredentialsStats';
 import EntitiesStats from './EntitiesStats/EntitiesStats';
+import EventsStats from './EventsStats/EventsStats';
 
 const Home: React.FC = () => {
     return (
@@ -25,6 +26,8 @@ const Home: React.FC = () => {
                         <CredentialsStats />
 
                         <EntitiesStats />
+
+                        <EventsStats />
                     </Col>
                 </Row>
             </Container>

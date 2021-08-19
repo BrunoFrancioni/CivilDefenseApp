@@ -10,3 +10,18 @@ export interface IEvent {
     date_time: Date;
     active: boolean;
 }
+
+export interface IStatsEvents {
+    totalActiveEvents: number;
+    totalInactiveEvents: number;
+    statsActiveEventType: {
+        totalInundacion: number;
+        totalIncendio: number;
+        totalAccidenteTransito: number;
+    },
+    statsInactiveEventType: {
+        totalInundacion: number;
+        totalIncendio: number;
+        totalAccidenteTransito: number;
+    }
+}
