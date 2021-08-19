@@ -16,6 +16,7 @@ import Sidebar from '../../shared/Sidebar/Sidebar';
 import { connect, ConnectedProps } from 'react-redux';
 import { logOutAction } from '../../store/user/user.slice';
 import { Dispatch } from '@reduxjs/toolkit';
+import Footer from '../../shared/Footer/Footer';
 
 class Users extends React.Component<UsersProps, UsersState> {
     private usersService: UsersService;
@@ -401,6 +402,8 @@ class Users extends React.Component<UsersProps, UsersState> {
                         </Col>
                     </Row>
                 </Container>
+
+                <Footer />
             </>
         )
     }

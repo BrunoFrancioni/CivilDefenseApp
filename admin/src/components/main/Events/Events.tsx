@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, ButtonGroup, Col, Container, Row } from "react-bootstrap";
+import Footer from "../../shared/Footer/Footer";
 import Header from "../../shared/Header/Header";
 import Sidebar from "../../shared/Sidebar/Sidebar";
 import ActiveEvents from "./ActiveEvents/ActiveEvents";
@@ -52,6 +53,8 @@ const Events = () => {
                     </Col>
                 </Row>
             </Container>
+
+            <Footer />
         </>
     )
 }

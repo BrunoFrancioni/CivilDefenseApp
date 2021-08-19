@@ -13,6 +13,7 @@ import Header from '../../shared/Header/Header';
 import Sidebar from '../../shared/Sidebar/Sidebar';
 import { logOutAction } from '../../store/user/user.slice';
 import { useDispatch } from 'react-redux';
+import Footer from '../../shared/Footer/Footer';
 
 const Entities = () => {
     const initialStateActiveEntity: IEditEntityDTO = {
@@ -396,6 +397,8 @@ const Entities = () => {
                     </Col>
                 </Row>
             </Container>
+
+            <Footer />
         </>
     )
 }

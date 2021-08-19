@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import Footer from '../../shared/Footer/Footer';
 import Header from '../../shared/Header/Header';
 import Sidebar from '../../shared/Sidebar/Sidebar';
 import CredentialsStats from './CredentialsStats/CredentialsStats';
@@ -27,6 +28,8 @@ const Home: React.FC = () => {
                     </Col>
                 </Row>
             </Container>
+
+            <Footer />
         </>
     )
 }
