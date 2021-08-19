@@ -7,6 +7,7 @@ import {
     IDeleteEventResult,
     IGetPaginateEvents,
     IGetPaginateEventsResult,
+    IGetStatsEventsResult,
     ISetEventInactive,
     ISetEventInactiveResult
 } from "interfaces/IEvents";
@@ -58,6 +59,25 @@ export class EventsRoutes {
                     });
                 }
             });
+
+        app.route('/events/stats')
+            .get(verify,
+                async (req: Request, res: Response) => {
+                    try {
+                        const result: IGetStatsEventsResult = await this.eventsController
+                            .getEventsStats();
+
+                        return res.status(200).json({
+                            stats: result.stats
+                        });
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
+                        });
+                    }
+                });
 
         app.route('/events/active')
             .get(verify,

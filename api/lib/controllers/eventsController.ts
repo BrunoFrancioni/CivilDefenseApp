@@ -1,4 +1,4 @@
-import { ICreateEvent, ICreateEventResult, IDeleteEvent, IDeleteEventResult, IEvent, IGetPaginateEvents, IGetPaginateEventsResult, ISetEventInactive, ISetEventInactiveResult } from 'interfaces/IEvents';
+import { ICreateEvent, ICreateEventResult, IDeleteEvent, IDeleteEventResult, IEvent, IGetPaginateEvents, IGetPaginateEventsResult, IGetStatsEventsResult, ISetEventInactive, ISetEventInactiveResult } from 'interfaces/IEvents';
 import EventsSchema, { IEvents } from '../models/eventsModel';
 import { ICredentials } from '../models/credentialsModel';
 import { ICredential } from 'interfaces/ICredentials';
@@ -268,6 +268,78 @@ export class EventsController {
 
             result = {
                 result: true
+            }
+
+            return result;
+        } catch (e) {
+            throw new Error(e);
+        }
+    }
+
+    public async getEventsStats(): Promise<IGetStatsEventsResult> {
+        try {
+            let result: IGetStatsEventsResult;
+
+            const totalResult = await this.Events.find().countDocuments().exec();
+
+            if (totalResult === 0) {
+                result = {
+                    result: true,
+                    stats: {
+                        totalActiveEvents: totalResult,
+                        totalInactiveEvents: totalResult,
+                        statsActiveEventType: null,
+                        statsInactiveEventType: null
+                    }
+                }
+
+                return result;
+            }
+
+            const totalActive = await this.Events.find({ active: { $eq: true } }).countDocuments().exec();
+
+            const totalActiveInundacion = await this.Events
+                .find({ event_type: { $eq: 'Inundación' }, active: { $eq: true } })
+                .countDocuments().exec();
+
+            const totalActiveIncendio = await this.Events
+                .find({ event_type: { $eq: 'Incendio' }, active: { $eq: true } })
+                .countDocuments().exec();
+
+            const totalActiveAccidente = await this.Events
+                .find({ event_type: { $eq: 'Accidente de tránsito' }, active: { $eq: true } })
+                .countDocuments().exec();
+
+            const totalInactive = await this.Events.find({ active: { $eq: false } }).countDocuments().exec();
+
+            const totalInactiveInundacion = await this.Events
+                .find({ event_type: { $eq: 'Inundación' }, active: { $eq: false } })
+                .countDocuments().exec();
+
+            const totalInactiveIncendio = await this.Events
+                .find({ event_type: { $eq: 'Incendio' }, active: { $eq: false } })
+                .countDocuments().exec();
+
+            const totalInactiveAccidente = await this.Events
+                .find({ event_type: { $eq: 'Accidente de tránsito' }, active: { $eq: false } })
+                .countDocuments().exec();
+
+            result = {
+                result: true,
+                stats: {
+                    totalActiveEvents: totalActive,
+                    totalInactiveEvents: totalInactive,
+                    statsActiveEventType: {
+                        totalInundacion: totalActiveInundacion,
+                        totalIncendio: totalActiveIncendio,
+                        totalAccidenteTransito: totalActiveAccidente
+                    },
+                    statsInactiveEventType: {
+                        totalInundacion: totalInactiveInundacion,
+                        totalIncendio: totalInactiveIncendio,
+                        totalAccidenteTransito: totalInactiveAccidente
+                    }
+                }
             }
 
             return result;

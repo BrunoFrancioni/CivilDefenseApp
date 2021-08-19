@@ -51,3 +51,23 @@ export interface IDeleteEvent {
 export interface IDeleteEventResult {
     result: boolean;
 }
+
+export interface IGetStatsEventsResult {
+    result: boolean;
+    stats: IStatsEvents;
+}
+
+export interface IStatsEvents {
+    totalActiveEvents: number;
+    totalInactiveEvents: number;
+    statsActiveEventType: {
+        totalInundacion: number;
+        totalIncendio: number;
+        totalAccidenteTransito: number;
+    },
+    statsInactiveEventType: {
+        totalInundacion: number;
+        totalIncendio: number;
+        totalAccidenteTransito: number;
+    }
+}
