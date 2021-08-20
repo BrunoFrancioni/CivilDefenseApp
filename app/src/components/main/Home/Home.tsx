@@ -23,6 +23,68 @@ const Home = () => {
     const [events, setEvents] = useState<IEvent[]>([]);
     const [showModalCreateEvent, setShowModalCreateEvent] = useState<boolean>(false);
 
+    const iconSchool = new L.Icon({
+        iconUrl: './images/marker-school.svg',
+        iconRetinaUrl: './images/marker-school.svg',
+        iconSize: new L.Point(50, 65)
+    });
+
+    const iconHospital = new L.Icon({
+        iconUrl: './images/marker-hospital.svg',
+        iconRetinaUrl: './images/marker-hospital.svg',
+        iconSize: new L.Point(50, 65)
+    });
+
+    const iconGasStation = new L.Icon({
+        iconUrl: './images/marker-gas-station.svg',
+        iconRetinaUrl: './images/marker-gas-station.svg',
+        iconSize: new L.Point(50, 65)
+    });
+
+    const iconMunicipality = new L.Icon({
+        iconUrl: './images/marker-municipality.svg',
+        iconRetinaUrl: './images/marker-municipality.svg',
+        iconSize: new L.Point(50, 65)
+    });
+
+    const iconEvents = new L.Icon({
+        iconUrl: './images/marker-events.svg',
+        iconRetinaUrl: './images/marker-events.svg',
+        iconSize: new L.Point(50, 65)
+    });
+
+    const iconClub = new L.Icon({
+        iconUrl: './images/marker-sport.svg',
+        iconRetinaUrl: './images/marker-sport.svg',
+        iconSize: new L.Point(50, 65)
+    });
+
+    const iconBed = new L.Icon({
+        iconUrl: './images/marker-bed.svg',
+        iconRetinaUrl: './images/marker-bed.svg',
+        iconSize: new L.Point(50, 65)
+    });
+
+    const iconsEntity = (value: string) => {
+        switch (value) {
+            case 'educación':
+                return iconSchool;
+            case 'centro salud':
+                return iconHospital;
+            case 'depósito combustible':
+                return iconGasStation;
+            case 'organismo público':
+                return iconMunicipality;
+            case 'lugar evento masivo':
+                return iconEvents;
+            case 'club':
+                return iconClub;
+            case 'hogar acogida':
+                return iconBed;
+        }
+    }
+
+
     const iconFire = new L.Icon({
         iconUrl: './images/fire.svg',
         iconRetinaUrl: './images/fire.svg',
@@ -40,6 +102,17 @@ const Home = () => {
         iconRetinaUrl: './images/accident.svg',
         iconSize: new L.Point(50, 65)
     });
+
+    const iconsEvents = (value: string) => {
+        switch (value) {
+            case 'Incendio':
+                return iconFire;
+            case 'Inundación':
+                return iconFlood;
+            case 'Accidente de tránsito':
+                return iconAccident;
+        }
+    }
 
     useEffect(() => {
         (async () => {
@@ -124,6 +197,7 @@ const Home = () => {
                                         <Marker
                                             key={entity._id}
                                             position={[Number(entity.coordinates[1]), Number(entity.coordinates[0])]}
+                                            icon={iconsEntity(entity.entityType)}
                                         >
                                             <Popup>
                                                 {entity.name}
@@ -136,43 +210,17 @@ const Home = () => {
                             {
                                 events !== [] &&
                                 events.map(event => {
-                                    if (event.event_type === 'Incendio') {
-                                        return (
-                                            <Marker
-                                                key={event._id}
-                                                position={[Number(event.coordinates[1]), Number(event.coordinates[0])]}
-                                                icon={iconFire}
-                                            >
-                                                <Popup>
-                                                    {event.title}
-                                                </Popup>
-                                            </Marker>
-                                        )
-                                    } else if (event.event_type === 'Inundación') {
-                                        return (
-                                            <Marker
-                                                key={event._id}
-                                                position={[Number(event.coordinates[1]), Number(event.coordinates[0])]}
-                                                icon={iconFlood}
-                                            >
-                                                <Popup>
-                                                    {event.title}
-                                                </Popup>
-                                            </Marker>
-                                        )
-                                    } else {
-                                        return (
-                                            <Marker
-                                                key={event._id}
-                                                position={[Number(event.coordinates[1]), Number(event.coordinates[0])]}
-                                                icon={iconAccident}
-                                            >
-                                                <Popup>
-                                                    {event.title}
-                                                </Popup>
-                                            </Marker>
-                                        )
-                                    }
+                                    return (
+                                        <Marker
+                                            key={event._id}
+                                            position={[Number(event.coordinates[1]), Number(event.coordinates[0])]}
+                                            icon={iconsEvents(event.event_type)}
+                                        >
+                                            <Popup>
+                                                {event.title}
+                                            </Popup>
+                                        </Marker>
+                                    )
                                 })
                             }
                         </MapContainer>
