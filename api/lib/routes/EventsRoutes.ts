@@ -17,31 +17,6 @@ export class EventsRoutes {
 
     public routes(app): void {
         app.route('/events')
-            .post(verify,
-                async (req: Request, res: Response) => {
-                    try {
-                        const result: ICreateEventResult = await this.eventsController
-                            .createEvent(req.body.createEvent);
-
-                        if (result.result) {
-                            return res.status(201).json({
-                                message: 'Event created succesfully'
-                            });
-                        } else {
-                            return res.status(500).json({
-                                message: 'Error'
-                            });
-                        }
-                    } catch (e) {
-                        console.log(e);
-
-                        return res.status(500).json({
-                            message: 'Error'
-                        });
-                    }
-                });
-
-        app.route('/events')
             .get(async (req: Request, res: Response) => {
                 try {
                     const result: IGetPaginateEventsResult = await this.eventsController

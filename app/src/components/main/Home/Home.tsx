@@ -13,11 +13,16 @@ import CreateEventModal from "../../shared/Modals/Events/CreateEventModal/Create
 import { selectUser } from "../../store/store";
 import { logOutAction } from "../../store/user/user.slice";
 
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://localhost:8080";
+
 const Home = () => {
     const user = useSelector(selectUser);
     const dispatch = useDispatch();
     const entitiesService: EntitiesService = new EntitiesService();
     const eventsService: EventsService = new EventsService();
+
+    const socket = socketIOClient(ENDPOINT);
 
     const [entities, setEntities] = useState<IEntity[]>([]);
     const [events, setEvents] = useState<IEvent[]>([]);
@@ -120,6 +125,26 @@ const Home = () => {
 
             await getActiveEvents();
         })();
+
+        socket.on("New Event", data => {
+            console.log("Nuevo evento", data);
+
+            if (user.info && String(data.id) !== user.info._id) {
+                Swal.fire({
+                    position: 'bottom-start',
+                    icon: 'info',
+                    title: 'Nuevo evento',
+                    html:
+                        `<b>Título del evento:</b> ${data.event.title} <br />
+                        <b>Descripción:</b> ${data.event.description} <br />
+                        <b>Tipo de evento:</b> ${data.event.event_type}`,
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+
+            getActiveEvents();
+        });
     }, []);
 
     const getEntities = async () => {

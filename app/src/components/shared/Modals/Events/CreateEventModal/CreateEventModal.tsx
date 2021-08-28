@@ -4,19 +4,20 @@ import * as yup from 'yup';
 import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import { ICreateEvent, ICreateEventInitialState } from "../../../../../core/interfaces/IEvents";
 import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { selectUser } from "../../../../store/store";
-import EventsService from "../../../../../core/services/EventsService";
 
 import './styles.css';
 import Swal from "sweetalert2";
-import { logOutAction } from "../../../../store/user/user.slice";
+
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://localhost:8080";
 
 const CreateEventModal = (props: CreateEventModalProps) => {
-    const eventsService: EventsService = new EventsService();
-    const dispatch = useDispatch();
     const user = useSelector(selectUser);
+
+    const socket = socketIOClient(ENDPOINT);
 
     const initialState: ICreateEventInitialState = {
         title: '',
@@ -32,6 +33,28 @@ const CreateEventModal = (props: CreateEventModalProps) => {
 
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        socket.on("Result Create Event", data => {
+            console.log("Result Create Event", data);
+
+            if (user.info && String(data.id) === user.info._id) {
+                if (data.result === false) {
+                    setLoading(false);
+
+                    Swal.fire({
+                        title: 'Ha ocurrido un error',
+                        text: 'Intente nuevamente',
+                        icon: 'error'
+                    });
+                } else {
+                    setLoading(false);
+
+                    props.handleEventCreated();
+                }
+            }
+        });
+    }, [])
 
     function LocationMarker() {
         useMapEvents({
@@ -71,38 +94,7 @@ const CreateEventModal = (props: CreateEventModalProps) => {
                 creator: (user.info) ? user.info._id : ''
             }
 
-            try {
-                const result = await eventsService.createEvent(createEvent);
-                console.log("Resultado", result);
-
-                setLoading(false);
-
-                props.handleEventCreated();
-            } catch (e) {
-                console.log("ERROR", e);
-
-                setLoading(false);
-
-                if (e.response.status === 401) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'La sesión ha expirado',
-                        text: 'Por favor, iníciela de nuevo.',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        localStorage.removeItem('token');
-
-                        dispatch(logOutAction({ logged: false, info: null }));
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Ha ocurrido un error',
-                        text: 'Intente nuevamente',
-                        icon: 'error'
-                    });
-                }
-            }
+            socket.emit("Create Event", createEvent);
         }
     }
 

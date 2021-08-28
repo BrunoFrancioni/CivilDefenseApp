@@ -23,6 +23,8 @@ export interface ICreateEvent {
 
 export interface ICreateEventResult {
     result: boolean;
+    event: IEvent;
+    id: string;
 }
 
 export interface IGetPaginateEvents {

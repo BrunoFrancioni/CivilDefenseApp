@@ -22,11 +22,39 @@ export class EventsController {
 
             if (event == null) {
                 result = {
-                    result: false
+                    result: false,
+                    event: null,
+                    id: createEvent.creator
                 }
             } else {
+                const createdEvent: IEvents = await this.Events
+                    .findOne({ _id: { $eq: event._id } })
+                    .populate("creator")
+                    .exec();
+
+                const credential: ICredential = {
+                    _id: createdEvent.creator._id,
+                    dni: createdEvent.creator.dni,
+                    email: createdEvent.creator.email,
+                    name_lastname: createdEvent.creator.name_lastname,
+                    organization: createdEvent.creator.organization
+                }
+
+                const newEvent: IEvent = {
+                    _id: createdEvent._id,
+                    title: createdEvent.title,
+                    description: createdEvent.description,
+                    coordinates: createdEvent.coordinates,
+                    event_type: createdEvent.event_type,
+                    creator: credential,
+                    date_time: createdEvent.date_time,
+                    active: createdEvent.active
+                }
+
                 result = {
-                    result: true
+                    result: true,
+                    event: newEvent,
+                    id: createEvent.creator
                 }
             }
 
