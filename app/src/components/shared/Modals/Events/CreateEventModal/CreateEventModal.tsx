@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import { Formik } from "formik";
 import { CreateEventModalProps } from "./types";
 import * as yup from 'yup';
@@ -10,14 +11,12 @@ import { selectUser } from "../../../../store/store";
 
 import './styles.css';
 import Swal from "sweetalert2";
-
-import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+import { SocketContext } from "../../../../../core/contexts/socket";
 
 const CreateEventModal = (props: CreateEventModalProps) => {
     const user = useSelector(selectUser);
 
-    const socket = socketIOClient(ENDPOINT);
+    const socket = useContext(SocketContext);
 
     const initialState: ICreateEventInitialState = {
         title: '',
@@ -35,7 +34,7 @@ const CreateEventModal = (props: CreateEventModalProps) => {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        socket.on("Result Create Event", data => {
+        socket.on("Result Create Event", (data: any) => {
             console.log("Result Create Event", data);
 
             if (user.info && String(data.id) === user.info._id) {

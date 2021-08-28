@@ -1,9 +1,10 @@
 import L from "leaflet";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { MapContainer, Marker, TileLayer, Popup } from 'react-leaflet';
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import { SocketContext } from "../../../core/contexts/socket";
 import { IEntity } from "../../../core/interfaces/IEntities";
 import { IEvent } from "../../../core/interfaces/IEvents";
 import EntitiesService from "../../../core/services/EntitiesService";
@@ -13,16 +14,13 @@ import CreateEventModal from "../../shared/Modals/Events/CreateEventModal/Create
 import { selectUser } from "../../store/store";
 import { logOutAction } from "../../store/user/user.slice";
 
-import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
-
 const Home = () => {
     const user = useSelector(selectUser);
     const dispatch = useDispatch();
     const entitiesService: EntitiesService = new EntitiesService();
     const eventsService: EventsService = new EventsService();
 
-    const socket = socketIOClient(ENDPOINT);
+    const socket = useContext(SocketContext);
 
     const [entities, setEntities] = useState<IEntity[]>([]);
     const [events, setEvents] = useState<IEvent[]>([]);
@@ -126,7 +124,7 @@ const Home = () => {
             await getActiveEvents();
         })();
 
-        socket.on("New Event", data => {
+        socket.on("New Event", (data: any) => {
             console.log("Nuevo evento", data);
 
             if (user.info && String(data.id) !== user.info._id) {
