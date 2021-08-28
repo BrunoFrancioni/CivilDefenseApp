@@ -9,6 +9,20 @@ import { IEntity } from "../../../core/interfaces/IEntities";
 import { IEvent } from "../../../core/interfaces/IEvents";
 import EntitiesService from "../../../core/services/EntitiesService";
 import EventsService from "../../../core/services/EventsService";
+import {
+    iconBed,
+    iconClub,
+    iconEvents,
+    iconGasStation,
+    iconHospital,
+    iconMunicipality,
+    iconSchool
+} from "../../../core/utils/MapMarkers/EntitiesMapMarkers";
+import {
+    iconAccident,
+    iconFire,
+    iconFlood
+} from "../../../core/utils/MapMarkers/EventsMapMarkers";
 import Footer from "../../shared/Footer/Footer";
 import CreateEventModal from "../../shared/Modals/Events/CreateEventModal/CreateEventModal";
 import { selectUser } from "../../store/store";
@@ -25,48 +39,6 @@ const Home = () => {
     const [entities, setEntities] = useState<IEntity[]>([]);
     const [events, setEvents] = useState<IEvent[]>([]);
     const [showModalCreateEvent, setShowModalCreateEvent] = useState<boolean>(false);
-
-    const iconSchool = new L.Icon({
-        iconUrl: './images/marker-school.svg',
-        iconRetinaUrl: './images/marker-school.svg',
-        iconSize: new L.Point(50, 65)
-    });
-
-    const iconHospital = new L.Icon({
-        iconUrl: './images/marker-hospital.svg',
-        iconRetinaUrl: './images/marker-hospital.svg',
-        iconSize: new L.Point(50, 65)
-    });
-
-    const iconGasStation = new L.Icon({
-        iconUrl: './images/marker-gas-station.svg',
-        iconRetinaUrl: './images/marker-gas-station.svg',
-        iconSize: new L.Point(50, 65)
-    });
-
-    const iconMunicipality = new L.Icon({
-        iconUrl: './images/marker-municipality.svg',
-        iconRetinaUrl: './images/marker-municipality.svg',
-        iconSize: new L.Point(50, 65)
-    });
-
-    const iconEvents = new L.Icon({
-        iconUrl: './images/marker-events.svg',
-        iconRetinaUrl: './images/marker-events.svg',
-        iconSize: new L.Point(50, 65)
-    });
-
-    const iconClub = new L.Icon({
-        iconUrl: './images/marker-sport.svg',
-        iconRetinaUrl: './images/marker-sport.svg',
-        iconSize: new L.Point(50, 65)
-    });
-
-    const iconBed = new L.Icon({
-        iconUrl: './images/marker-bed.svg',
-        iconRetinaUrl: './images/marker-bed.svg',
-        iconSize: new L.Point(50, 65)
-    });
 
     const iconsEntity = (value: string) => {
         switch (value) {
@@ -86,25 +58,6 @@ const Home = () => {
                 return iconBed;
         }
     }
-
-
-    const iconFire = new L.Icon({
-        iconUrl: './images/fire.svg',
-        iconRetinaUrl: './images/fire.svg',
-        iconSize: new L.Point(50, 65)
-    });
-
-    const iconFlood = new L.Icon({
-        iconUrl: './images/flood.svg',
-        iconRetinaUrl: './images/flood.svg',
-        iconSize: new L.Point(50, 65)
-    });
-
-    const iconAccident = new L.Icon({
-        iconUrl: './images/accident.svg',
-        iconRetinaUrl: './images/accident.svg',
-        iconSize: new L.Point(50, 65)
-    });
 
     const iconsEvents = (value: string) => {
         switch (value) {
