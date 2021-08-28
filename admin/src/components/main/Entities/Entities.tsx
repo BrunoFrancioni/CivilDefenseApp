@@ -209,7 +209,7 @@ const Entities = () => {
         const activeEntity: IEditEntityDTO = {
             _id: entity._id,
             name: entity.name,
-            entityType: entity.entityType,
+            entityType: firstLetterUppercase(entity.entityType),
             legalNumber: entity.legalNumber,
             address: entity.address,
             phone: entity.phone,
