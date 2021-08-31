@@ -1,6 +1,5 @@
-import L from "leaflet";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { MapContainer, Marker, TileLayer, Popup } from 'react-leaflet';
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
@@ -39,6 +38,48 @@ const Home = () => {
     const [entities, setEntities] = useState<IEntity[]>([]);
     const [events, setEvents] = useState<IEvent[]>([]);
     const [showModalCreateEvent, setShowModalCreateEvent] = useState<boolean>(false);
+
+    const [showSchools, setShowSchools] = useState<boolean>(true);
+    const [showHospitals, setShowHospitals] = useState<boolean>(true);
+    const [showGasStation, setShowGasStation] = useState<boolean>(true);
+    const [showMunicipality, setShowMunicipality] = useState<boolean>(true);
+    const [showEvents, setShowEvents] = useState<boolean>(true);
+    const [showClub, setShowClub] = useState<boolean>(true);
+    const [showBed, setShowBed] = useState<boolean>(true);
+
+    const showIconEntities = (value: string) => {
+        switch (value) {
+            case 'educación':
+                return showSchools;
+            case 'centro salud':
+                return showHospitals;
+            case 'depósito combustible':
+                return showGasStation;
+            case 'organismo público':
+                return showMunicipality;
+            case 'lugar evento masivo':
+                return showEvents;
+            case 'club':
+                return showClub;
+            case 'hogar acogida':
+                return showBed;
+        }
+    }
+
+    const [showFire, setShowFire] = useState<boolean>(true);
+    const [showFlood, setShowFlood] = useState<boolean>(true);
+    const [showAccident, setShowAccident] = useState<boolean>(true);
+
+    const showIconEvents = (value: string) => {
+        switch (value) {
+            case 'Incendio':
+                return showFire;
+            case 'Inundación':
+                return showFlood;
+            case 'Accidente de tránsito':
+                return showAccident;
+        }
+    }
 
     const iconsEntity = (value: string) => {
         switch (value) {
@@ -154,6 +195,146 @@ const Home = () => {
     return (
         <div>
             <Container>
+                <Row className="mb-2">
+                    <Col>
+                        <h3>Filtros para las Entidades</h3>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col>
+                        <Form.Group>
+                            <Form.Check
+                                inline
+                                id="schools"
+                                checked={showSchools}
+                                label="Educación"
+                                onChange={() => setShowSchools(!showSchools)}
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col>
+                        <Form.Group controlId="hospitals">
+                            <Form.Check
+                                inline
+                                id="hospitals"
+                                checked={showHospitals}
+                                label="Centro salud"
+                                onChange={() => setShowHospitals(!showHospitals)}
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col>
+                        <Form.Group controlId="gasStation">
+                            <Form.Check
+                                inline
+                                id="gasStation"
+                                checked={showGasStation}
+                                label="Depósito combustible"
+                                onChange={() => setShowGasStation(!showGasStation)}
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col>
+                        <Form.Group controlId="municipality">
+                            <Form.Check
+                                inline
+                                id="municipality"
+                                checked={showMunicipality}
+                                label="Organismo público"
+                                onChange={() => setShowMunicipality(!showMunicipality)}
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col>
+                        <Form.Group controlId="events">
+                            <Form.Check
+                                inline
+                                id="events"
+                                checked={showEvents}
+                                label="Lugar evento masivo"
+                                onChange={() => setShowEvents(!showEvents)}
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col>
+                        <Form.Group controlId="club">
+                            <Form.Check
+                                inline
+                                id="club"
+                                checked={showClub}
+                                label="Club"
+                                onChange={() => setShowClub(!showClub)}
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col>
+                        <Form.Group controlId="bed">
+                            <Form.Check
+                                inline
+                                id="bed"
+                                checked={showBed}
+                                label="Hogar acogida"
+                                onChange={() => setShowBed(!showBed)}
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+
+                <hr />
+
+                <Row className="mb-2">
+                    <Col>
+                        <h3>Filtros para los Eventos</h3>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col>
+                        <Form.Group controlId="fire">
+                            <Form.Check
+                                inline
+                                id="fire"
+                                checked={showFire}
+                                label="Incendio"
+                                onChange={() => setShowFire(!showFire)}
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col>
+                        <Form.Group controlId="flood">
+                            <Form.Check
+                                inline
+                                id="flood"
+                                checked={showFlood}
+                                label="Inundación"
+                                onChange={() => setShowFlood(!showFlood)}
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col>
+                        <Form.Group controlId="accident">
+                            <Form.Check
+                                inline
+                                id="accident"
+                                checked={showAccident}
+                                label="Accidente de tránsito"
+                                onChange={() => setShowAccident(!showAccident)}
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+
+                <hr />
+
                 <Row>
                     <Col>
                         <MapContainer
@@ -169,39 +350,49 @@ const Home = () => {
                             {
                                 entities !== [] &&
                                 entities.map(entity => {
-                                    return (
-                                        <Marker
-                                            key={entity._id}
-                                            position={[Number(entity.coordinates[1]), Number(entity.coordinates[0])]}
-                                            icon={iconsEntity(entity.entityType)}
-                                        >
-                                            <Popup>
-                                                {entity.name}
-                                            </Popup>
-                                        </Marker>
-                                    )
+                                    if (showIconEntities(entity.entityType)) {
+                                        return (
+                                            <Marker
+                                                key={entity._id}
+                                                position={[Number(entity.coordinates[1]), Number(entity.coordinates[0])]}
+                                                icon={iconsEntity(entity.entityType)}
+                                            >
+                                                <Popup>
+                                                    {entity.name}
+                                                </Popup>
+                                            </Marker>
+                                        )
+                                    }
+
+                                    return <Marker key={entity._id} position={[0, 0]}></Marker>
                                 })
                             }
 
                             {
                                 events !== [] &&
                                 events.map(event => {
-                                    return (
-                                        <Marker
-                                            key={event._id}
-                                            position={[Number(event.coordinates[1]), Number(event.coordinates[0])]}
-                                            icon={iconsEvents(event.event_type)}
-                                        >
-                                            <Popup>
-                                                {event.title}
-                                            </Popup>
-                                        </Marker>
-                                    )
+                                    if (showIconEvents(event.event_type)) {
+                                        return (
+                                            <Marker
+                                                key={event._id}
+                                                position={[Number(event.coordinates[1]), Number(event.coordinates[0])]}
+                                                icon={iconsEvents(event.event_type)}
+                                            >
+                                                <Popup>
+                                                    {event.title}
+                                                </Popup>
+                                            </Marker>
+                                        )
+                                    }
+
+                                    return <Marker key={event._id} position={[0, 0]}></Marker>
                                 })
                             }
                         </MapContainer>
                     </Col>
                 </Row>
+
+                <hr />
 
                 <Row>
                     <Col>
