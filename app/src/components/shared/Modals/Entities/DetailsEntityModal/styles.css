@@ -1,0 +1,8 @@
+.align-text {
+    text-align: center;
+}
+
+.container-risks {
+    display: flex;
+    justify-content: center;
+}

@@ -23,6 +23,7 @@ import {
     iconFlood
 } from "../../../core/utils/MapMarkers/EventsMapMarkers";
 import Footer from "../../shared/Footer/Footer";
+import DetailsEntityModal from "../../shared/Modals/Entities/DetailsEntityModal/DetailsEntityModal";
 import CreateEventModal from "../../shared/Modals/Events/CreateEventModal/CreateEventModal";
 import DetailsEventModal from "../../shared/Modals/Events/DetailsEventModal/DetailsEventModal";
 import { selectUser } from "../../store/store";
@@ -53,6 +54,20 @@ const Home = () => {
         active: false
     }
 
+    const initialStateDetailsEntity: IEntity = {
+        _id: '',
+        name: '',
+        entityType: '',
+        legalNumber: '',
+        address: '',
+        phone: '',
+        postalCode: '',
+        email: '',
+        sector: '',
+        risk: [''],
+        coordinates: ['', '']
+    }
+
     const socket = useContext(SocketContext);
 
     const [entities, setEntities] = useState<IEntity[]>([]);
@@ -61,6 +76,9 @@ const Home = () => {
 
     const [showModalDetailsEvent, setShowModalDetailsEvent] = useState<boolean>(false);
     const [activeEvent, setActiveEvent] = useState<IEvent>(initialStateDetailsEvent);
+
+    const [showModalDetailsEntity, setShowModalDetailsEntity] = useState<boolean>(false);
+    const [activeEntity, setActiveEntity] = useState<IEntity>(initialStateDetailsEntity);
 
     const [showSchools, setShowSchools] = useState<boolean>(true);
     const [showHospitals, setShowHospitals] = useState<boolean>(true);
@@ -223,6 +241,16 @@ const Home = () => {
     const handleCloseDetailsEventModal = () => {
         setShowModalDetailsEvent(false);
         setActiveEvent(initialStateDetailsEvent);
+    }
+
+    const showDetailsEntity = (entity: IEntity) => {
+        setActiveEntity(entity);
+        setShowModalDetailsEntity(true);
+    }
+
+    const handleCloseDetailsEntityModal = () => {
+        setShowModalDetailsEntity(false);
+        setActiveEntity(initialStateDetailsEntity);
     }
 
     return (
@@ -391,13 +419,12 @@ const Home = () => {
                                                 icon={iconsEntity(entity.entityType)}
                                             >
                                                 <Popup>
-                                                    {entity.name}
-                                                    <span>
-                                                        <i
-                                                            className="fas fa-info-circle"
-                                                            title="Click para mas información"
-                                                        ></i>
-                                                    </span>
+                                                    <p><b>{entity.name}</b>
+                                                        <span
+                                                            className="option"
+                                                            onClick={() => showDetailsEntity(entity)}
+                                                        >(Info)</span>
+                                                    </p>
                                                 </Popup>
                                             </Marker>
                                         )
@@ -418,7 +445,7 @@ const Home = () => {
                                                 icon={iconsEvents(event.event_type)}
                                             >
                                                 <Popup>
-                                                    <p>{event.title}
+                                                    <p><b>{event.title}</b>
                                                         <span
                                                             className="option"
                                                             onClick={() => showDetailsEvent(event)}
@@ -468,6 +495,15 @@ const Home = () => {
                     showModal={showModalDetailsEvent}
                     handleClose={() => handleCloseDetailsEventModal()}
                     event={activeEvent}
+                />
+            }
+
+            {
+                showModalDetailsEntity &&
+                <DetailsEntityModal
+                    showModal={showModalDetailsEntity}
+                    handleClose={() => handleCloseDetailsEntityModal()}
+                    entity={activeEntity}
                 />
             }
         </div>
