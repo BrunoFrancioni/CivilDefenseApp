@@ -1,0 +1,12 @@
+.container-col {
+    display: flex;
+}
+
+.icon {
+    height: 3rem;
+    width: 3rem;
+}
+
+.name {
+    margin: auto 0;
+}

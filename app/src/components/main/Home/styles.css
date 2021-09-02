@@ -1,3 +1,17 @@
+.container-title {
+    display: flex;
+}
+
+.info-icon {
+    margin: auto 0;
+    height: 2rem;
+    width: 3rem;
+}
+
+.info-icon:hover {
+    cursor: pointer;
+}
+
 .option {
     color: blue;
 }

@@ -24,8 +24,10 @@ import {
 } from "../../../core/utils/MapMarkers/EventsMapMarkers";
 import Footer from "../../shared/Footer/Footer";
 import DetailsEntityModal from "../../shared/Modals/Entities/DetailsEntityModal/DetailsEntityModal";
+import DetailsIconsEntityModal from "../../shared/Modals/Entities/DetailsIconsEntityModal/DetailsIconsEntityModal";
 import CreateEventModal from "../../shared/Modals/Events/CreateEventModal/CreateEventModal";
 import DetailsEventModal from "../../shared/Modals/Events/DetailsEventModal/DetailsEventModal";
+import DetailsIconsEventsModal from "../../shared/Modals/Events/DetailsIconsEvents/DetailsIconsEventsModal";
 import { selectUser } from "../../store/store";
 import { logOutAction } from "../../store/user/user.slice";
 
@@ -79,6 +81,9 @@ const Home = () => {
 
     const [showModalDetailsEntity, setShowModalDetailsEntity] = useState<boolean>(false);
     const [activeEntity, setActiveEntity] = useState<IEntity>(initialStateDetailsEntity);
+
+    const [showDetailsIconEntities, setShowDetailsIconEntities] = useState<boolean>(false);
+    const [showDetailsIconEvents, setShowDetailsIconEvents] = useState<boolean>(false);
 
     const [showSchools, setShowSchools] = useState<boolean>(true);
     const [showHospitals, setShowHospitals] = useState<boolean>(true);
@@ -258,7 +263,18 @@ const Home = () => {
             <Container>
                 <Row className="mb-2">
                     <Col>
-                        <h3>Filtros para las Entidades</h3>
+                        <div className="container-title">
+                            <h3>Filtros para las Entidades </h3>
+                            <span
+                                className="ml-1 info-icon"
+                                onClick={() => setShowDetailsIconEntities(true)}
+                            >
+                                <i
+                                    className="fas fa-info-circle"
+                                    title="Ver información de las Entidades"
+                                ></i>
+                            </span>
+                        </div>
                     </Col>
                 </Row>
 
@@ -352,7 +368,18 @@ const Home = () => {
 
                 <Row className="mb-2">
                     <Col>
-                        <h3>Filtros para los Eventos</h3>
+                        <div className="container-title">
+                            <h3>Filtros para los Eventos </h3>
+                            <span
+                                className="ml-1 info-icon"
+                                onClick={() => setShowDetailsIconEvents(true)}
+                            >
+                                <i
+                                    className="fas fa-info-circle"
+                                    title="Ver información de los Eventos"
+                                ></i>
+                            </span>
+                        </div>
                     </Col>
                 </Row>
 
@@ -504,6 +531,22 @@ const Home = () => {
                     showModal={showModalDetailsEntity}
                     handleClose={() => handleCloseDetailsEntityModal()}
                     entity={activeEntity}
+                />
+            }
+
+            {
+                showDetailsIconEntities &&
+                <DetailsIconsEntityModal
+                    showModal={showDetailsIconEntities}
+                    handleClose={() => setShowDetailsIconEntities(false)}
+                />
+            }
+
+            {
+                showDetailsIconEvents &&
+                <DetailsIconsEventsModal
+                    showModal={showDetailsIconEvents}
+                    handleClose={() => setShowDetailsIconEvents(false)}
                 />
             }
         </div>
