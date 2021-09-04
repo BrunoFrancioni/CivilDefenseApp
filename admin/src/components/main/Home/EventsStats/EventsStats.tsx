@@ -18,6 +18,10 @@ const EventsStats = () => {
     const [searchWithError, setSearchWithError] = useState<boolean>(false);
 
     useEffect(() => {
+        setTimeout(() => {
+
+        }, 500);
+        
         (async () => {
             await getStats();
         })();
@@ -30,7 +34,7 @@ const EventsStats = () => {
             (result.data.stats) ? setStats(result.data.stats) : setStats(null);
             setSearchWithError(false);
             setLoading(false);
-        } catch (e) {
+        } catch (e: any) {
             console.log('ERROR', e);
 
             if (e.response.status === 401) {

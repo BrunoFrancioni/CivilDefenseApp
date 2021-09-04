@@ -18,6 +18,10 @@ const CredentialsStats = () => {
     const [searchWithError, setSearchWithError] = useState<boolean>(false);
 
     useEffect(() => {
+        setTimeout(() => {
+
+        }, 500);
+
         (async () => {
             await getStats();
         })();
@@ -30,7 +34,7 @@ const CredentialsStats = () => {
             setLoading(false);
             setStats(result.data.stats);
             setSearchWithError(false);
-        } catch (e) {
+        } catch (e: any) {
             console.log('ERROR', e);
 
             if (e.response.status === 401) {
