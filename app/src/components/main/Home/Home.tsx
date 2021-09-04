@@ -202,7 +202,7 @@ const Home = () => {
             const result = await eventsService.getActiveEvents();
 
             setEvents(result.data.events);
-        } catch (e) {
+        } catch (e: any) {
             console.log("ERROR", e);
 
             if (e.response.status === 401) {
@@ -270,7 +270,7 @@ const Home = () => {
                                 onClick={() => setShowDetailsIconEntities(true)}
                             >
                                 <i
-                                    className="fas fa-info-circle"
+                                    className="fas fa-info-circle fa-2x"
                                     title="Ver información de las Entidades"
                                 ></i>
                             </span>

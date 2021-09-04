@@ -45,6 +45,17 @@ export interface IGetCredentialByIdResult {
     credential: ICredential;
 }
 
+export interface IChangePassword {
+    id: string;
+    oldPassword: string;
+    newPassword: string;
+}
+
+export interface IChangePasswordResult {
+    result: boolean;
+    message: string;
+}
+
 export interface IEditCredential {
     name_lastname: string;
     dni: string;

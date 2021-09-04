@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ICreateCredentialsResult, IDeleteCredentialResult, IEditCredentialResult, IGetCredentialByIdResult, IGetCredentials, IGetCredentialsResult, IGetCredentialsStatsResult, IGetNewPasswordResult, ILoginResult } from "interfaces/ICredentials";
+import { IChangePassword, IChangePasswordResult, ICreateCredentialsResult, IDeleteCredentialResult, IEditCredentialResult, IGetCredentialByIdResult, IGetCredentials, IGetCredentialsResult, IGetCredentialsStatsResult, IGetNewPasswordResult, ILoginResult } from "interfaces/ICredentials";
 import { verify } from '../middleware/auth';
 
 import { CredentialsController } from '../controllers/credentialsController';
@@ -134,6 +134,36 @@ export class CredentialsRoutes {
 
                         return res.status(400).json({
                             message: 'Bad request'
+                        });
+                    } catch (e) {
+                        console.log(e);
+
+                        return res.status(500).json({
+                            message: 'Error'
+                        });
+                    }
+                });
+        app.route('/credentials/:id/password')
+            .put(verify,
+                async(req: Request, res: Response) => {
+                    const changePasswordDTO: IChangePassword = {
+                        id: req.params.id,
+                        oldPassword: req.body.changePasswordDTO.oldPassword,
+                        newPassword: req.body.changePasswordDTO.newPassword
+                    }
+
+                    try {
+                        const result: IChangePasswordResult = await this.credentialsController
+                            .changePassword(changePasswordDTO);
+
+                        if(result.result) {
+                            return res.status(200).json({
+                                message: 'Password changed'
+                            });
+                        }
+
+                        return res.status(400).json({
+                            message: result.message
                         });
                     } catch (e) {
                         console.log(e);

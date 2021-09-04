@@ -2,6 +2,8 @@ import * as bcrypt from 'bcrypt';
 
 import CredentialsSchema, { ICredentials } from '../models/credentialsModel';
 import {
+    IChangePassword,
+    IChangePasswordResult,
     ICreateCredentials,
     ICreateCredentialsResult,
     ICredential,
@@ -299,6 +301,69 @@ export class CredentialsController {
 
             return result;
         } catch (e) {
+            throw new Error(e);
+        }
+    }
+
+    public async changePassword(changePasswordDTO: IChangePassword): Promise<IChangePasswordResult> {
+        let result: IChangePasswordResult;
+
+        if((changePasswordDTO.newPassword && !changePasswordDTO.oldPassword) 
+        || (!changePasswordDTO.newPassword && changePasswordDTO.oldPassword)) {
+            result = {
+                result: false,
+                message: 'New password and old password are required.'
+            }
+
+            return result;
+        }
+
+        try {
+            const credential = await this.Credentials.findOne({ _id: changePasswordDTO.id }).exec();
+
+            if (!credential) {
+                result = {
+                    result: false,
+                    message: 'User not found'
+                }
+
+                return result;
+            }
+
+            bcrypt.compare(changePasswordDTO.oldPassword, credential.password,(err, res) => {
+                if(err) {
+                    result = {
+                        result: false,
+                        message: 'Bad old password'
+                    }
+    
+                    return result;
+                }
+
+                if(res) {
+                    bcrypt.hash(changePasswordDTO.newPassword, 10, async (err, hash) => {
+                        if(err) {
+                            throw new Error();
+                        }
+                
+                        if(hash) {
+                            credential.password = hash;
+
+                            result = {
+                                result: false,
+                                message: null
+                            }
+            
+                            return result;
+                        }
+                
+                        if(!err && !result) {
+                            throw new Error();
+                        }
+                    });
+                }
+            });
+        } catch(e: any) {
             throw new Error(e);
         }
     }

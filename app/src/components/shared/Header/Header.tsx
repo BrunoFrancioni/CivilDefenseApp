@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from 'react-router-dom';
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -80,12 +81,21 @@ const Header = () => {
                                     onClick={() => setShowModalLogIn(true)}
                                 >Iniciar Sesión</Button> :
 
-                                <Button
-                                    variant="danger"
-                                    size="lg"
-                                    className="button-sesion float-end"
-                                    onClick={() => clickLogOut()}
-                                >Cerrar Sesión</Button>
+                                <>
+                                    <span
+                                        title="Configuraciones del usuario"
+                                        onClick={() => <Redirect to="/settings" />}
+                                    >
+                                        <i className="fas fa-cog fa-3x icono"></i>
+                                    </span>
+
+                                    <Button
+                                        variant="danger"
+                                        size="lg"
+                                        className="button-sesion float-end"
+                                        onClick={() => clickLogOut()}
+                                    >Cerrar Sesión</Button>
+                                </>
                         }
                     </Col>
                 </Row>
