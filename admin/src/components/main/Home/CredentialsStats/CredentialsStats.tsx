@@ -18,10 +18,6 @@ const CredentialsStats = () => {
     const [searchWithError, setSearchWithError] = useState<boolean>(false);
 
     useEffect(() => {
-        setTimeout(() => {
-
-        }, 500);
-
         (async () => {
             await getStats();
         })();

@@ -18,10 +18,6 @@ const EntitiesStats = () => {
     const [searchWithError, setSearchWithError] = useState<boolean>(false);
 
     useEffect(() => {
-        setTimeout(() => {
-
-        }, 500);
-        
         (async () => {
             await getStats();
         })();
