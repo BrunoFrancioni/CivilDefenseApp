@@ -10,3 +10,9 @@ export interface ICredentialLogIn {
     email: string;
     password: string;
 }
+
+export interface IChangePassword {
+    oldPassword: string;
+    newPassword: string;
+    secondNewPassword: string;
+}
