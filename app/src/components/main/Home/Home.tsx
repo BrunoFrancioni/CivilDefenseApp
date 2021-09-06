@@ -375,7 +375,7 @@ const Home = () => {
                                 onClick={() => setShowDetailsIconEvents(true)}
                             >
                                 <i
-                                    className="fas fa-info-circle"
+                                    className="fas fa-info-circle fa-2x"
                                     title="Ver información de los Eventos"
                                 ></i>
                             </span>

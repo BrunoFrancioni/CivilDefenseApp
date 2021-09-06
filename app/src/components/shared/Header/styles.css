@@ -4,6 +4,12 @@
     margin-bottom: 2rem;
 }
 
+.container-options {
+    display: flex;
+    margin: 2rem auto;
+    justify-content: end;
+}
+
 .button-sesion {
     font-weight: bold !important;
     font-size: 1.3rem !important;

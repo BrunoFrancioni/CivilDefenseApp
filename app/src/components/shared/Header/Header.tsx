@@ -81,21 +81,22 @@ const Header = () => {
                                     onClick={() => setShowModalLogIn(true)}
                                 >Iniciar Sesión</Button> :
 
-                                <>
-                                    <span
-                                        title="Configuraciones del usuario"
-                                        onClick={() => <Redirect to="/settings" />}
-                                    >
-                                        <i className="fas fa-cog fa-3x icono"></i>
-                                    </span>
+                                <div className="container-options">
+                                    <Nav.Link href="/settings">
+                                        <span
+                                            title="Configuraciones del usuario"
+                                        >
+                                            <i className="fas fa-cog fa-3x icono"></i>
+                                        </span>
+                                    </Nav.Link>
 
                                     <Button
                                         variant="danger"
                                         size="lg"
-                                        className="button-sesion float-end"
+                                        className="ml-4"
                                         onClick={() => clickLogOut()}
                                     >Cerrar Sesión</Button>
-                                </>
+                                </div>
                         }
                     </Col>
                 </Row>
