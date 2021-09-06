@@ -314,7 +314,7 @@ export class CredentialsController {
                 result: false,
                 message: 'New password and old password are required.'
             }
-
+            
             return result;
         }
 
@@ -326,43 +326,37 @@ export class CredentialsController {
                     result: false,
                     message: 'User not found'
                 }
+                
+                return result;
+            }
+
+            const comparePass = bcrypt.compareSync(changePasswordDTO.oldPassword, credential.password);
+            
+            if(!comparePass) {
+                result = {
+                    result: false,
+                    message: 'Bad old password'
+                }
 
                 return result;
             }
 
-            bcrypt.compare(changePasswordDTO.oldPassword, credential.password,(err, res) => {
-                if(err) {
-                    result = {
-                        result: false,
-                        message: 'Bad old password'
-                    }
-    
-                    return result;
-                }
-
-                if(res) {
-                    bcrypt.hash(changePasswordDTO.newPassword, 10, async (err, hash) => {
-                        if(err) {
-                            throw new Error();
-                        }
-                
-                        if(hash) {
-                            credential.password = hash;
-
-                            result = {
-                                result: false,
-                                message: null
-                            }
+            const hash = bcrypt.hashSync(changePasswordDTO.newPassword, 10);
             
-                            return result;
-                        }
-                
-                        if(!err && !result) {
-                            throw new Error();
-                        }
-                    });
-                }
-            });
+            credential.password = hash;
+
+            const cred = await credential.save();
+
+            if(cred === null) {
+                throw new Error();
+            }
+
+            result = {
+                result: true,
+                message: null
+            }
+
+            return result;
         } catch(e: any) {
             throw new Error(e);
         }

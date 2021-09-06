@@ -151,10 +151,12 @@ export class CredentialsRoutes {
                         oldPassword: req.body.changePasswordDTO.oldPassword,
                         newPassword: req.body.changePasswordDTO.newPassword
                     }
-
+                    
                     try {
                         const result: IChangePasswordResult = await this.credentialsController
                             .changePassword(changePasswordDTO);
+
+                        console.log("result", result);
 
                         if(result.result) {
                             return res.status(200).json({
