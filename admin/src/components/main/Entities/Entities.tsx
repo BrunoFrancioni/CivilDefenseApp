@@ -305,7 +305,7 @@ const Entities = () => {
                             !loading && totalResults != 0 &&
                             entities != [] && !searchWithError &&
                             <Container fluid>
-                                <Table striped bordered hover>
+                                <Table striped bordered hover variant="dark">
                                     <thead>
                                         <tr>
                                             <th>Nombre Institución</th>

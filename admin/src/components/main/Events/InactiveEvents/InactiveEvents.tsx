@@ -189,7 +189,7 @@ const InactiveEvents = () => {
                 !loading && totalResults != 0 &&
                 events != [] && !searchWithError &&
                 <Container fluid>
-                    <Table striped bordered hover>
+                    <Table striped bordered hover variant="dark">
                         <thead>
                             <tr>
                                 <th>Título</th>
