@@ -48,7 +48,7 @@ const DetailsIconsEntityModal = (props: DetailsIconsEntityModalProps) => {
                             <div className="container-col">
                                 <img
                                     alt="Gas Station"
-                                    src="./ionicons.designerpack/car-outline.svg"
+                                    src="./ionicons.designerpack/gasstation.svg"
                                     className="icon mr-2"
                                 />
                                 <p className="name">Depósito combustible</p>
