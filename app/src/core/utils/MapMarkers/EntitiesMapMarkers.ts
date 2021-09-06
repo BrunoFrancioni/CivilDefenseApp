@@ -31,8 +31,8 @@ export const iconGasStation = new L.Icon({
 });
 
 export const iconGasStation2 = new L.Icon({
-    iconUrl: './ionicons.designerpack/car-outline.svg',
-    iconRetinaUrl: './ionicons.designerpack/car-outline.svg',
+    iconUrl: './ionicons.designerpack/gasstation.svg',
+    iconRetinaUrl: './ionicons.designerpack/gasstation.svg',
     iconSize: new L.Point(30, 30)
 });
 
