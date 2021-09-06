@@ -39,5 +39,10 @@
 }
 
 .main-container {
-  background-color: #f4edf4;
+  background-image: url("images/background3.jpg");
+}
+html{
+  background-image: url("images/background3.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
