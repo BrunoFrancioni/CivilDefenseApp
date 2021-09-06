@@ -324,7 +324,7 @@ class Users extends React.Component<UsersProps, UsersState> {
                                 !this.state.loading && this.state.totalResults != 0 &&
                                 !this.state.searchWithError &&
                                 <Container fluid>
-                                    <Table striped bordered hover>
+                                    <Table striped bordered hover variant="dark">
                                         <thead>
                                             <tr>
                                                 <th>Nombre Apellido</th>
