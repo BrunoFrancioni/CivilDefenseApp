@@ -10,7 +10,7 @@ import { EventsRoutes } from "./routes/EventsRoutes";
 class App {
     public app: express.Application;
     public mongoUrl: string = process.env.MONGO_DB_CONNECTION;
-
+//npm run dev lib/app.ts
     public credentialsRoutes: CredentialsRoutes = new CredentialsRoutes();
     public entitiesRoutes: EntitiesRoutes = new EntitiesRoutes();
     public eventsRoutes: EventsRoutes = new EventsRoutes();

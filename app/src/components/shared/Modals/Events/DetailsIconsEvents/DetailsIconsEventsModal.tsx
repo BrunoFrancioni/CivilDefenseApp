@@ -26,7 +26,7 @@ const DetailsIconsEventsModal = (props: DetailsIconsEventsModalProps) => {
                             <div className="container-col">
                                 <img
                                     alt="Fire"
-                                    src="./images/fire.svg"
+                                    src="./ionicons.designerpack/flame.svg"
                                     className="icon mr-2"
                                 />
                                 <p className="name">Incendio</p>
@@ -37,7 +37,7 @@ const DetailsIconsEventsModal = (props: DetailsIconsEventsModalProps) => {
                             <div className="container-col">
                                 <img
                                     alt="Flood"
-                                    src="./images/flood.svg"
+                                    src="./ionicons.designerpack/water.svg"
                                     className="icon mr-2"
                                 />
                                 <p className="name">Inundación</p>
@@ -48,7 +48,7 @@ const DetailsIconsEventsModal = (props: DetailsIconsEventsModalProps) => {
                             <div className="container-col">
                                 <img
                                     alt="Accident"
-                                    src="./images/accident.svg"
+                                    src="./ionicons.designerpack/crash.svg"
                                     className="icon mr-2"
                                 />
                                 <p className="name">Accidente de tránsito</p>

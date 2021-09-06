@@ -26,7 +26,7 @@ const DetailsIconsEntityModal = (props: DetailsIconsEntityModalProps) => {
                             <div className="container-col">
                                 <img
                                     alt="School"
-                                    src="./images/marker-school.svg"
+                                    src="./ionicons.designerpack/school.svg"
                                     className="icon mr-2"
                                 />
                                 <p className="name">Educación</p>
@@ -37,7 +37,7 @@ const DetailsIconsEntityModal = (props: DetailsIconsEntityModalProps) => {
                             <div className="container-col">
                                 <img
                                     alt="Hospital"
-                                    src="./images/marker-hospital.svg"
+                                    src="./ionicons.designerpack/fitness-outline.svg"
                                     className="icon mr-2"
                                 />
                                 <p className="name">Centro salud</p>
@@ -48,7 +48,7 @@ const DetailsIconsEntityModal = (props: DetailsIconsEntityModalProps) => {
                             <div className="container-col">
                                 <img
                                     alt="Gas Station"
-                                    src="./images/marker-gas-station.svg"
+                                    src="./ionicons.designerpack/car-outline.svg"
                                     className="icon mr-2"
                                 />
                                 <p className="name">Depósito combustible</p>
@@ -59,7 +59,7 @@ const DetailsIconsEntityModal = (props: DetailsIconsEntityModalProps) => {
                             <div className="container-col">
                                 <img
                                     alt="Municipality"
-                                    src="./images/marker-municipality.svg"
+                                    src="./ionicons.designerpack/business.svg"
                                     className="icon mr-2"
                                 />
                                 <p className="name">Organismo público</p>
@@ -74,7 +74,7 @@ const DetailsIconsEntityModal = (props: DetailsIconsEntityModalProps) => {
                             <div className="container-col">
                                 <img
                                     alt="Events"
-                                    src="./images/marker-events.svg"
+                                    src="./ionicons.designerpack/ticket-outline.svg"
                                     className="icon mr-2"
                                 />
                                 <p className="name">Lugar evento masivo</p>
@@ -85,7 +85,7 @@ const DetailsIconsEntityModal = (props: DetailsIconsEntityModalProps) => {
                             <div className="container-col">
                                 <img
                                     alt="Club"
-                                    src="./images/marker-sport.svg"
+                                    src="./ionicons.designerpack/football.svg"
                                     className="icon mr-2"
                                 />
                                 <p className="name">Club</p>
@@ -96,7 +96,7 @@ const DetailsIconsEntityModal = (props: DetailsIconsEntityModalProps) => {
                             <div className="container-col">
                                 <img
                                     alt="Bed"
-                                    src="./images/marker-bed.svg"
+                                    src="./ionicons.designerpack/home.svg"
                                     className="icon mr-2"
                                 />
                                 <p className="name">Hogar acogida</p>

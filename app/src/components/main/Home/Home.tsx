@@ -15,12 +15,22 @@ import {
     iconGasStation,
     iconHospital,
     iconMunicipality,
-    iconSchool
+    iconSchool2,
+    iconHospital2,
+    iconGasStation2,
+    iconMunicipality2,
+    iconEvents2,
+    iconClub2,
+    iconBed2
+
 } from "../../../core/utils/MapMarkers/EntitiesMapMarkers";
 import {
     iconAccident,
     iconFire,
-    iconFlood
+    iconFlood,
+    iconFire2,
+    iconAccident2,
+    iconFlood2
 } from "../../../core/utils/MapMarkers/EventsMapMarkers";
 import Footer from "../../shared/Footer/Footer";
 import DetailsEntityModal from "../../shared/Modals/Entities/DetailsEntityModal/DetailsEntityModal";
@@ -127,33 +137,37 @@ const Home = () => {
         }
     }
 
+    /*se cambia los return de los cases para seleccionar otros iconos,
+    para rollbackear solo hay que borrar el numero 2
+    y cambiar las referencias que hay en los modals*/
+
     const iconsEntity = (value: string) => {
         switch (value) {
             case 'educación':
-                return iconSchool;
+                return iconSchool2;
             case 'centro salud':
-                return iconHospital;
+                return iconHospital2;
             case 'depósito combustible':
-                return iconGasStation;
+                return iconGasStation2;
             case 'organismo público':
-                return iconMunicipality;
+                return iconMunicipality2;
             case 'lugar evento masivo':
-                return iconEvents;
+                return iconEvents2;
             case 'club':
-                return iconClub;
+                return iconClub2;
             case 'hogar acogida':
-                return iconBed;
+                return iconBed2;
         }
     }
 
     const iconsEvents = (value: string) => {
         switch (value) {
             case 'Incendio':
-                return iconFire;
+                return iconFire2;
             case 'Inundación':
-                return iconFlood;
+                return iconFlood2;
             case 'Accidente de tránsito':
-                return iconAccident;
+                return iconAccident2;
         }
     }
 
