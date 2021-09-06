@@ -273,7 +273,7 @@ const Home = () => {
     }
 
     return (
-        <div>
+        <div className="home-container">
             <Container>
                 <Row className="mb-2">
                     <Col>
@@ -395,6 +395,18 @@ const Home = () => {
                             </span>
                         </div>
                     </Col>
+
+                    <Col>
+                        {
+                            user.logged &&
+                            <div className="containet-button-create">
+                                <Button
+                                    variant="success"
+                                    onClick={() => setShowModalCreateEvent(true)}
+                                ><b>Crear Evento</b></Button>
+                            </div>
+                        }
+                    </Col>
                 </Row>
 
                 <Row>
@@ -460,11 +472,16 @@ const Home = () => {
                                                 icon={iconsEntity(entity.entityType)}
                                             >
                                                 <Popup>
-                                                    <p><b>{entity.name}</b>
+                                                    <p><b>{entity.name} </b>
                                                         <span
                                                             className="option"
                                                             onClick={() => showDetailsEntity(entity)}
-                                                        >(Info)</span>
+                                                        >
+                                                            <i
+                                                                className="fas fa-info-circle fa-1x"
+                                                                title="Ver información de la Entidad"
+                                                            ></i>
+                                                        </span>
                                                     </p>
                                                 </Popup>
                                             </Marker>
@@ -486,11 +503,16 @@ const Home = () => {
                                                 icon={iconsEvents(event.event_type)}
                                             >
                                                 <Popup>
-                                                    <p><b>{event.title}</b>
+                                                    <p><b>{event.title} </b>
                                                         <span
                                                             className="option"
                                                             onClick={() => showDetailsEvent(event)}
-                                                        >(Info)</span>
+                                                        >
+                                                            <i
+                                                                className="fas fa-info-circle fa-1x"
+                                                                title="Ver información del Evento"
+                                                            ></i>
+                                                        </span>
                                                     </p>
                                                 </Popup>
                                             </Marker>
@@ -501,20 +523,6 @@ const Home = () => {
                                 })
                             }
                         </MapContainer>
-                    </Col>
-                </Row>
-
-                <hr />
-
-                <Row>
-                    <Col>
-                        {
-                            user.logged &&
-                            <Button
-                                variant="primary"
-                                onClick={() => setShowModalCreateEvent(true)}
-                            >Crear Evento</Button>
-                        }
                     </Col>
                 </Row>
             </Container>

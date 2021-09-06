@@ -82,13 +82,16 @@ const Header = () => {
                                 >Iniciar Sesión</Button> :
 
                                 <div className="container-options">
-                                    <Nav.Link href="/settings">
-                                        <span
-                                            title="Configuraciones del usuario"
-                                        >
-                                            <i className="fas fa-cog fa-3x icono"></i>
-                                        </span>
-                                    </Nav.Link>
+                                    {
+                                        (window.location.pathname !== '/settings') &&
+                                        <Nav.Link href="/settings">
+                                            <span
+                                                title="Configuraciones del usuario"
+                                            >
+                                                <i className="fas fa-cog fa-3x icono"></i>
+                                            </span>
+                                        </Nav.Link>
+                                    }
 
                                     <Button
                                         variant="danger"
