@@ -180,7 +180,7 @@ const Home = () => {
 
         socket.on("New Event", (data: any) => {
             console.log("Nuevo evento", data);
-            console.log("Comparacion", user.info && String(data.id) !== user.info._id);
+            
             if (user.info && String(data.id) !== user.info._id) {
                 Swal.fire({
                     position: 'bottom-start',
