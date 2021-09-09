@@ -4,7 +4,9 @@
 
 .footer{
     height: 20px;
-    position: relative;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }
 
 .text-footer {
