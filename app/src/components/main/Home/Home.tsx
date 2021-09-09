@@ -180,7 +180,7 @@ const Home = () => {
 
         socket.on("New Event", (data: any) => {
             console.log("Nuevo evento", data);
-
+            
             if (user.info && String(data.id) !== user.info._id) {
                 Swal.fire({
                     position: 'bottom-start',
@@ -191,7 +191,7 @@ const Home = () => {
                         <b>Descripción:</b> ${data.event.description} <br />
                         <b>Tipo de evento:</b> ${data.event.event_type}`,
                     showConfirmButton: false,
-                    timer: 3000
+                    timer: 4000
                 });
             }
 
