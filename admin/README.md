@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Admin Specification
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -39,8 +39,74 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+***
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Final result of the system.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Login view.
+
+![Login View](/admin/ReadmePictures/login.png 'Login View')
+
+## Home view.
+
+![Home View](/admin/ReadmePictures/home.png 'Home View')
+
+## Users view.
+
+![Users View](/admin/ReadmePictures/users.png 'Users View')
+
+## Create User view.
+
+![Create User View](/admin/ReadmePictures/create_user.png 'Create User view')
+
+## Edit User view.
+
+![Edit User view](/admin/ReadmePictures/edit_user.png 'Edit User view')
+
+## Delete User view.
+
+![Delete User view](/admin/ReadmePictures/delete_user.png 'Delete User view')
+
+## Change Password view.
+
+![Change Password view](/admin/ReadmePictures/password_user.png 'Change Password view')
+
+## Entities view.
+
+![Entities View](/admin/ReadmePictures/entities.png 'Entities view')
+
+## Create Entity view.
+
+![Create Entity view](/admin/ReadmePictures/create_entity.png 'Create Entity view')
+
+## Details Entity view.
+
+![Details Entity view](/admin/ReadmePictures/details_entity.png 'Details Entity View')
+
+## Edit Entity view.
+
+![Edit Entity view](/admin/ReadmePictures/edit_entity.png 'Edit Entity view')
+
+## Delete Entity view.
+
+![Delete Entity view](/admin/ReadmePictures/delete_entity.png 'Delete Entity view')
+
+## Active Events view.
+
+![Active Events view](/admin/ReadmePictures/active_events.png 'Active Events view.')
+
+## Details Events view.
+
+![Details Events view](/admin/ReadmePictures/details_event.png 'Details Events view')
+
+## Finish Event view.
+
+![Finish Event view](/admin/ReadmePictures/finish_event.png 'Finish Event view')
+
+## Delete Event view.
+
+![Delete Event view](/admin/ReadmePictures/delete_event.png 'Delete Event view')
+
+## Inactive Events view.
+
+![Inactive Events view](/admin/ReadmePictures/inactive_events.png 'Inactive Events view')

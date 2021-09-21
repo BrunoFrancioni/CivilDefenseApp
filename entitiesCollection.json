@@ -1,0 +1,677 @@
+[{
+  "_id": {
+    "$oid": "5fe55ed9eaa29e2b8f8498d0"
+  },
+  "name": "COLEGIO SAN JOSE",
+  "entityType": "educación",
+  "legalNumber": "461",
+  "address": "CHAMPAGNAT 1375",
+  "phone": "0247742-2488",
+  "postalCode": "2700",
+  "email": "egb@sanjosepergamino.com.ar",
+  "sector": "Privada",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.945625305175774",
+    "-34.58481766903432"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55ee9eaa29e2b8f8498d1"
+  },
+  "name": "COLEGIO SAN PABLO",
+  "entityType": "educación",
+  "legalNumber": "3131",
+  "address": "GUALBERTO ALVAREZ 401",
+  "phone": "0247743-7254",
+  "postalCode": "2700",
+  "email": "sanpablosecretaria@gmail.com",
+  "sector": "Privada",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.940303802490234",
+    "-34.58340439154656"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55ef7eaa29e2b8f8498d2"
+  },
+  "name": "ESCUELA HOGAR DE JESUS",
+  "entityType": "educación",
+  "legalNumber": "460",
+  "address": "HIPOLITO IRIGOYEN 29",
+  "phone": "02477423-3513",
+  "postalCode": "2700",
+  "email": "hogardejesus@hotmail.com",
+  "sector": "Privada",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.95712661743163",
+    "-34.583757713171714"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55f0beaa29e2b8f8498d3"
+  },
+  "name": "ESCUELA PRIMARIA Nº30 \"GENERAL SAN MARTIN\"",
+  "entityType": "educación",
+  "legalNumber": "30",
+  "address": "ZONA RURAL S/N",
+  "phone": "0247715-34-6592",
+  "postalCode": "2711",
+  "email": "escuela30lavanguardia@live.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.942277908325195",
+    "-34.584499683695064"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55f1ceaa29e2b8f8498d4"
+  },
+  "name": "ESCUELA PRIMARIA Nº34 \"JOSE LORENZO MORENO\"",
+  "entityType": "educación",
+  "legalNumber": "34",
+  "address": "RUTA 178 KM 13",
+  "phone": "0247734-6593",
+  "postalCode": "2700",
+  "email": "escuela34jlmoreno@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.94090461730957",
+    "-34.58626625351593"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55f2ceaa29e2b8f8498d5"
+  },
+  "name": "COLEGIO NUESTRA SEÑORA DEL HUERTO",
+  "entityType": "educación",
+  "legalNumber": "462",
+  "address": "H M CRESCENCIA PEREZ 646",
+  "phone": "0247742-3242",
+  "postalCode": "2700",
+  "email": "huertopergamino@yahoo.com.ar",
+  "sector": "Privada",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.94202041625976",
+    " -34.57591361962323"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55f4eeaa29e2b8f8498d6"
+  },
+  "name": "ESCUELA MONSEÑOR SCALABRINI",
+  "entityType": "educación",
+  "legalNumber": "463",
+  "address": "CHAMPAGNAT E/ ACEVEDO 251",
+  "phone": "0247743-7292",
+  "postalCode": "2700",
+  "email": "egbscalabrini@yahoo.com",
+  "sector": "Privada",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.95094680786132",
+    "-34.577397694098806"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55f61eaa29e2b8f8498d7"
+  },
+  "name": "ESCUELA PRIMARIA Nº31 \"SILVERIO F. VAZQUEZ\"",
+  "entityType": "educación",
+  "legalNumber": "31",
+  "address": "RUTA 32 ACCESO ARROYO DULCE",
+  "phone": "0247749-1579",
+  "postalCode": "2700",
+  "email": "karina_1317@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.931034088134766",
+    "-34.58100176465939"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55f73eaa29e2b8f8498d8"
+  },
+  "name": "Centro Salud 1",
+  "entityType": "centro salud",
+  "legalNumber": "5909",
+  "address": "ALBERDI 2965",
+  "phone": "0247742-1566",
+  "postalCode": "2700",
+  "email": "csantajuliaepb@yahoo.com.ar",
+  "sector": "Privada",
+  "risk": [
+    "accidente"
+  ],
+  "coordinates": [
+    "-60.93317985534667",
+    "-34.57139056257011"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55f82eaa29e2b8f8498d9"
+  },
+  "name": "Centro Salud 2",
+  "entityType": "centro salud",
+  "legalNumber": "5802",
+  "address": "ITALIA 151",
+  "phone": "0247742-4455",
+  "postalCode": "2700",
+  "email": "info@icade.edu.ar",
+  "sector": "Privada",
+  "risk": [
+    "accidente"
+  ],
+  "coordinates": [
+    "-60.92845916748047",
+    "-34.58919867650491"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55f94eaa29e2b8f8498da"
+  },
+  "name": "Centro Salud 3",
+  "entityType": "centro salud",
+  "legalNumber": "9000",
+  "address": "LAGOS 602",
+  "phone": "0247741-4100",
+  "postalCode": "2700",
+  "email": "sanagustincolegio@hotmail.com",
+  "sector": "Privada",
+  "risk": [
+    "accidente"
+  ],
+  "coordinates": [
+    "-60.95283508300781",
+    "-34.59414469764633"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55fc2eaa29e2b8f8498dc"
+  },
+  "name": "Centro Salud 5",
+  "entityType": "centro salud",
+  "legalNumber": "1",
+  "address": "MERCED 618",
+  "phone": "0247742-3742",
+  "postalCode": "2700",
+  "email": "eep1pergamino@yahoo.com.ar",
+  "sector": "Estatal",
+  "risk": [
+    "accidente"
+  ],
+  "coordinates": [
+    " -60.96313476562499",
+    "-34.57782171051106"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe55fcfeaa29e2b8f8498dd"
+  },
+  "name": "Centro Salud 6",
+  "entityType": "centro salud",
+  "legalNumber": "48",
+  "address": "AV ANTONIO RIVERO S/N",
+  "phone": "0247742-3704",
+  "postalCode": "2700",
+  "email": "claradisanto7@gmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "accidente"
+  ],
+  "coordinates": [
+    "-60.95163345336913",
+    "-34.58163776088898"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe56004eaa29e2b8f8498de"
+  },
+  "name": "Estación de Servicio 1",
+  "entityType": "depósito combustible",
+  "legalNumber": "49",
+  "address": "CAMINO RURAL DEL CARMEN S/N",
+  "phone": "247715-34-6599",
+  "postalCode": "2718",
+  "email": "dany.gou@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio"
+  ],
+  "coordinates": [
+    "-60.94279289245606",
+    "-34.56835149540769"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe56011eaa29e2b8f8498df"
+  },
+  "name": "Estación de Servicio 2",
+  "entityType": "depósito combustible",
+  "legalNumber": "5",
+  "address": "SCHUMACHER 1500",
+  "phone": "0247743-3164",
+  "postalCode": "2700",
+  "email": "pp081005@abc.gov.ar",
+  "sector": "Estatal",
+  "risk": [
+    "incendio"
+  ],
+  "coordinates": [
+    "-60.955839157104485",
+    "-34.57541892224359"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe5601feaa29e2b8f8498e0"
+  },
+  "name": "Estación de Servicio 3",
+  "entityType": "depósito combustible",
+  "legalNumber": "50",
+  "address": "GRAL. MOSCONI 1920",
+  "phone": "0247743-7172",
+  "postalCode": "2700",
+  "email": "addresse-epb50@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio"
+  ],
+  "coordinates": [
+    "-60.94021797180176",
+    "-34.59294354815492"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe5602eeaa29e2b8f8498e1"
+  },
+  "name": "Estación de Servicio 4",
+  "entityType": "depósito combustible",
+  "legalNumber": "53",
+  "address": "BALBOA 586",
+  "phone": "0247742-4713",
+  "postalCode": "2700",
+  "email": "epb53@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio"
+  ],
+  "coordinates": [
+    "-60.92717170715332",
+    "-34.57485355020498"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe5603ceaa29e2b8f8498e2"
+  },
+  "name": "Estación de Servicio 5",
+  "entityType": "depósito combustible",
+  "legalNumber": "54",
+  "address": "SANTA ANA 380",
+  "phone": "0247749-3017",
+  "postalCode": "2701",
+  "email": "egb54rancagua@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio"
+  ],
+  "coordinates": [
+    "-60.96588134765625",
+    "-34.581991090024715"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe56103eaa29e2b8f8498e7"
+  },
+  "name": "Centro Salud 4",
+  "entityType": "centro salud",
+  "legalNumber": "450",
+  "address": "castro barros 100",
+  "phone": "03513044157",
+  "email": "agustinpfs@gmail.com",
+  "sector": "Público",
+  "risk": [
+    "accidente"
+  ],
+  "coordinates": [
+    "-60.96313476562499",
+    "-34.589551973494125"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe56124eaa29e2b8f8498e8"
+  },
+  "name": "Organismo Público 1",
+  "entityType": "organismo público",
+  "legalNumber": "451",
+  "address": "FRANCISCO AYERZA S/N",
+  "phone": "0247715-34-6600",
+  "postalCode": "2701",
+  "email": "organismopublico1@gmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.939102172851555",
+    "-34.57937641885099"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe56133eaa29e2b8f8498e9"
+  },
+  "name": "Organismo Público 2",
+  "entityType": "organismo público",
+  "legalNumber": "52",
+  "address": "MANSILLA 808",
+  "phone": "0247742-2131",
+  "postalCode": "2700",
+  "email": "espostalCoderim52@yahoo.com.ar",
+  "sector": "Estatal",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.9469985961914",
+    "-34.590187904289024"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe56148eaa29e2b8f8498ea"
+  },
+  "name": "Organismo Público 3",
+  "entityType": "organismo público",
+  "legalNumber": "27",
+  "address": "Campo Urrutia - Ruta 178 km 22",
+  "phone": "02477-346591",
+  "postalCode": "2700",
+  "email": "opp0810027@abc.gov.ar",
+  "sector": "Estatal",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.93154907226562",
+    "-34.58524164759393"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe5615aeaa29e2b8f8498eb"
+  },
+  "name": "Organismo Público 4",
+  "entityType": "organismo público",
+  "legalNumber": "10",
+  "address": "AMEGHINO 131",
+  "phone": "0247744-3543",
+  "postalCode": "2700",
+  "email": "epb10pergamino@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio",
+    "inundación"
+  ],
+  "coordinates": [
+    "-60.962104797363274",
+    "-34.58425236092333"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe5616beaa29e2b8f8498ec"
+  },
+  "name": "Organismo Público 5",
+  "entityType": "organismo público",
+  "legalNumber": "11",
+  "address": "127 Y DIAGONAL S/N",
+  "phone": "0247743-7608",
+  "postalCode": "2700",
+  "email": "sandragauna@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio"
+  ],
+  "coordinates": [
+    "-60.925884246826165",
+    "-34.58149642881411"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe56179eaa29e2b8f8498ed"
+  },
+  "name": "Lugar evento masivo 1",
+  "entityType": "lugar evento masivo",
+  "legalNumber": "15",
+  "address": "SALTA S/N",
+  "phone": "0247749-9182",
+  "postalCode": "2718",
+  "email": "epp-urquiza@cerlu.com.ar",
+  "sector": "Estatal",
+  "risk": [
+    "amenaza climática"
+  ],
+  "coordinates": [
+    " -60.95171928405762",
+    "-34.57033043547793"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe56194eaa29e2b8f8498ee"
+  },
+  "name": "Lugar evento masivo 2",
+  "entityType": "lugar evento masivo",
+  "legalNumber": "16",
+  "address": "FLORIDA 1111",
+  "phone": "0247743-7414",
+  "postalCode": "2700",
+  "email": "escuela16pergamino@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "amenaza climática"
+  ],
+  "coordinates": [
+    "-60.92717170715332",
+    "-34.56835149540769"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe561b6eaa29e2b8f8498f0"
+  },
+  "name": "Lugar evento masivo 3",
+  "entityType": "lugar evento masivo",
+  "legalNumber": "18",
+  "address": "GOLONDRINAS 2842",
+  "phone": "0247743-7668",
+  "postalCode": "2700",
+  "email": "eventos3@gmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "amenaza climática"
+  ],
+  "coordinates": [
+    "-60.95832824707031",
+    "-34.59237829532613"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe561d0eaa29e2b8f8498f1"
+  },
+  "name": "Club 1",
+  "entityType": "club",
+  "legalNumber": "19",
+  "address": "ASCASUBI 440",
+  "phone": "0247715-68-4113",
+  "postalCode": "2717",
+  "email": "danipolola@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "amenaza climática"
+  ],
+  "coordinates": [
+    "-60.97008705139161",
+    "-34.586160260385704"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe561deeaa29e2b8f8498f2"
+  },
+  "name": "Club 2",
+  "entityType": "club",
+  "legalNumber": "2",
+  "address": "FLORIDA 425",
+  "phone": "0247742-4045",
+  "postalCode": "2700",
+  "email": "escuela2pergamino@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "amenaza climática"
+  ],
+  "coordinates": [
+    " -60.94399452209472",
+    "-34.59767738961"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe561f9eaa29e2b8f8498f3"
+  },
+  "name": "Club 3",
+  "entityType": "club",
+  "legalNumber": "20",
+  "address": "JUAN B. ALBERDI legalNumber 250",
+  "phone": "0247749-8117",
+  "postalCode": "2717",
+  "email": "ep20guerrico@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "amenaza climática"
+  ],
+  "coordinates": [
+    "-60.92863082885743",
+    "-34.598030650543215"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe56210eaa29e2b8f8498f4"
+  },
+  "name": "Club 4",
+  "entityType": "club",
+  "legalNumber": "21",
+  "address": "RUTA 51 KM 35 S/N",
+  "phone": "247715-46-4076",
+  "postalCode": "2751",
+  "email": "club4@gmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio"
+  ],
+  "coordinates": [
+    "-60.92193603515625",
+    "-34.589622632711695"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe56227eaa29e2b8f8498f5"
+  },
+  "name": "Club 5",
+  "entityType": "club",
+  "legalNumber": "22",
+  "address": "AV DE MAYO 1165",
+  "phone": "0247742-4840",
+  "postalCode": "2700",
+  "email": "ebbn22@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio"
+  ],
+  "coordinates": [
+    "-60.96665382385254",
+    "-34.59181303865144"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe562a4eaa29e2b8f8498f6"
+  },
+  "name": "Hogar Acogida 1",
+  "entityType": "hogar acogida",
+  "legalNumber": "23",
+  "address": "CALLE 8  8",
+  "phone": "0247748-3104",
+  "postalCode": "2703",
+  "email": "ep23pinzon@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio"
+  ],
+  "coordinates": [
+    "-60.93541145324707",
+    "-34.57400548493766"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe562b5eaa29e2b8f8498f7"
+  },
+  "name": "Hogar Acogida 2",
+  "entityType": "hogar acogida",
+  "legalNumber": "24",
+  "address": "LORENZO MORENO 845",
+  "phone": "0247749-5041",
+  "postalCode": "2715",
+  "email": "escuela24@waycomnet.com.ar",
+  "sector": "Estatal",
+  "risk": [
+    "incendio"
+  ],
+  "coordinates": [
+    "-60.92674255371094",
+    "-34.57732702448648"
+  ]
+},{
+  "_id": {
+    "$oid": "5fe562c3eaa29e2b8f8498f8"
+  },
+  "name": "Hogar Acogida 3",
+  "entityType": "hogar acogida",
+  "legalNumber": "26",
+  "address": "ZONA RURAL Nro S/N",
+  "phone": "0247715-34-6590",
+  "postalCode": "2717",
+  "email": "mabe_lescano@hotmail.com",
+  "sector": "Estatal",
+  "risk": [
+    "incendio"
+  ],
+  "coordinates": [
+    "-60.921592712402344",
+    "-34.5752069081797"
+  ]
+}]

@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# App Specification
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -9,7 +9,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://localhost:4000](http://localhost:4000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
@@ -39,8 +39,44 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+***
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Final result of the system.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Home view.
+
+![Home view](/app/ReadmePictures/home.png 'Home view')
+
+### Entities Filter Markers details.
+
+![Entities Filter Markers details](/app/ReadmePictures/details_marker_entity.png 'Entities Filter Markers details')
+
+### Events Filter Markers details.
+
+![Events Filter Markers details](/app/ReadmePictures/details_marker_event.png 'Events Filter Markers details')
+
+### Login view.
+
+![Login view](/app/ReadmePictures/login.png 'Login view')
+
+### Details Entity view.
+
+![Details Entity view](/app/ReadmePictures/details_entity.png 'Details Entity view')
+
+### Details Event view.
+
+![Details Event view](/app/ReadmePictures/details_event.png 'Details Event view')
+
+### Create New Event view.
+
+![Create New Event view](/app/ReadmePictures/create_event.png 'Create New Event view')
+
+![Create New Event view 2](/app/ReadmePictures/create_event_2.png 'Create New Event view 2')
+
+### Details User view.
+
+![Details User view](/app/ReadmePictures/details_user.png 'Details User view')
+
+### Change Password view.
+
+![Change Password view](/app/ReadmePictures/change_password.png 'Change Password view')

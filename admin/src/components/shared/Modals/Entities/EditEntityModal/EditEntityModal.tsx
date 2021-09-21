@@ -139,7 +139,7 @@ const EditEntityModal = (props: EditEntityModalProps) => {
             onEscapeKeyDown={props.handleClose}
         >
             <Modal.Header closeButton>
-                <Modal.Title>Detalles de la Entidad</Modal.Title>
+                <Modal.Title>Editar Entidad</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
